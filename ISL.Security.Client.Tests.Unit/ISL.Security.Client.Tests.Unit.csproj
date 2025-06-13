@@ -42,4 +42,11 @@
 		<Using Include="Xunit" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Services\Clients\Audits\" />
+	  <Folder Include="Services\Clients\Users\" />
+	  <Folder Include="Services\Foundations\Audits\" />
+	  <Folder Include="Services\Orchestrations\Audits\" />
+	</ItemGroup>
+
 </Project>

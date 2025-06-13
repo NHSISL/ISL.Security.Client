@@ -11,7 +11,8 @@ namespace ISL.Security.Client.Services.Foundations.Users
 {
     internal partial class UserService : IUserService
     {
-        public async ValueTask<User> GetUserAsync(ClaimsPrincipal user)
+        public ValueTask<User> GetUserAsync(ClaimsPrincipal user) =>
+        TryCatch(async () =>
         {
             var userIdString = user.FindFirst("oid")?.Value
                 ?? user.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value
@@ -36,7 +37,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
                 jobTitle: jobTitle,
                 roles: roles,
                 claims: claimsList);
-        }
+        });
 
         public ValueTask<bool> UserHasClaimTypeAsync(ClaimsPrincipal user, string claimType, string claimValue) =>
         TryCatch(async () =>

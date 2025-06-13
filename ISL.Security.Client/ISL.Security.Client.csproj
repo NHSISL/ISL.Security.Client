@@ -21,7 +21,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/NHSISL/ISL.Security.Client</RepositoryUrl>
 		<RepositoryType>Github</RepositoryType>
-		<PackageTags> EF, Entity Framework, Operations, C#, The Standard, Client </PackageTags>
+		<PackageTags> C#, The Standard, Client </PackageTags>
 		<PackageReleaseNotes>
 			Initial beta release of ISL.Security.Client, a client library for security operations.
 		</PackageReleaseNotes>
