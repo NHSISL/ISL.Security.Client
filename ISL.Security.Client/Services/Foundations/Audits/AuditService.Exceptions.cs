@@ -19,6 +19,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             {
                 return await returningObjectFunction();
             }
+            catch (InvalidArgumentAuditException invalidArgumentAuditException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(invalidArgumentAuditException);
+            }
             catch (Exception exception)
             {
                 var failedAuditServiceException =
@@ -28,6 +32,16 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
                 throw await CreateAndLogServiceExceptionAsync(failedAuditServiceException);
             }
+        }
+
+        private async ValueTask<AuditValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
+        {
+            var auditValidationException =
+                new AuditValidationException(
+                    message: "Audit validation errors occurred, please try again.",
+                    innerException: exception);
+
+            return auditValidationException;
         }
 
         private async ValueTask<AuditServiceException> CreateAndLogServiceExceptionAsync(Xeption exception)

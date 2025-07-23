@@ -13,15 +13,42 @@ namespace ISL.Security.Client.Services.Foundations.Audits
     {
         private static void ValidateInputs<T>(T entity, string userId, SecurityConfigurations securityConfigurations)
         {
+            Validate(
+                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
+                (Rule: IsInvalid(userId), Parameter: nameof(userId)),
+                (Rule: IsInvalid(securityConfigurations), Parameter: nameof(SecurityConfigurations)));
+
+            Validate(
+                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyName),
+                    Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyType),
+                    Parameter: nameof(SecurityConfigurations.CreatedByPropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyName),
+                    Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyType),
+                    Parameter: nameof(SecurityConfigurations.CreatedDatePropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyName),
+                    Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyType),
+                    Parameter: nameof(SecurityConfigurations.UpdatedByPropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyName),
+                    Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyType),
+                    Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
+
             var createdByName = securityConfigurations.CreatedByPropertyName;
             var createdDateName = securityConfigurations.CreatedDatePropertyName;
             var updatedByName = securityConfigurations.UpdatedByPropertyName;
             var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
 
             Validate(
-                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(userId), Parameter: nameof(userId)),
-
                 (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
                     Parameter: nameof(createdByName)),
 
@@ -33,20 +60,48 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
                 (Rule: IsInvalidProperty(updatedDateName, entity, typeof(DateTimeOffset)),
                     Parameter: nameof(updatedDateName)));
-
         }
 
         private static void ValidateInputs<T>(T entity, T storageEntity, SecurityConfigurations securityConfigurations)
         {
+
+
+            Validate(
+                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
+                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)),
+                (Rule: IsInvalid(securityConfigurations), Parameter: nameof(SecurityConfigurations)));
+
+            Validate(
+                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyName),
+                    Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyType),
+                    Parameter: nameof(SecurityConfigurations.CreatedByPropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyName),
+                    Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyType),
+                    Parameter: nameof(SecurityConfigurations.CreatedDatePropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyName),
+                    Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyType),
+                    Parameter: nameof(SecurityConfigurations.UpdatedByPropertyType)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyName),
+                    Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)),
+
+                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyType),
+                    Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
+
             var createdByName = securityConfigurations.CreatedByPropertyName;
             var createdDateName = securityConfigurations.CreatedDatePropertyName;
             var updatedByName = securityConfigurations.UpdatedByPropertyName;
             var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
 
             Validate(
-                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)),
-
                 (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
                     Parameter: nameof(createdByName)),
 
@@ -87,7 +142,6 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 var actualUnderlyingType = Nullable.GetUnderlyingType(actualType) ?? actualType;
                 var expectedUnderlyingType = Nullable.GetUnderlyingType(expectedType) ?? expectedType;
                 var result = !expectedUnderlyingType.IsAssignableFrom(actualUnderlyingType);
-                Console.WriteLine($"[{propertyName}] actualType = {actualUnderlyingType}, expectedType = {expectedUnderlyingType}");
 
                 return result;
             }
@@ -124,7 +178,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         {
             var invalidArgumentAuditException =
                 new InvalidArgumentAuditException(
-                    message: "Invalid audit input arguments. Please correct the errors and try again.");
+                    message: "Invalid audit argument(s), correct the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {

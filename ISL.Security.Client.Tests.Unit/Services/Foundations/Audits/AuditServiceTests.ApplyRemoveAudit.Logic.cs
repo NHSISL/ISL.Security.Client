@@ -53,7 +53,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .ReturnsAsync(currentDateTime);
 
             // When
-            var actualResult = await this.auditService.ApplyRemoveAuditAsync(person, modifiedUserId, securityConfigurations);
+            var actualResult = await this.auditService
+                .ApplyRemoveAuditAsync(person, modifiedUserId, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
