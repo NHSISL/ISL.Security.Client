@@ -3,6 +3,7 @@
 // ---------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using ISL.Security.Client.Models.Clients;
 using ISL.Security.Client.Models.Foundations.Audits.Exceptions;
 
@@ -10,21 +11,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 {
     internal partial class AuditService
     {
-        private static void ValidateInputs<T>(T entity, string userId)
-        {
-            Validate(
-                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(userId), Parameter: nameof(userId)));
-        }
-
-        private static void ValidateInputs<T>(T entity, T storageEntity)
-        {
-            Validate(
-                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)));
-        }
-
-        private static void ValidateProperties<T>(T entity, SecurityConfigurations securityConfigurations)
+        private static void ValidateInputs<T>(T entity, string userId, SecurityConfigurations securityConfigurations)
         {
             var createdByName = securityConfigurations.CreatedByPropertyName;
             var createdDateName = securityConfigurations.CreatedDatePropertyName;
@@ -32,6 +19,34 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
 
             Validate(
+                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
+                (Rule: IsInvalid(userId), Parameter: nameof(userId)),
+
+                (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
+                    Parameter: nameof(createdByName)),
+
+                (Rule: IsInvalidProperty(createdDateName, entity, typeof(DateTimeOffset)),
+                    Parameter: nameof(createdDateName)),
+
+                (Rule: IsInvalidProperty(updatedByName, entity, typeof(string)),
+                    Parameter: nameof(updatedByName)),
+
+                (Rule: IsInvalidProperty(updatedDateName, entity, typeof(DateTimeOffset)),
+                    Parameter: nameof(updatedDateName)));
+
+        }
+
+        private static void ValidateInputs<T>(T entity, T storageEntity, SecurityConfigurations securityConfigurations)
+        {
+            var createdByName = securityConfigurations.CreatedByPropertyName;
+            var createdDateName = securityConfigurations.CreatedDatePropertyName;
+            var updatedByName = securityConfigurations.UpdatedByPropertyName;
+            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
+
+            Validate(
+                (Rule: IsInvalid(entity), Parameter: nameof(entity)),
+                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)),
+
                 (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
                     Parameter: nameof(createdByName)),
 
@@ -56,22 +71,41 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
         private static bool IsInvalidPropertyOperation<T>(string propertyName, T entity, Type expectedType)
         {
-            var property = typeof(T).GetProperty(propertyName);
-
-            if (property == null || !property.CanWrite)
+            if (entity == null || string.IsNullOrWhiteSpace(propertyName))
             {
                 return true;
             }
 
-            var propertyType = property.PropertyType;
-            var underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
-
-            if (!underlyingType.IsAssignableFrom(expectedType))
+            if (entity is IDictionary<string, object> expando)
             {
-                return true;
-            }
+                if (!expando.TryGetValue(propertyName, out var value))
+                {
+                    return true;
+                }
 
-            return false;
+                var actualType = value?.GetType() ?? expectedType;
+                var actualUnderlyingType = Nullable.GetUnderlyingType(actualType) ?? actualType;
+                var expectedUnderlyingType = Nullable.GetUnderlyingType(expectedType) ?? expectedType;
+                var result = !expectedUnderlyingType.IsAssignableFrom(actualUnderlyingType);
+                Console.WriteLine($"[{propertyName}] actualType = {actualUnderlyingType}, expectedType = {expectedUnderlyingType}");
+
+                return result;
+            }
+            else
+            {
+                var property = entity.GetType().GetProperty(propertyName);
+
+                if (property == null || !property.CanWrite)
+                {
+                    return true;
+                }
+
+                var propertyType = property.PropertyType;
+                var underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+                bool result = !underlyingType.IsAssignableFrom(expectedType);
+
+                return result;
+            }
         }
 
         private static dynamic IsInvalid(string text) => new

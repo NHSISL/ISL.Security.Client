@@ -3,6 +3,7 @@
 // ---------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ISL.Security.Client.Brokers.DateTimes;
 using ISL.Security.Client.Models.Clients;
@@ -22,32 +23,27 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId);
+            ValidateInputs(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
-            var createdByName = securityConfigurations.CreatedByPropertyName;
-            var createdDateName = securityConfigurations.CreatedDatePropertyName;
-            var updatedByName = securityConfigurations.UpdatedByPropertyName;
-            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
-            ValidateProperties(entity, securityConfigurations);
 
             SetProperty(
                 entity,
-                propertyName: createdByName,
+                propertyName: securityConfigurations.CreatedByPropertyName,
                 value: userId);
 
             SetProperty(
                 entity,
-                propertyName: createdDateName,
+                propertyName: securityConfigurations.CreatedDatePropertyName,
                 value: auditDateTimeOffset);
 
             SetProperty(
                 entity,
-                propertyName: updatedByName,
+                propertyName: securityConfigurations.UpdatedByPropertyName,
                 value: userId);
 
             SetProperty(
                 entity,
-                propertyName: updatedDateName,
+                propertyName: securityConfigurations.UpdatedDatePropertyName,
                 value: auditDateTimeOffset);
 
             return entity;
@@ -59,11 +55,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId);
+            ValidateInputs(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
             var updatedByName = securityConfigurations.UpdatedByPropertyName;
             var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
-            ValidateProperties(entity, securityConfigurations);
 
             SetProperty(
                 entity,
@@ -84,20 +79,17 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId);
+            ValidateInputs(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
-            var updatedByName = securityConfigurations.UpdatedByPropertyName;
-            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
-            ValidateProperties(entity, securityConfigurations);
 
             SetProperty(
                 entity,
-                propertyName: updatedByName,
+                propertyName: securityConfigurations.UpdatedByPropertyName,
                 value: userId);
 
             SetProperty(
                 entity,
-                propertyName: updatedDateName,
+                propertyName: securityConfigurations.UpdatedDatePropertyName,
                 value: auditDateTimeOffset);
 
             return entity;
@@ -109,13 +101,9 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch<T>(async () =>
         {
-            ValidateInputs(entity, storageEntity);
-            ValidateProperties(entity, securityConfigurations);
-
+            ValidateInputs(entity, storageEntity, securityConfigurations);
             var createdByName = securityConfigurations.CreatedByPropertyName;
             var createdDateName = securityConfigurations.CreatedDatePropertyName;
-
-            // Get current values from storageEntity for CreatedBy and CreatedDate
             var createdByProperty = typeof(T).GetProperty(createdByName);
             var createdDateProperty = typeof(T).GetProperty(createdDateName);
 
@@ -129,7 +117,6 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             object createdByValue = createdByProperty.GetValue(storageEntity);
             object createdDateValue = createdDateProperty.GetValue(storageEntity);
-
             SetProperty(entity, createdByName, createdByValue);
             SetProperty(entity, createdDateName, createdDateValue);
 
@@ -138,8 +125,33 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
         private static void SetProperty<T>(T entity, string propertyName, object value)
         {
-            var prop = typeof(T).GetProperty(propertyName);
-            prop.SetValue(entity, value);
+            if (entity == null || string.IsNullOrWhiteSpace(propertyName))
+            {
+                return;
+            }
+
+            if (entity is IDictionary<string, object> expando)
+            {
+                expando[propertyName] = value;
+            }
+            else
+            {
+                var property = entity.GetType().GetProperty(propertyName);
+
+                if (property == null || !property.CanWrite)
+                {
+                    return;
+                }
+
+                var targetType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+
+                if (value != null && !targetType.IsAssignableFrom(value.GetType()))
+                {
+                    value = Convert.ChangeType(value, targetType);
+                }
+
+                property.SetValue(entity, value);
+            }
         }
     }
 }
