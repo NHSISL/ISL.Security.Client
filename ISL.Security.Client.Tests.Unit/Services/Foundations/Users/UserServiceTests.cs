@@ -19,7 +19,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
             this.userService = new UserService();
         }
 
-        private static ClaimsPrincipal CreateRandomClaimsPrincipal()
+        private static ClaimsPrincipal CreateRandomClaimsPrincipal(bool isAuthenticated = true)
         {
             Guid securityOid = Guid.NewGuid();
             string givenName = GetRandomString();
@@ -40,7 +40,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                 new Claim(ClaimTypes.Role, "Users")
             };
 
-            var identity = new ClaimsIdentity(claims, "TestScheme");
+            string authenticationType = isAuthenticated ? "TestScheme" : null;
+            var identity = new ClaimsIdentity(claims, authenticationType);
             var principal = new ClaimsPrincipal(identity);
 
             return principal;
