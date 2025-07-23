@@ -64,6 +64,8 @@ namespace ISL.Security.Client.Services.Foundations.Users
         public ValueTask<bool> IsUserAuthenticatedAsync(ClaimsPrincipal claimsPrincipal) =>
         TryCatch(async () =>
         {
+            ValidateOnGetUser(claimsPrincipal);
+
             return claimsPrincipal.Identity?.IsAuthenticated ?? false;
         });
 
