@@ -64,7 +64,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
         public ValueTask<bool> IsUserAuthenticatedAsync(ClaimsPrincipal claimsPrincipal) =>
         TryCatch(async () =>
         {
-            ValidateOnGetUser(claimsPrincipal);
+            ValidateOnIsUserAuthenticated(claimsPrincipal);
 
             return claimsPrincipal.Identity?.IsAuthenticated ?? false;
         });
@@ -72,6 +72,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
         public ValueTask<bool> IsUserInRoleAsync(ClaimsPrincipal claimsPrincipal, string roleName) =>
         TryCatch(async () =>
         {
+            ValidateOnIsUserInRole(claimsPrincipal, roleName);
             var roles = claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value);
 
             return roles.Contains(roleName);

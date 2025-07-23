@@ -30,11 +30,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                     innerException: invalidArgumentUserException);
 
             // when
-            ValueTask<bool> getUserTask =
+            ValueTask<bool> isUserAuthenticatedTask =
                 userService.IsUserAuthenticatedAsync(nullClaimsPrincipal);
 
             UserValidationException actualUserValidationException =
-                await Assert.ThrowsAsync<UserValidationException>(getUserTask.AsTask);
+                await Assert.ThrowsAsync<UserValidationException>(isUserAuthenticatedTask.AsTask);
 
             // then
             actualUserValidationException.Should()

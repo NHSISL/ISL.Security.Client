@@ -2,6 +2,7 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
+using System;
 using System.Security.Claims;
 using ISL.Security.Client.Models.Foundations.Users.Exceptions;
 
@@ -13,6 +14,24 @@ namespace ISL.Security.Client.Services.Foundations.Users
         {
             Validate((Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
         }
+
+        virtual internal void ValidateOnIsUserInRole(ClaimsPrincipal claimsPrincipal, string roleName)
+        {
+            Validate(
+                (Rule: IsInvalid(roleName), Parameter: "RoleName"),
+                (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
+        }
+
+        virtual internal void ValidateOnIsUserAuthenticated(ClaimsPrincipal claimsPrincipal)
+        {
+            Validate((Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
+        }
+
+        private static dynamic IsInvalid(string? text) => new
+        {
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
+        };
 
         private static dynamic IsInvalid(ClaimsPrincipal claimsPrincipal) => new
         {
