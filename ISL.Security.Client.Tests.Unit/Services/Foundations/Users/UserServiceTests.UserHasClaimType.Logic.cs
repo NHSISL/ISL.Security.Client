@@ -38,6 +38,30 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
             actualResult.Should().Be(expectedResult);
         }
 
+        [Fact]
+        public async Task ShouldPerformUserHasClaimTypeWithValueAsync()
+        {
+            // Given
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            string claimType = "displayName";
+            string claimValue = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
+            bool expectedResult = true;
 
+            User expectedUser = new User(
+                userId: claimsPrincipal.FindFirst("oid")?.Value,
+                givenName: claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value,
+                surname: claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value,
+                displayName: claimsPrincipal.FindFirst("displayName")?.Value,
+                email: claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value,
+                jobTitle: claimsPrincipal.FindFirst("jobTitle")?.Value,
+                roles: claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value).ToList(),
+                claims: claimsPrincipal.Claims.ToList());
+
+            // When
+            bool actualResult = await this.userService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+
+            // Then
+            actualResult.Should().Be(expectedResult);
+        }
     }
 }
