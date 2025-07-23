@@ -2,6 +2,7 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
@@ -47,6 +48,80 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             // when
             ValueTask<Person> applyAddAuditTask =
                 auditService.ApplyAddAuditAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
+
+            AuditValidationException actualAuditValidationException =
+                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+
+            // then
+            actualAuditValidationException.Should()
+                .BeEquivalentTo(expectedAuditValidationException);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnApplyAddAuditIfConfigurationNotPopulatedFoundAsync(
+            string invalidInput)
+        {
+            // given
+            Person inputPerson = new Person();
+            string inputUserId = GetRandomString();
+            SecurityConfigurations invalidSecurityConfigurations = new SecurityConfigurations
+            {
+                CreatedByPropertyName = invalidInput,
+                CreatedByPropertyType = typeof(DateTime),
+                CreatedDatePropertyName = invalidInput,
+                CreatedDatePropertyType = typeof(string),
+                UpdatedByPropertyName = invalidInput,
+                UpdatedByPropertyType = typeof(DateTimeOffset),
+                UpdatedDatePropertyName = invalidInput,
+                UpdatedDatePropertyType = typeof(string)
+            };
+
+            InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
+                message: "Invalid audit argument(s), correct the errors and try again.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedByPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedByPropertyType),
+                values: "A type of String / Guid / Long is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedDatePropertyType),
+                values: "A type of DateTime / DateTimeOffset is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedByPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedByPropertyType),
+                values: "A type of String / Guid / Long is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedDatePropertyType),
+                values: "A type of DateTime / DateTimeOffset is required");
+
+            var expectedAuditValidationException =
+                new AuditValidationException(
+                    message: "Audit validation errors occurred, please try again.",
+                    innerException: invalidArgumentAuditException);
+
+            // when
+            ValueTask<Person> applyAddAuditTask =
+                auditService.ApplyAddAuditAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);

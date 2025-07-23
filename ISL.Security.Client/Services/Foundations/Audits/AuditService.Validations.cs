@@ -22,25 +22,25 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalid(securityConfigurations.CreatedByPropertyName),
                     Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyType),
+                (Rule: IsInvalidDataType(securityConfigurations.CreatedByPropertyType),
                     Parameter: nameof(SecurityConfigurations.CreatedByPropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyName),
                     Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyType),
+                (Rule: IsInvalidDateType(securityConfigurations.CreatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.CreatedDatePropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyName),
                     Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyType),
+                (Rule: IsInvalidDataType(securityConfigurations.UpdatedByPropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedByPropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyName),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyType),
+                (Rule: IsInvalidDateType(securityConfigurations.UpdatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
 
             var createdByName = securityConfigurations.CreatedByPropertyName;
@@ -64,8 +64,6 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
         private static void ValidateInputs<T>(T entity, T storageEntity, SecurityConfigurations securityConfigurations)
         {
-
-
             Validate(
                 (Rule: IsInvalid(entity), Parameter: nameof(entity)),
                 (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)),
@@ -75,25 +73,25 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalid(securityConfigurations.CreatedByPropertyName),
                     Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.CreatedByPropertyType),
+                (Rule: IsInvalidDataType(securityConfigurations.CreatedByPropertyType),
                     Parameter: nameof(SecurityConfigurations.CreatedByPropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyName),
                     Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.CreatedDatePropertyType),
+                (Rule: IsInvalidDateType(securityConfigurations.CreatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.CreatedDatePropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyName),
                     Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.UpdatedByPropertyType),
+                (Rule: IsInvalidDataType(securityConfigurations.UpdatedByPropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedByPropertyType)),
 
                 (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyName),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)),
 
-                (Rule: IsInvalid(securityConfigurations.UpdatedDatePropertyType),
+                (Rule: IsInvalidDateType(securityConfigurations.UpdatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
 
             var createdByName = securityConfigurations.CreatedByPropertyName;
@@ -166,6 +164,22 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         {
             Condition = String.IsNullOrWhiteSpace(text),
             Message = "Text is required"
+        };
+
+        private static dynamic IsInvalidDataType(Type type) => new
+        {
+            Condition =
+                type == typeof(DateTime) ||
+                type == typeof(DateTimeOffset) ||
+                type == typeof(byte[]) ||
+                type == typeof(bool),
+            Message = "A type of String / Guid / Long is required"
+        };
+
+        private static dynamic IsInvalidDateType(Type type) => new
+        {
+            Condition = type != typeof(DateTime) || type != typeof(DateTimeOffset),
+            Message = "A type of DateTime / DateTimeOffset is required"
         };
 
         private static dynamic IsInvalid<T>(T entity) => new
