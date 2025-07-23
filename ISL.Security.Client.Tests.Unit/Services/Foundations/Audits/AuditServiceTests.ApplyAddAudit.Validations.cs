@@ -130,5 +130,71 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             actualAuditValidationException.Should()
                 .BeEquivalentTo(expectedAuditValidationException);
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnApplyAddAuditIfEntityDoesNotHaveAuditPropsAsync()
+        {
+            // given
+            Person inputPerson = new Person();
+            string inputUserId = GetRandomString();
+            SecurityConfigurations inputSecurityConfigurations = new SecurityConfigurations
+            {
+                CreatedByPropertyName = "CreatedByUser",
+                CreatedByPropertyType = typeof(string),
+                CreatedDatePropertyName = "CreatedAt",
+                CreatedDatePropertyType = typeof(DateTime),
+                UpdatedByPropertyName = "UpdatedByUser",
+                UpdatedByPropertyType = typeof(string),
+                UpdatedDatePropertyName = "UpdatedAt",
+                UpdatedDatePropertyType = typeof(DateTime)
+            };
+
+            InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
+                message: "Invalid audit argument(s), correct the errors and try again.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedByPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.CreatedByPropertyName}' not found, " +
+                    $"not settable, or not assignable from '{inputSecurityConfigurations.CreatedByPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.CreatedDatePropertyName}' not found, " +
+                    $"not settable, or not assignable from '{inputSecurityConfigurations.CreatedDatePropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedByPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.UpdatedByPropertyName}' not found, " +
+                    $"not settable, or not assignable from '{inputSecurityConfigurations.UpdatedByPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.UpdatedDatePropertyName}' not found, " +
+                    $"not settable, or not assignable from '{inputSecurityConfigurations.UpdatedDatePropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            var expectedAuditValidationException =
+                new AuditValidationException(
+                    message: "Audit validation errors occurred, please try again.",
+                    innerException: invalidArgumentAuditException);
+
+            // when
+            ValueTask<Person> applyAddAuditTask =
+                auditService.ApplyAddAuditAsync(inputPerson, inputUserId, inputSecurityConfigurations);
+
+            AuditValidationException actualAuditValidationException =
+                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+
+            // then
+            actualAuditValidationException.Should()
+                .BeEquivalentTo(expectedAuditValidationException);
+        }
     }
 }

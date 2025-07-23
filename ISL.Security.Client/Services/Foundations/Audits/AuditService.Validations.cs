@@ -43,23 +43,30 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalidDateType(securityConfigurations.UpdatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
 
-            var createdByName = securityConfigurations.CreatedByPropertyName;
-            var createdDateName = securityConfigurations.CreatedDatePropertyName;
-            var updatedByName = securityConfigurations.UpdatedByPropertyName;
-            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
-
             Validate(
-                (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
-                    Parameter: nameof(createdByName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedByPropertyName,
+                    entity,
+                    securityConfigurations.CreatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
 
-                (Rule: IsInvalidProperty(createdDateName, entity, typeof(DateTimeOffset)),
-                    Parameter: nameof(createdDateName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedDatePropertyName,
+                    entity,
+                    securityConfigurations.CreatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
 
-                (Rule: IsInvalidProperty(updatedByName, entity, typeof(string)),
-                    Parameter: nameof(updatedByName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedByPropertyName,
+                    entity,
+                    securityConfigurations.UpdatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
 
-                (Rule: IsInvalidProperty(updatedDateName, entity, typeof(DateTimeOffset)),
-                    Parameter: nameof(updatedDateName)));
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedDatePropertyName,
+                    entity,
+                    securityConfigurations.UpdatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)));
         }
 
         private static void ValidateInputs<T>(T entity, T storageEntity, SecurityConfigurations securityConfigurations)
@@ -94,23 +101,30 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalidDateType(securityConfigurations.UpdatedDatePropertyType),
                     Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyType)));
 
-            var createdByName = securityConfigurations.CreatedByPropertyName;
-            var createdDateName = securityConfigurations.CreatedDatePropertyName;
-            var updatedByName = securityConfigurations.UpdatedByPropertyName;
-            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
-
             Validate(
-                (Rule: IsInvalidProperty(createdByName, entity, typeof(string)),
-                    Parameter: nameof(createdByName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedByPropertyName,
+                    entity,
+                    securityConfigurations.CreatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
 
-                (Rule: IsInvalidProperty(createdDateName, entity, typeof(DateTimeOffset)),
-                    Parameter: nameof(createdDateName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedDatePropertyName,
+                    entity,
+                    securityConfigurations.CreatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
 
-                (Rule: IsInvalidProperty(updatedByName, entity, typeof(string)),
-                    Parameter: nameof(updatedByName)),
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedByPropertyName,
+                    entity,
+                    securityConfigurations.UpdatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
 
-                (Rule: IsInvalidProperty(updatedDateName, entity, typeof(DateTimeOffset)),
-                    Parameter: nameof(updatedDateName)));
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedDatePropertyName,
+                    entity,
+                    securityConfigurations.UpdatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)));
         }
 
         private static dynamic IsInvalidProperty<T>(string propertyName, T entity, Type expectedType) => new
@@ -119,7 +133,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             Message =
                 $"Property '{propertyName}' not found, not settable, or not assignable from " +
-                    $"'{expectedType.Name}' on type '{typeof(T).Name}'."
+                    $"'{expectedType.Name}' on entity '{typeof(T).Name}'."
         };
 
         private static bool IsInvalidPropertyOperation<T>(string propertyName, T entity, Type expectedType)
@@ -178,7 +192,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
         private static dynamic IsInvalidDateType(Type type) => new
         {
-            Condition = type != typeof(DateTime) || type != typeof(DateTimeOffset),
+            Condition = !(type == typeof(DateTime) || type == typeof(DateTimeOffset)),
             Message = "A type of DateTime / DateTimeOffset is required"
         };
 
