@@ -19,6 +19,10 @@ namespace ISL.Security.Client.Services.Foundations.Users
             {
                 return await returningObjectFunction();
             }
+            catch (InvalidArgumentUserException invalidArgumentUserException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(invalidArgumentUserException);
+            }
             catch (Exception exception)
             {
                 var failedUserServiceException =
@@ -28,6 +32,16 @@ namespace ISL.Security.Client.Services.Foundations.Users
 
                 throw await CreateAndLogServiceExceptionAsync(failedUserServiceException);
             }
+        }
+
+        private async ValueTask<UserValidationException> CreateAndLogValidationExceptionAsync(Xeption exception)
+        {
+            var userValidationException =
+                new UserValidationException(
+                    message: "User validation errors occurred, please try again.",
+                    innerException: exception);
+
+            return userValidationException;
         }
 
         private async ValueTask<UserServiceException> CreateAndLogServiceExceptionAsync(Xeption exception)

@@ -14,6 +14,8 @@ namespace ISL.Security.Client.Services.Foundations.Users
         public ValueTask<User> GetUserAsync(ClaimsPrincipal claimsPrincipal) =>
         TryCatch(async () =>
         {
+            ValidateOnGetUser(claimsPrincipal);
+
             var userIdString = claimsPrincipal.FindFirst("oid")?.Value
                 ?? claimsPrincipal
                     .FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value

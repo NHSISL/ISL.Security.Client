@@ -14,18 +14,18 @@ namespace ISL.Security.Client.Clients.Users
 {
     internal class UserClient : IUserClient
     {
-        private readonly IUserService claimsPrincipalService;
+        private readonly IUserService userPrincipalService;
 
-        public UserClient(IUserService claimsPrincipalService)
+        public UserClient(IUserService userPrincipalService)
         {
-            this.claimsPrincipalService = claimsPrincipalService;
+            this.userPrincipalService = userPrincipalService;
         }
 
         public async ValueTask<User> GetUserAsync(ClaimsPrincipal claimsPrincipal)
         {
             try
             {
-                return await claimsPrincipalService.GetUserAsync(claimsPrincipal);
+                return await userPrincipalService.GetUserAsync(claimsPrincipal);
             }
             catch (UserValidationException userValidationException)
             {
@@ -53,7 +53,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await claimsPrincipalService.IsUserAuthenticatedAsync(claimsPrincipal);
+                return await userPrincipalService.IsUserAuthenticatedAsync(claimsPrincipal);
             }
             catch (UserValidationException userValidationException)
             {
@@ -81,7 +81,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await claimsPrincipalService.IsUserInRoleAsync(claimsPrincipal, roleName);
+                return await userPrincipalService.IsUserInRoleAsync(claimsPrincipal, roleName);
             }
             catch (UserValidationException userValidationException)
             {
@@ -112,7 +112,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await claimsPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+                return await userPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
             }
             catch (UserValidationException userValidationException)
             {
@@ -140,7 +140,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await claimsPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType);
+                return await userPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType);
             }
             catch (UserValidationException userValidationException)
             {

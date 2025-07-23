@@ -19,7 +19,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
             ClaimsPrincipal nullClaimsPrincipal = null;
 
             InvalidArgumentUserException invalidArgumentUserException = new InvalidArgumentUserException(
-                    message: "Invalid user argument(s), correct the errors and try again.");
+                message: "Invalid user argument(s), correct the errors and try again.");
 
             invalidArgumentUserException.AddData(
                 key: nameof(ClaimsPrincipal),
