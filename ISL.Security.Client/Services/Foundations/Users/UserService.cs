@@ -52,12 +52,16 @@ namespace ISL.Security.Client.Services.Foundations.Users
             string claimValue) =>
         TryCatch(async () =>
         {
+            ValidateOnUserHasClaimType(claimsPrincipal, claimType, claimValue);
+
             return claimsPrincipal.HasClaim(claimType, claimValue);
         });
 
         public ValueTask<bool> UserHasClaimTypeAsync(ClaimsPrincipal claimsPrincipal, string claimType) =>
         TryCatch(async () =>
         {
+            ValidateOnUserHasClaimType(claimsPrincipal, claimType);
+
             return claimsPrincipal.FindFirst(claimType) != null;
         });
 

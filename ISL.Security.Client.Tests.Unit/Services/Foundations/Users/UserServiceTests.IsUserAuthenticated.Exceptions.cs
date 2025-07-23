@@ -34,7 +34,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
             var userServiceMock = new Mock<UserService> { CallBase = true };
 
             userServiceMock.Setup(broker =>
-                broker.ValidateOnGetUser(It.IsAny<ClaimsPrincipal>()))
+                broker.ValidateOnIsUserAuthenticated(It.IsAny<ClaimsPrincipal>()))
                     .Throws(serviceException);
 
             // when
@@ -50,7 +50,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                 .BeEquivalentTo(expectedUserServiceException);
 
             userServiceMock.Verify(broker =>
-                broker.ValidateOnGetUser(It.IsAny<ClaimsPrincipal>()),
+                broker.ValidateOnIsUserAuthenticated(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
