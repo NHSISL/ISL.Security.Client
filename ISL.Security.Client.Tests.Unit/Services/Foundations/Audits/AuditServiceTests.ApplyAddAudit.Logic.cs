@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
+using ISL.Security.Client.Tests.Unit.Models;
 using Moq;
 
 namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
@@ -43,6 +44,54 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
                 UpdatedDatePropertyName = "UpdatedDate",
+                UpdatedDatePropertyType = typeof(DateTimeOffset)
+            };
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffsetAsync())
+                    .ReturnsAsync(currentDateTime);
+
+            // When
+            var actualResult = await this.auditService.ApplyAddAuditAsync(person, userId, securityConfigurations);
+
+            // Then
+            ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task ShouldApplyAddAuditForNormalObjectAsync()
+        {
+            // Given
+            DateTimeOffset currentDateTime = DateTime.UtcNow;
+            string userId = GetRandomString();
+
+            var person = new Person
+            {
+                Name = "John Doe",
+                CreatedBy = string.Empty,
+                CreatedWhen = DateTimeOffset.MinValue,
+                UpdatedBy = string.Empty,
+                UpdatedWhen = DateTimeOffset.MinValue,
+            };
+
+            dynamic expectedResult = new Person
+            {
+                Name = "John Doe",
+                CreatedBy = userId,
+                CreatedWhen = currentDateTime,
+                UpdatedBy = userId,
+                UpdatedWhen = currentDateTime,
+            };
+
+            var securityConfigurations = new SecurityConfigurations
+            {
+                CreatedByPropertyName = "CreatedBy",
+                CreatedByPropertyType = typeof(string),
+                CreatedDatePropertyName = "CreatedWhen",
+                CreatedDatePropertyType = typeof(DateTimeOffset),
+                UpdatedByPropertyName = "UpdatedBy",
+                UpdatedByPropertyType = typeof(string),
+                UpdatedDatePropertyName = "UpdatedWhen",
                 UpdatedDatePropertyType = typeof(DateTimeOffset)
             };
 
