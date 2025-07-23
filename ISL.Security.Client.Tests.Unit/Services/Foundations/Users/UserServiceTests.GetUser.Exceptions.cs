@@ -39,12 +39,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                     .Throws(serviceException);
 
             // when
-            ValueTask<User> retrieveUserByIdTask =
+            ValueTask<User> getUserTask =
                 userServiceMock.Object.GetUserAsync(someClaimsPrincipal);
 
             UserServiceException actualUserServiceException =
                 await Assert.ThrowsAsync<UserServiceException>(
-                    retrieveUserByIdTask.AsTask);
+                    getUserTask.AsTask);
 
             // then
             actualUserServiceException.Should()
