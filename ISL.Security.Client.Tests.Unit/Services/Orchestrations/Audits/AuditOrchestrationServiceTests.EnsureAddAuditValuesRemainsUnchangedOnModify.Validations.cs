@@ -1,0 +1,59 @@
+﻿// ---------------------------------------------------------
+// Copyright (c) North East London ICB. All rights reserved.
+// ---------------------------------------------------------
+
+using System.Threading.Tasks;
+using FluentAssertions;
+using ISL.Security.Client.Models.Clients;
+using ISL.Security.Client.Models.Orchestrations.Audits.Exceptions;
+using ISL.Security.Client.Tests.Unit.Models;
+
+namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+{
+    public partial class AuditOrchestrationServiceTests
+    {
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnEnsureAddAuditValuesIfNullsFoundAsync()
+        {
+            // given
+            Person nullInputPerson = null;
+            Person nullStoragePerson = null;
+            SecurityConfigurations nullSecurityConfigurations = null;
+
+            InvalidArgumentAuditOrchestrationException invalidArgumentAuditException =
+                new InvalidArgumentAuditOrchestrationException(
+                message: "Invalid audit argument(s), correct the errors and try again.");
+
+            invalidArgumentAuditException.AddData(
+                key: "entity",
+                values: "Entity is required");
+
+            invalidArgumentAuditException.AddData(
+                key: "storageEntity",
+                values: "Entity is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations),
+                values: "Entity is required");
+
+            var expectedAuditOrchestrationValidationException =
+                new AuditOrchestrationValidationException(
+                    message: "Audit orchestration validation errors occurred, please try again.",
+                    innerException: invalidArgumentAuditException);
+
+            // when
+            ValueTask<Person> task =
+                auditOrchestrationService.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                    nullInputPerson,
+                    nullStoragePerson,
+                    nullSecurityConfigurations);
+
+            AuditOrchestrationValidationException actualAuditOrchestrationValidationException =
+                await Assert.ThrowsAsync<AuditOrchestrationValidationException>(task.AsTask);
+
+            // then
+            actualAuditOrchestrationValidationException.Should()
+                .BeEquivalentTo(expectedAuditOrchestrationValidationException);
+        }
+    }
+}

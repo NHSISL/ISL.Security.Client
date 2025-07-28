@@ -9,11 +9,11 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 {
     internal partial class AuditOrchestrationService
     {
-        private static void ValidateInputs<T>(T entity, ClaimsPrincipal user)
+        private static void ValidateInputs<T>(T entity, ClaimsPrincipal claimsPrincipal)
         {
             Validate(
                 (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(user), Parameter: nameof(user)));
+                (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(claimsPrincipal)));
         }
 
         private static void ValidateInputs<T>(T entity, T storageEntity)
@@ -23,9 +23,9 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)));
         }
 
-        private static dynamic IsInvalid(ClaimsPrincipal user) => new
+        private static dynamic IsInvalid(ClaimsPrincipal claimsPrincipal) => new
         {
-            Condition = user == null,
+            Condition = claimsPrincipal == null,
             Message = "Claims principal is required"
         };
 

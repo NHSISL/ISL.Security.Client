@@ -41,6 +41,14 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             {
                 throw await CreateAndLogDependencyValidationExceptionAsync(auditDependencyValidationException);
             }
+            catch (UserDependencyException userDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(userDependencyException);
+            }
+            catch (AuditDependencyException auditDependencyException)
+            {
+                throw await CreateAndLogDependencyExceptionAsync(auditDependencyException);
+            }
             catch (UserServiceException userServiceException)
             {
                 throw await CreateAndLogDependencyExceptionAsync(userServiceException);

@@ -13,12 +13,12 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 {
     internal partial class AuditOrchestrationService : IAuditOrchestrationService
     {
-        private readonly IUserService claimsPrincipalService;
+        private readonly IUserService userService;
         private readonly IAuditService auditService;
 
-        public AuditOrchestrationService(IUserService claimsPrincipalService, IAuditService auditService)
+        public AuditOrchestrationService(IUserService userService, IAuditService auditService)
         {
-            this.claimsPrincipalService = claimsPrincipalService;
+            this.userService = userService;
             this.auditService = auditService;
         }
 
@@ -29,7 +29,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal);
-            User user = await this.claimsPrincipalService.GetUserAsync(claimsPrincipal);
+            User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyAddAuditAsync(entity, user.UserId, securityConfigurations);
@@ -44,7 +44,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal);
-            User user = await this.claimsPrincipalService.GetUserAsync(claimsPrincipal);
+            User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyModifyAuditAsync(entity, user.UserId, securityConfigurations);
@@ -59,7 +59,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal);
-            User user = await this.claimsPrincipalService.GetUserAsync(claimsPrincipal);
+            User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyRemoveAuditAsync(entity, user.UserId, securityConfigurations);
