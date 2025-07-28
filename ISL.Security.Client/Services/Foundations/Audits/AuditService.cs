@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ISL.Security.Client.Brokers.DateTimes;
 using ISL.Security.Client.Models.Clients;
+using ISL.Security.Client.Models.Foundations.Audits.Exceptions;
 
 namespace ISL.Security.Client.Services.Foundations.Audits
 {
@@ -117,14 +118,21 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             if (obj is IDictionary<string, object> expando)
             {
                 if (!expando.TryGetValue(propertyName, out var value))
-                    throw new InvalidOperationException($"Property '{propertyName}' not found on ExpandoObject.");
+                {
+                    throw new InvalidArgumentAuditException(
+                        $"Property '{propertyName}' not found on storage ExpandoObject.");
+                }
+
                 return value;
             }
 
             var prop = typeof(T).GetProperty(propertyName);
+
             if (prop == null || !prop.CanRead)
-                throw new InvalidOperationException(
-                    $"Property '{propertyName}' not found or not readable on type '{typeof(T).Name}'.");
+            {
+                throw new InvalidArgumentAuditException(
+                    $"Property '{propertyName}' not found or not readable on storage type '{typeof(T).Name}'.");
+            }
 
             return prop.GetValue(obj);
         }

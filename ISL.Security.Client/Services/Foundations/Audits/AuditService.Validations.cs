@@ -69,7 +69,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)));
         }
 
-        private static void ValidateInputs<T>(T entity, T storageEntity, SecurityConfigurations securityConfigurations)
+        virtual internal void ValidateInputs<T>(
+            T entity,
+            T storageEntity,
+            SecurityConfigurations securityConfigurations)
         {
             Validate(
                 (Rule: IsInvalid(entity), Parameter: nameof(entity)),
@@ -123,6 +126,30 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalidProperty(
                     securityConfigurations.UpdatedDatePropertyName,
                     entity,
+                    securityConfigurations.UpdatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)),
+
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedByPropertyName,
+                    storageEntity,
+                    securityConfigurations.CreatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedByPropertyName)),
+
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.CreatedDatePropertyName,
+                    storageEntity,
+                    securityConfigurations.CreatedDatePropertyType),
+                Parameter: nameof(SecurityConfigurations.CreatedDatePropertyName)),
+
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedByPropertyName,
+                    storageEntity,
+                    securityConfigurations.UpdatedByPropertyType),
+                Parameter: nameof(SecurityConfigurations.UpdatedByPropertyName)),
+
+                (Rule: IsInvalidProperty(
+                    securityConfigurations.UpdatedDatePropertyName,
+                    storageEntity,
                     securityConfigurations.UpdatedDatePropertyType),
                 Parameter: nameof(SecurityConfigurations.UpdatedDatePropertyName)));
         }

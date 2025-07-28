@@ -46,11 +46,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> applyAddAuditTask =
+            ValueTask<Person> applyModifyAuditTask =
                 auditService.ApplyModifyAuditAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
-                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+                await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);
 
             // then
             actualAuditValidationException.Should()
@@ -120,11 +120,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> applyAddAuditTask =
+            ValueTask<Person> applyModifyAuditTask =
                 auditService.ApplyModifyAuditAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
-                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+                await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);
 
             // then
             actualAuditValidationException.Should()
@@ -190,11 +190,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> applyAddAuditTask =
+            ValueTask<Person> applyModifyAuditTask =
                 auditService.ApplyModifyAuditAsync(inputPerson, inputUserId, inputSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
-                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+                await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);
 
             // then
             actualAuditValidationException.Should()
