@@ -28,7 +28,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch<T>(async () =>
         {
-            ValidateInputs(entity, claimsPrincipal);
+            ValidateInputs(entity, claimsPrincipal, securityConfigurations);
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
@@ -43,7 +43,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch<T>(async () =>
         {
-            ValidateInputs(entity, claimsPrincipal);
+            ValidateInputs(entity, claimsPrincipal, securityConfigurations);
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
@@ -58,7 +58,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch<T>(async () =>
         {
-            ValidateInputs(entity, claimsPrincipal);
+            ValidateInputs(entity, claimsPrincipal, securityConfigurations);
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
@@ -73,10 +73,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch<T>(async () =>
         {
-            ValidateInputs(entity, storageEntity);
+            ValidateInputs(entity, storageEntity, securityConfigurations);
 
-            T updatedEntity = await this.auditService
-                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(entity, storageEntity, securityConfigurations);
+            var updatedEntity = await this.auditService
+                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<T>(entity, storageEntity, securityConfigurations);
 
             return updatedEntity;
         });

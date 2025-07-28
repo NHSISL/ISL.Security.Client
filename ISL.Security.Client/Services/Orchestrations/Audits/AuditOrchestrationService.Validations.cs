@@ -3,24 +3,33 @@
 // ---------------------------------------------------------
 
 using System.Security.Claims;
+using ISL.Security.Client.Models.Clients;
 using ISL.Security.Client.Models.Orchestrations.Audits.Exceptions;
 
 namespace ISL.Security.Client.Services.Foundations.Audits
 {
     internal partial class AuditOrchestrationService
     {
-        private static void ValidateInputs<T>(T entity, ClaimsPrincipal claimsPrincipal)
+        private static void ValidateInputs<T>(
+            T entity,
+            ClaimsPrincipal claimsPrincipal,
+            SecurityConfigurations securityConfigurations)
         {
             Validate(
                 (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(claimsPrincipal)));
+                (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(claimsPrincipal)),
+                (Rule: IsInvalid(securityConfigurations), Parameter: nameof(securityConfigurations)));
         }
 
-        private static void ValidateInputs<T>(T entity, T storageEntity)
+        private static void ValidateInputs<T>(
+            T entity,
+            T storageEntity,
+            SecurityConfigurations securityConfigurations)
         {
             Validate(
                 (Rule: IsInvalid(entity), Parameter: nameof(entity)),
-                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)));
+                (Rule: IsInvalid(storageEntity), Parameter: nameof(storageEntity)),
+                (Rule: IsInvalid(securityConfigurations), Parameter: nameof(securityConfigurations)));
         }
 
         private static dynamic IsInvalid(ClaimsPrincipal claimsPrincipal) => new
@@ -39,7 +48,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         {
             var invalidArgumentAuditOrchestrationException =
                 new InvalidArgumentAuditOrchestrationException(
-                    message: "Invalid audit orchestration input arguments. Please correct the errors and try again.");
+                    message: "Invalid audit orchestration argument(s), correct the errors and try again.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {

@@ -22,7 +22,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             InvalidArgumentAuditOrchestrationException invalidArgumentAuditException =
                 new InvalidArgumentAuditOrchestrationException(
-                message: "Invalid audit argument(s), correct the errors and try again.");
+                message: "Invalid audit orchestration argument(s), correct the errors and try again.");
 
             invalidArgumentAuditException.AddData(
                 key: "entity",
@@ -33,12 +33,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "Entity is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations),
+                key: "securityConfigurations",
                 values: "Entity is required");
 
             var expectedAuditOrchestrationValidationException =
                 new AuditOrchestrationValidationException(
-                    message: "Audit orchestration validation errors occurred, please try again.",
+                    message: "Audit orchestration validation error occurred, please try again.",
                     innerException: invalidArgumentAuditException);
 
             // when

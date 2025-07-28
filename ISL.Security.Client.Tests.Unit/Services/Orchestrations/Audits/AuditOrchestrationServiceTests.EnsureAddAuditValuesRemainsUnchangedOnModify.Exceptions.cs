@@ -32,8 +32,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             this.auditServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
-                    It.IsAny<object>(),
-                    It.IsAny<object>(),
+                    It.IsAny<Person>(),
+                    It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(dependancyValidationException);
 
@@ -78,16 +78,17 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             this.auditServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
-                    It.IsAny<object>(),
-                    It.IsAny<object>(),
+                    It.IsAny<Person>(),
+                    It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(dependancyException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
-                somePerson,
-                someStoragePerson,
-                someSecurityConfiguration);
+            ValueTask<Person> task = this.auditOrchestrationService
+                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<Person>(
+                    somePerson,
+                    someStoragePerson,
+                    someSecurityConfiguration);
 
             AuditOrchestrationDependencyException actualException =
                 await Assert.ThrowsAsync<AuditOrchestrationDependencyException>(task.AsTask);
@@ -117,7 +118,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             var failedAuditOrchestrationServiceException =
                 new FailedAuditOrchestrationServiceException(
-                    message: "Failed Audit orchestration service error occurred, please contact support.",
+                    message: "Failed audit orchestration service error occurred, please contact support.",
                     innerException: serviceException);
 
             var expectedAuditOrchestrationServiceException =
@@ -127,8 +128,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             this.auditServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
-                    It.IsAny<object>(),
-                    It.IsAny<object>(),
+                    It.IsAny<Person>(),
+                    It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(serviceException);
 

@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
-using ISL.Security.Client.Models.Foundations.Audits.Exceptions;
+using ISL.Security.Client.Models.Orchestrations.Audits.Exceptions;
 using ISL.Security.Client.Tests.Unit.Models;
 
 namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
@@ -21,8 +21,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             ClaimsPrincipal nullClaimsPrincipal = null;
             SecurityConfigurations nullSecurityConfigurations = null;
 
-            InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
-                message: "Invalid audit argument(s), correct the errors and try again.");
+            InvalidArgumentAuditOrchestrationException invalidArgumentAuditException =
+                new InvalidArgumentAuditOrchestrationException(
+                    message: "Invalid audit orchestration argument(s), correct the errors and try again.");
 
             invalidArgumentAuditException.AddData(
                 key: "entity",
@@ -33,23 +34,23 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "Claims principal is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations),
+                key: "securityConfigurations",
                 values: "Entity is required");
 
             var expectedAuditValidationException =
-                new AuditValidationException(
-                    message: "Audit validation errors occurred, please try again.",
+                new AuditOrchestrationValidationException(
+                    message: "Audit orchestration validation error occurred, please try again.",
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> taskask =
+            ValueTask<Person> task =
                 auditOrchestrationService.ApplyAddAuditAsync(
                     nullPerson,
                     nullClaimsPrincipal,
                     nullSecurityConfigurations);
 
-            AuditValidationException actualAuditValidationException =
-                await Assert.ThrowsAsync<AuditValidationException>(taskask.AsTask);
+            AuditOrchestrationValidationException actualAuditValidationException =
+                await Assert.ThrowsAsync<AuditOrchestrationValidationException>(task.AsTask);
 
             // then
             actualAuditValidationException.Should()
