@@ -104,24 +104,30 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             ValidateInputs(entity, storageEntity, securityConfigurations);
             var createdByName = securityConfigurations.CreatedByPropertyName;
             var createdDateName = securityConfigurations.CreatedDatePropertyName;
-            var createdByProperty = typeof(T).GetProperty(createdByName);
-            var createdDateProperty = typeof(T).GetProperty(createdDateName);
-
-            if (createdByProperty == null || !createdByProperty.CanRead)
-                throw new InvalidOperationException(
-                    $"Property '{createdByName}' not found or not readable on type '{typeof(T).Name}'.");
-
-            if (createdDateProperty == null || !createdDateProperty.CanRead)
-                throw new InvalidOperationException(
-                    $"Property '{createdDateName}' not found or not readable on type '{typeof(T).Name}'.");
-
-            object createdByValue = createdByProperty.GetValue(storageEntity);
-            object createdDateValue = createdDateProperty.GetValue(storageEntity);
+            object createdByValue = GetProperty(storageEntity, createdByName);
+            object createdDateValue = GetProperty(storageEntity, createdDateName);
             SetProperty(entity, createdByName, createdByValue);
             SetProperty(entity, createdDateName, createdDateValue);
 
             return entity;
         });
+
+        private object GetProperty<T>(T obj, string propertyName)
+        {
+            if (obj is IDictionary<string, object> expando)
+            {
+                if (!expando.TryGetValue(propertyName, out var value))
+                    throw new InvalidOperationException($"Property '{propertyName}' not found on ExpandoObject.");
+                return value;
+            }
+
+            var prop = typeof(T).GetProperty(propertyName);
+            if (prop == null || !prop.CanRead)
+                throw new InvalidOperationException(
+                    $"Property '{propertyName}' not found or not readable on type '{typeof(T).Name}'.");
+
+            return prop.GetValue(obj);
+        }
 
         private static void SetProperty<T>(T entity, string propertyName, object value)
         {
