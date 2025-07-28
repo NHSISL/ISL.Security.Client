@@ -156,28 +156,32 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 key: nameof(SecurityConfigurations.CreatedByPropertyName),
                 values:
                     $"Property '{inputSecurityConfigurations.CreatedByPropertyName}' not found, " +
-                    $"not settable, or not assignable from '{inputSecurityConfigurations.CreatedByPropertyType.Name}' " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.CreatedByPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
                 key: nameof(SecurityConfigurations.CreatedDatePropertyName),
                 values:
                     $"Property '{inputSecurityConfigurations.CreatedDatePropertyName}' not found, " +
-                    $"not settable, or not assignable from '{inputSecurityConfigurations.CreatedDatePropertyType.Name}' " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.CreatedDatePropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
                 key: nameof(SecurityConfigurations.UpdatedByPropertyName),
                 values:
                     $"Property '{inputSecurityConfigurations.UpdatedByPropertyName}' not found, " +
-                    $"not settable, or not assignable from '{inputSecurityConfigurations.UpdatedByPropertyType.Name}' " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.UpdatedByPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
                 key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
                 values:
                     $"Property '{inputSecurityConfigurations.UpdatedDatePropertyName}' not found, " +
-                    $"not settable, or not assignable from '{inputSecurityConfigurations.UpdatedDatePropertyType.Name}' " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.UpdatedDatePropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             var expectedAuditValidationException =

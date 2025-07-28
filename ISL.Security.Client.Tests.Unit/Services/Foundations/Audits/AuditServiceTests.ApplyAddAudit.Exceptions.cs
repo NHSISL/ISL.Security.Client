@@ -15,7 +15,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
     public partial class AuditServiceTests
     {
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnGetAuditIfServiceErrorOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnApplyAddAuditIfServiceErrorOccursAndLogItAsync()
         {
             // given
             dynamic someObject = new ExpandoObject();
@@ -54,12 +54,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .Throws(serviceException);
 
             // when
-            ValueTask<ExpandoObject> getAuditTask =
+            ValueTask<ExpandoObject> applyAddAuditTask =
                 auditService.ApplyAddAuditAsync(someObject, someUserId, someSecurityConfigurations);
 
             AuditServiceException actualAuditServiceException =
                 await Assert.ThrowsAsync<AuditServiceException>(
-                    getAuditTask.AsTask);
+                    applyAddAuditTask.AsTask);
 
             // then
             actualAuditServiceException.Should()
