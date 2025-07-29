@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ISL.Security.Client.Tests.Unit.Models
+namespace ISL.Security.Client.Tests.Acceptance.Models
 {
     internal class Person
     {
