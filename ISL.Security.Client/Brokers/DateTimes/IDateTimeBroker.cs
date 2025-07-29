@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ISL.Security.Client.Brokers.DateTimes
 {
-    public interface IDateTimeBroker
+    internal interface IDateTimeBroker
     {
         ValueTask<DateTimeOffset> GetCurrentDateTimeOffsetAsync();
     }
