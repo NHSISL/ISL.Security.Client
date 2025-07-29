@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISL.Security.Client.Tests.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISL.Security.Client.Tests.Acceptance", "ISL.Security.Client.Tests.Acceptance\ISL.Security.Client.Tests.Acceptance.csproj", "{D89FF18D-806B-444E-8011-31DFD27EBCD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISL.Security.Client.Tests.Integrations", "ISL.Security.Client.Tests.Integrations\ISL.Security.Client.Tests.Integrations.csproj", "{77689312-998A-581E-0527-B834C5C2D12D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{D89FF18D-806B-444E-8011-31DFD27EBCD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D89FF18D-806B-444E-8011-31DFD27EBCD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D89FF18D-806B-444E-8011-31DFD27EBCD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77689312-998A-581E-0527-B834C5C2D12D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77689312-998A-581E-0527-B834C5C2D12D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77689312-998A-581E-0527-B834C5C2D12D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77689312-998A-581E-0527-B834C5C2D12D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
