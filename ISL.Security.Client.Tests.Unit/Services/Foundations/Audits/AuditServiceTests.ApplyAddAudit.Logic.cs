@@ -86,7 +86,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             var securityConfigurations = new SecurityConfigurations
             {
-                CreatedByPropertyName = "CreatedAt",
+                CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
                 CreatedDatePropertyName = "CreatedWhen",
                 CreatedDatePropertyType = typeof(DateTimeOffset),
