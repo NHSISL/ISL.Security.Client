@@ -75,7 +75,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 UpdatedWhen = DateTimeOffset.MinValue,
             };
 
-            dynamic expectedResult = new Person
+            var expectedResult = new Person
             {
                 Name = "John Doe",
                 CreatedBy = userId,
@@ -86,7 +86,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             var securityConfigurations = new SecurityConfigurations
             {
-                CreatedByPropertyName = "CreatedBy",
+                CreatedByPropertyName = "CreatedAt",
                 CreatedByPropertyType = typeof(string),
                 CreatedDatePropertyName = "CreatedWhen",
                 CreatedDatePropertyType = typeof(DateTimeOffset),

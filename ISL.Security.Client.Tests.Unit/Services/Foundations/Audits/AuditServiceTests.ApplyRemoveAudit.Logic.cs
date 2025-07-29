@@ -77,7 +77,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 UpdatedWhen = DateTimeOffset.MinValue,
             };
 
-            dynamic expectedResult = new Person
+            var expectedResult = new Person
             {
                 Name = "John Doe",
                 CreatedBy = createdUserId,
