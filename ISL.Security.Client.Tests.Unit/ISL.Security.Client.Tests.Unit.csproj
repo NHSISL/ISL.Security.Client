@@ -36,8 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\Clients\Audits\" />
-	  <Folder Include="Services\Clients\Users\" />
+	  <Folder Include="Clients\Audits\" />
 	</ItemGroup>
 
 </Project>

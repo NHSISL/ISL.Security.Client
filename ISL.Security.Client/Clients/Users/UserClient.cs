@@ -2,6 +2,7 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ISL.Security.Client.Models.Clients.Users.Exceptions;
@@ -14,18 +15,18 @@ namespace ISL.Security.Client.Clients.Users
 {
     internal class UserClient : IUserClient
     {
-        private readonly IUserService userPrincipalService;
+        private readonly IUserService userService;
 
-        public UserClient(IUserService userPrincipalService)
+        public UserClient(IUserService userService)
         {
-            this.userPrincipalService = userPrincipalService;
+            this.userService = userService;
         }
 
         public async ValueTask<User> GetUserAsync(ClaimsPrincipal claimsPrincipal)
         {
             try
             {
-                return await userPrincipalService.GetUserAsync(claimsPrincipal);
+                return await userService.GetUserAsync(claimsPrincipal);
             }
             catch (UserValidationException userValidationException)
             {
@@ -44,8 +45,12 @@ namespace ISL.Security.Client.Clients.Users
             }
             catch (UserServiceException userServiceException)
             {
-                throw CreateUserClientServiceException(
+                throw CreateUserClientDependencyException(
                     userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
             }
         }
 
@@ -53,7 +58,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await userPrincipalService.IsUserAuthenticatedAsync(claimsPrincipal);
+                return await userService.IsUserAuthenticatedAsync(claimsPrincipal);
             }
             catch (UserValidationException userValidationException)
             {
@@ -72,8 +77,12 @@ namespace ISL.Security.Client.Clients.Users
             }
             catch (UserServiceException userServiceException)
             {
-                throw CreateUserClientServiceException(
+                throw CreateUserClientDependencyException(
                     userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
             }
         }
 
@@ -81,7 +90,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await userPrincipalService.IsUserInRoleAsync(claimsPrincipal, roleName);
+                return await userService.IsUserInRoleAsync(claimsPrincipal, roleName);
             }
             catch (UserValidationException userValidationException)
             {
@@ -100,8 +109,12 @@ namespace ISL.Security.Client.Clients.Users
             }
             catch (UserServiceException userServiceException)
             {
-                throw CreateUserClientServiceException(
+                throw CreateUserClientDependencyException(
                     userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
             }
         }
 
@@ -112,7 +125,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await userPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+                return await userService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
             }
             catch (UserValidationException userValidationException)
             {
@@ -131,8 +144,12 @@ namespace ISL.Security.Client.Clients.Users
             }
             catch (UserServiceException userServiceException)
             {
-                throw CreateUserClientServiceException(
+                throw CreateUserClientDependencyException(
                     userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
             }
         }
 
@@ -140,7 +157,7 @@ namespace ISL.Security.Client.Clients.Users
         {
             try
             {
-                return await userPrincipalService.UserHasClaimTypeAsync(claimsPrincipal, claimType);
+                return await userService.UserHasClaimTypeAsync(claimsPrincipal, claimType);
             }
             catch (UserValidationException userValidationException)
             {
@@ -159,8 +176,12 @@ namespace ISL.Security.Client.Clients.Users
             }
             catch (UserServiceException userServiceException)
             {
-                throw CreateUserClientServiceException(
+                throw CreateUserClientDependencyException(
                     userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
             }
         }
 
@@ -180,7 +201,7 @@ namespace ISL.Security.Client.Clients.Users
                 data: innerException.Data);
         }
 
-        private static UserClientServiceException CreateUserClientServiceException(Xeption innerException)
+        private static UserClientServiceException CreateUserClientServiceException(Exception innerException)
         {
             return new UserClientServiceException(
                 message: "User client service error occurred, please contact support.",
