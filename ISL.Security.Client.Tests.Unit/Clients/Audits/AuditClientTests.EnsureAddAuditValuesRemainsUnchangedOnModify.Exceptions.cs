@@ -6,59 +6,59 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
-using ISL.Security.Client.Models.Orchestrations.Audits.Exceptions;
+using ISL.Security.Client.Models.Clients.Audits.Exceptions;
 using ISL.Security.Client.Tests.Unit.Models;
 using Moq;
 using Xeptions;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+namespace ISL.Security.Client.Tests.Clients.Audits
 {
-    public partial class AuditOrchestrationServiceTests
+    public partial class AuditClientTests
     {
         [Theory]
-        [MemberData(nameof(DependencyValidationExceptions))]
+        [MemberData(nameof(ValidationExceptions))]
         public async Task ShouldThrowDependencyValidationOnEnsureAddAuditIfDependencyValidationOccursAndLogItAsync(
-            Xeption dependancyValidationException)
+            Xeption validationException)
         {
             // given
             var somePerson = new Person { Name = GetRandomString() };
             var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
-            var expectedDependencyException =
-                new AuditOrchestrationDependencyValidationException(
-                    message: "Audit orchestration dependency validation error occurred, fix the errors and try again.",
-                    innerException: dependancyValidationException.InnerException as Xeption);
+            var expectedAuditClientValidationException =
+                new AuditClientValidationException(
+                    message: "Audit client validation error occurred, fix the error and try again.",
+                    innerException: validationException.InnerException as Xeption,
+                    data: validationException.InnerException.Data);
 
-            this.auditServiceMock.Setup(service =>
+            this.auditOrchestrationServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
-                        .ThrowsAsync(dependancyValidationException);
+                        .ThrowsAsync(validationException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
 
-            AuditOrchestrationDependencyValidationException actualException =
-                await Assert.ThrowsAsync<AuditOrchestrationDependencyValidationException>(task.AsTask);
+            AuditClientValidationException actualAuditClientValidationException =
+                await Assert.ThrowsAsync<AuditClientValidationException>(task.AsTask);
 
             // then
-            actualException.Should()
-                .BeEquivalentTo(expectedDependencyException);
+            actualAuditClientValidationException.Should()
+                .BeEquivalentTo(expectedAuditClientValidationException);
 
-            this.auditServiceMock.Verify(service =>
+            this.auditOrchestrationServiceMock.Verify(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
                     Times.Once);
 
-            this.auditServiceMock.VerifyNoOtherCalls();
-            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -71,12 +71,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
-            var expectedDependencyException =
-                new AuditOrchestrationDependencyException(
-                    message: "Audit orchestration dependency error occurred, fix the errors and try again.",
-                    innerException: dependancyException.InnerException as Xeption);
+            var expectedAuditClientDependencyException =
+                new AuditClientDependencyException(
+                    message: "Audit client dependency error occurred, please contact support.",
+                    innerException: dependancyException.InnerException as Xeption,
+                    data: dependancyException.InnerException.Data);
 
-            this.auditServiceMock.Setup(service =>
+            this.auditOrchestrationServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
@@ -84,27 +85,26 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                         .ThrowsAsync(dependancyException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService
+            ValueTask<Person> task = this.auditClient
                 .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<Person>(
                     somePerson,
                     someStoragePerson,
                     someSecurityConfiguration);
 
-            AuditOrchestrationDependencyException actualException =
-                await Assert.ThrowsAsync<AuditOrchestrationDependencyException>(task.AsTask);
+            AuditClientDependencyException actualAuditClientDependencyException =
+                await Assert.ThrowsAsync<AuditClientDependencyException>(task.AsTask);
 
             // then
-            actualException.Should().BeEquivalentTo(expectedDependencyException);
+            actualAuditClientDependencyException.Should().BeEquivalentTo(expectedAuditClientDependencyException);
 
-            this.auditServiceMock.Verify(service =>
+            this.auditOrchestrationServiceMock.Verify(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
-                    Times.Once);
+                        Times.Once);
 
-            this.auditServiceMock.VerifyNoOtherCalls();
-            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -116,17 +116,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             var someSecurityConfiguration = GetSecurityConfigurations();
             var serviceException = new Exception();
 
-            var failedAuditOrchestrationServiceException =
-                new FailedAuditOrchestrationServiceException(
-                    message: "Failed audit orchestration service error occurred, please contact support.",
-                    innerException: serviceException);
+            var expectedAuditClientServiceException =
+                new AuditClientServiceException(
+                    message: "Audit client service error occurred, please contact support.",
+                    innerException: serviceException,
+                    data: serviceException.Data);
 
-            var expectedAuditOrchestrationServiceException =
-                new AuditOrchestrationServiceException(
-                    message: "Audit orchestration service error occurred, please contact support.",
-                    innerException: failedAuditOrchestrationServiceException);
-
-            this.auditServiceMock.Setup(service =>
+            this.auditOrchestrationServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
@@ -134,26 +130,25 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                         .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
 
-            AuditOrchestrationServiceException actualException =
-                await Assert.ThrowsAsync<AuditOrchestrationServiceException>(task.AsTask);
+            AuditClientServiceException actualAuditClientServiceException =
+                await Assert.ThrowsAsync<AuditClientServiceException>(task.AsTask);
 
             // then
-            actualException.Should().BeEquivalentTo(expectedAuditOrchestrationServiceException);
+            actualAuditClientServiceException.Should().BeEquivalentTo(expectedAuditClientServiceException);
 
-            this.auditServiceMock.Verify(service =>
+            this.auditOrchestrationServiceMock.Verify(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
-                    Times.Once);
+                        Times.Once);
 
-            this.auditServiceMock.VerifyNoOtherCalls();
-            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
     }
 }

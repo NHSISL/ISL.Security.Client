@@ -2,6 +2,7 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ISL.Security.Client.Models.Clients;
@@ -48,8 +49,12 @@ namespace ISL.Security.Client.Clients.Audits
             }
             catch (AuditOrchestrationServiceException auditOrchestrationServiceException)
             {
-                throw CreateAuditClientServiceException(
+                throw CreateAuditClientDependencyException(
                     auditOrchestrationServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateAuditClientServiceException(exception);
             }
         }
 
@@ -80,8 +85,12 @@ namespace ISL.Security.Client.Clients.Audits
             }
             catch (AuditOrchestrationServiceException auditOrchestrationServiceException)
             {
-                throw CreateAuditClientServiceException(
+                throw CreateAuditClientDependencyException(
                     auditOrchestrationServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateAuditClientServiceException(exception);
             }
         }
 
@@ -112,8 +121,12 @@ namespace ISL.Security.Client.Clients.Audits
             }
             catch (AuditOrchestrationServiceException auditOrchestrationServiceException)
             {
-                throw CreateAuditClientServiceException(
+                throw CreateAuditClientDependencyException(
                     auditOrchestrationServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateAuditClientServiceException(exception);
             }
         }
 
@@ -144,15 +157,19 @@ namespace ISL.Security.Client.Clients.Audits
             }
             catch (AuditOrchestrationServiceException auditOrchestrationServiceException)
             {
-                throw CreateAuditClientServiceException(
+                throw CreateAuditClientDependencyException(
                     auditOrchestrationServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateAuditClientServiceException(exception);
             }
         }
 
         private static AuditClientValidationException CreateAuditClientValidationException(Xeption innerException)
         {
             return new AuditClientValidationException(
-                message: "Audit client validation error occurred, fix errors and try again.",
+                message: "Audit client validation error occurred, fix the error and try again.",
                 innerException,
                 data: innerException.Data);
         }
@@ -165,7 +182,7 @@ namespace ISL.Security.Client.Clients.Audits
                 data: innerException.Data);
         }
 
-        private static AuditClientServiceException CreateAuditClientServiceException(Xeption innerException)
+        private static AuditClientServiceException CreateAuditClientServiceException(Exception innerException)
         {
             return new AuditClientServiceException(
                 message: "Audit client service error occurred, please contact support.",
