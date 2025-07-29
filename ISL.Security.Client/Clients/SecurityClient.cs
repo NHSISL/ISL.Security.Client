@@ -36,7 +36,9 @@ namespace ISL.Security.Client.Clients
                 .AddTransient<IDateTimeBroker, DateTimeBroker>()
                 .AddTransient<IAuditService, AuditService>()
                 .AddTransient<IUserService, UserService>()
-                .AddTransient<IAuditOrchestrationService, AuditOrchestrationService>();
+                .AddTransient<IAuditOrchestrationService, AuditOrchestrationService>()
+                .AddTransient<IUserClient, UserClient>()
+                .AddTransient<IAuditClient, AuditClient>();
 
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
