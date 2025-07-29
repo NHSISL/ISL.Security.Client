@@ -89,6 +89,17 @@ namespace ISL.Security.Client.Infrastructure.Services
                         {
                             Name = "Tag and Release"
                         }
+                    },
+                    {
+                        "publish",
+                        new PublishJobV2(
+                            runsOn: BuildMachines.UbuntuLatest,
+                            dependsOn: "add_tag",
+                            dotNetVersion: dotNetVersion,
+                            nugetApiKey: "${{ secrets.NUGET_ACCESS }}")
+                        {
+                            Name = "Publish to NuGet"
+                        }
                     }
                 }
             };
