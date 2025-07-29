@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Force.DeepCloner;
 using ISL.Security.Client.Models.Clients;
+using ISL.Security.Client.Tests.Acceptance.Models;
 
 namespace ISL.Security.Client.Tests.Clients.Audits
 {
