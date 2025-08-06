@@ -25,7 +25,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var securityConfigurations = new SecurityConfigurations();
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.ApplyModifyAuditAsync(
+                service.ApplyModifyAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
                     It.IsAny<SecurityConfigurations>()))
@@ -33,13 +33,13 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // When
             var actualResult = await this.auditClient
-                .ApplyModifyAuditAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
+                .ApplyModifyAuditValuesAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.ApplyModifyAuditAsync(
+                service.ApplyModifyAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
                     It.IsAny<SecurityConfigurations>()),

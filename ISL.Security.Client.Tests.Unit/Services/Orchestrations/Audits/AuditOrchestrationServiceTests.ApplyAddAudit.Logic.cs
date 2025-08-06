@@ -45,12 +45,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .ReturnsAsync(currentUser);
 
             this.auditServiceMock.Setup(service =>
-                service.ApplyAddAuditAsync(inputPerson, currentUser.UserId, securityConfigurations))
+                service.ApplyAddAuditValuesAsync(inputPerson, currentUser.UserId, securityConfigurations))
                     .ReturnsAsync(updatedPerson);
 
             // When
             var actualResult = await this.auditOrchestrationService
-                .ApplyAddAuditAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
+                .ApplyAddAuditValuesAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

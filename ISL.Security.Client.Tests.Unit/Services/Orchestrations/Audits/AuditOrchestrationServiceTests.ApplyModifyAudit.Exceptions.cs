@@ -35,7 +35,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                    .ThrowsAsync(dependancyValidationException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditAsync(
+            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditValuesAsync(
                 somePerson,
                 someClaimsPrincipal,
                 someSecurityConfiguration);
@@ -75,7 +75,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                   .ThrowsAsync(dependancyException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditAsync(
+            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditValuesAsync(
                 somePerson,
                 someClaimsPrincipal,
                 someSecurityConfiguration);
@@ -118,7 +118,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditAsync(
+            ValueTask<Person> task = this.auditOrchestrationService.ApplyModifyAuditValuesAsync(
                 somePerson,
                 someClaimsPrincipal,
                 someSecurityConfiguration);

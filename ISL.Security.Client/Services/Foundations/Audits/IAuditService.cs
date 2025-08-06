@@ -9,9 +9,9 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 {
     internal interface IAuditService
     {
-        ValueTask<T> ApplyAddAuditAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
-        ValueTask<T> ApplyModifyAuditAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
-        ValueTask<T> ApplyRemoveAuditAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
+        ValueTask<T> ApplyAddAuditValuesAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
+        ValueTask<T> ApplyModifyAuditValuesAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
+        ValueTask<T> ApplyRemoveAuditValuesAsync<T>(T entity, string userId, SecurityConfigurations securityConfigurations);
 
         ValueTask<T> EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<T>(
             T entity,

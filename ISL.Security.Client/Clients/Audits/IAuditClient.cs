@@ -10,12 +10,12 @@ namespace ISL.Security.Client.Clients.Audits
 {
     public interface IAuditClient
     {
-        ValueTask<T> ApplyAddAuditAsync<T>(
+        ValueTask<T> ApplyAddAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);
 
-        ValueTask<T> ApplyModifyAuditAsync<T>(
+        ValueTask<T> ApplyModifyAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);
@@ -25,7 +25,7 @@ namespace ISL.Security.Client.Clients.Audits
             T storageEntity,
             SecurityConfigurations securityConfigurations);
 
-        ValueTask<T> ApplyRemoveAuditAsync<T>(
+        ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);
