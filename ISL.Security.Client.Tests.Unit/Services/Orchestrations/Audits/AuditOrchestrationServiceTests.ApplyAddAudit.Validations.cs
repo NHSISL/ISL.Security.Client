@@ -44,7 +44,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> task =
-                auditOrchestrationService.ApplyAddAuditAsync(
+                auditOrchestrationService.ApplyAddAuditValuesAsync(
                     nullPerson,
                     nullClaimsPrincipal,
                     nullSecurityConfigurations);

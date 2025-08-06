@@ -55,7 +55,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<ExpandoObject> applyModifyAuditTask =
-                auditService.ApplyModifyAuditAsync(someObject, someUserId, someSecurityConfigurations);
+                auditService.ApplyModifyAuditValuesAsync(someObject, someUserId, someSecurityConfigurations);
 
             AuditServiceException actualAuditServiceException =
                 await Assert.ThrowsAsync<AuditServiceException>(

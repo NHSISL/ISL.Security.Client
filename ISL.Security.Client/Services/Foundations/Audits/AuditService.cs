@@ -18,7 +18,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         public AuditService(IDateTimeBroker dateTimeBroker) =>
             this.dateTimeBroker = dateTimeBroker;
 
-        public ValueTask<T> ApplyAddAuditAsync<T>(
+        public ValueTask<T> ApplyAddAuditValuesAsync<T>(
             T entity,
             string userId,
             SecurityConfigurations securityConfigurations) =>
@@ -50,7 +50,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return entity;
         });
 
-        public ValueTask<T> ApplyModifyAuditAsync<T>(
+        public ValueTask<T> ApplyModifyAuditValuesAsync<T>(
             T entity,
             string userId,
             SecurityConfigurations securityConfigurations) =>
@@ -74,7 +74,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return entity;
         });
 
-        public ValueTask<T> ApplyRemoveAuditAsync<T>(
+        public ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             string userId,
             SecurityConfigurations securityConfigurations) =>

@@ -47,7 +47,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyModifyAuditTask =
-                auditService.ApplyModifyAuditAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
+                auditService.ApplyModifyAuditValuesAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);
@@ -121,7 +121,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyModifyAuditTask =
-                auditService.ApplyModifyAuditAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
+                auditService.ApplyModifyAuditValuesAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);
@@ -191,7 +191,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyModifyAuditTask =
-                auditService.ApplyModifyAuditAsync(inputPerson, inputUserId, inputSecurityConfigurations);
+                auditService.ApplyModifyAuditValuesAsync(inputPerson, inputUserId, inputSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyModifyAuditTask.AsTask);

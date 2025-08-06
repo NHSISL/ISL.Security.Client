@@ -42,7 +42,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // When
             var actualResult = await this.securityClient.Audits
-                .ApplyAddAuditAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations);
+                .ApplyAddAuditValuesAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations);
 
             // Then
             actualResult.Should().BeEquivalentTo(expectedResult, options =>

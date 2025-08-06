@@ -44,12 +44,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .ReturnsAsync(currentUser);
 
             this.auditServiceMock.Setup(service =>
-                service.ApplyRemoveAuditAsync(inputPerson, currentUser.UserId, securityConfigurations))
+                service.ApplyRemoveAuditValuesAsync(inputPerson, currentUser.UserId, securityConfigurations))
                     .ReturnsAsync(updatedPerson);
 
             // When
             var actualResult = await this.auditOrchestrationService
-                .ApplyRemoveAuditAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
+                .ApplyRemoveAuditValuesAsync(inputPerson, inputClaimsPrincipal, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

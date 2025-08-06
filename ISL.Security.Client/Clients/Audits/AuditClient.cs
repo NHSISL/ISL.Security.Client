@@ -22,7 +22,7 @@ namespace ISL.Security.Client.Clients.Audits
             this.auditOrchestrationService = auditOrchestrationService;
         }
 
-        public async ValueTask<T> ApplyAddAuditAsync<T>(
+        public async ValueTask<T> ApplyAddAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations)
@@ -30,7 +30,7 @@ namespace ISL.Security.Client.Clients.Audits
             try
             {
                 return await this.auditOrchestrationService
-                    .ApplyAddAuditAsync<T>(entity, claimsPrincipal, securityConfigurations);
+                    .ApplyAddAuditValuesAsync<T>(entity, claimsPrincipal, securityConfigurations);
             }
             catch (AuditOrchestrationValidationException auditOrchestrationValidationException)
             {
@@ -58,7 +58,7 @@ namespace ISL.Security.Client.Clients.Audits
             }
         }
 
-        public async ValueTask<T> ApplyModifyAuditAsync<T>(
+        public async ValueTask<T> ApplyModifyAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations)
@@ -66,7 +66,7 @@ namespace ISL.Security.Client.Clients.Audits
             try
             {
                 return await this.auditOrchestrationService
-                    .ApplyModifyAuditAsync(entity, claimsPrincipal, securityConfigurations);
+                    .ApplyModifyAuditValuesAsync(entity, claimsPrincipal, securityConfigurations);
             }
             catch (AuditOrchestrationValidationException auditOrchestrationValidationException)
             {
@@ -94,7 +94,7 @@ namespace ISL.Security.Client.Clients.Audits
             }
         }
 
-        public async ValueTask<T> ApplyRemoveAuditAsync<T>(
+        public async ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations)
@@ -102,7 +102,7 @@ namespace ISL.Security.Client.Clients.Audits
             try
             {
                 return await this.auditOrchestrationService
-                    .ApplyRemoveAuditAsync(entity, claimsPrincipal, securityConfigurations);
+                    .ApplyRemoveAuditValuesAsync(entity, claimsPrincipal, securityConfigurations);
             }
             catch (AuditOrchestrationValidationException auditOrchestrationValidationException)
             {

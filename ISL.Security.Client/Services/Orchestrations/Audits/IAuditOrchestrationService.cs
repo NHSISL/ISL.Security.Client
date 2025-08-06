@@ -10,17 +10,17 @@ namespace ISL.Security.Client.Services.Orchestrations.Audits
 {
     internal interface IAuditOrchestrationService
     {
-        ValueTask<T> ApplyAddAuditAsync<T>(
+        ValueTask<T> ApplyAddAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);
 
-        ValueTask<T> ApplyModifyAuditAsync<T>(
+        ValueTask<T> ApplyModifyAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);
 
-        ValueTask<T> ApplyRemoveAuditAsync<T>(
+        ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations);

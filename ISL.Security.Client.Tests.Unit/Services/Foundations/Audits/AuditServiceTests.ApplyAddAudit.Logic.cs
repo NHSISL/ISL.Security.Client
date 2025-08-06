@@ -53,7 +53,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .ApplyAddAuditAsync(person, userId, securityConfigurations);
+                .ApplyAddAuditValuesAsync(person, userId, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
@@ -102,7 +102,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .ApplyAddAuditAsync(person, userId, securityConfigurations);
+                .ApplyAddAuditValuesAsync(person, userId, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

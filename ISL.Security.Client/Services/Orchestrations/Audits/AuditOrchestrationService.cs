@@ -22,7 +22,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             this.auditService = auditService;
         }
 
-        public ValueTask<T> ApplyAddAuditAsync<T>(
+        public ValueTask<T> ApplyAddAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations) =>
@@ -32,12 +32,12 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
-                .ApplyAddAuditAsync(entity, user.UserId, securityConfigurations);
+                .ApplyAddAuditValuesAsync(entity, user.UserId, securityConfigurations);
 
             return updatedEntity;
         });
 
-        public ValueTask<T> ApplyModifyAuditAsync<T>(
+        public ValueTask<T> ApplyModifyAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations) =>
@@ -47,12 +47,12 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
-                .ApplyModifyAuditAsync(entity, user.UserId, securityConfigurations);
+                .ApplyModifyAuditValuesAsync(entity, user.UserId, securityConfigurations);
 
             return updatedEntity;
         });
 
-        public ValueTask<T> ApplyRemoveAuditAsync<T>(
+        public ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
             SecurityConfigurations securityConfigurations) =>
@@ -62,7 +62,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             User user = await this.userService.GetUserAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
-                .ApplyRemoveAuditAsync(entity, user.UserId, securityConfigurations);
+                .ApplyRemoveAuditValuesAsync(entity, user.UserId, securityConfigurations);
 
             return updatedEntity;
         });

@@ -47,7 +47,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyRemoveAuditTask =
-                auditService.ApplyRemoveAuditAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
+                auditService.ApplyRemoveAuditValuesAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyRemoveAuditTask.AsTask);
@@ -121,7 +121,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyRemoveAuditTask =
-                auditService.ApplyRemoveAuditAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
+                auditService.ApplyRemoveAuditValuesAsync(inputPerson, inputUserId, invalidSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyRemoveAuditTask.AsTask);
@@ -191,7 +191,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // when
             ValueTask<Person> applyRemoveAuditTask =
-                auditService.ApplyRemoveAuditAsync(inputPerson, inputUserId, inputSecurityConfigurations);
+                auditService.ApplyRemoveAuditValuesAsync(inputPerson, inputUserId, inputSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyRemoveAuditTask.AsTask);

@@ -25,18 +25,18 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var inputSecurityConfigurations = new SecurityConfigurations();
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.ApplyAddAuditAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations))
+                service.ApplyAddAuditValuesAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations))
                     .ReturnsAsync(updatedPerson);
 
             // When
             var actualResult = await this.auditClient
-                .ApplyAddAuditAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations);
+                .ApplyAddAuditValuesAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.ApplyAddAuditAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations),
+                service.ApplyAddAuditValuesAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations),
                     Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
