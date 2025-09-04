@@ -49,6 +49,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
+            this.auditServiceMock.Verify(service =>
+                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                    inputPerson,
+                    storagePerson,
+                    securityConfigurations),
+                        Times.Once);
+
             this.userServiceMock.VerifyNoOtherCalls();
             this.auditServiceMock.VerifyNoOtherCalls();
         }
@@ -115,6 +122,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.auditServiceMock.Verify(broker =>
+                broker.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                    inputPerson,
+                    storagePerson,
+                    securityConfigurations),
+                        Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
             this.auditServiceMock.VerifyNoOtherCalls();
