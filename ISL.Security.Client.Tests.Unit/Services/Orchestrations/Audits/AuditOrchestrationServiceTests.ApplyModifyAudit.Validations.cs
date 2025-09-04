@@ -55,6 +55,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             // then
             actualAuditOrchestrationValidationException.Should()
                 .BeEquivalentTo(expectedAuditValidationException);
+
+            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditServiceMock.VerifyNoOtherCalls();
         }
     }
 }
