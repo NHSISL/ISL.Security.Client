@@ -21,7 +21,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             Xeption dependancyValidationException)
         {
             // given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
@@ -61,7 +62,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             Xeption dependancyException)
         {
             // given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
@@ -98,7 +100,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         public async Task ShouldThrowServiceExceptionOnApplyModifyAuditIfServiceErrorOccursAndLogItAsync()
         {
             //Given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
             var serviceException = new Exception();

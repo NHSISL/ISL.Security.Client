@@ -48,6 +48,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -112,6 +115,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditServiceMock.VerifyNoOtherCalls();
         }
     }
 }

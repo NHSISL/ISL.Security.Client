@@ -15,12 +15,21 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {
-        [Fact]
-        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync()
+        [Theory]
+        [InlineData("username", true)]
+        [InlineData("username", false)]
+        [InlineData("", false)]
+        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync(string userId, bool isAuthenticated)
         {
             // Given
-            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal();
+            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
+
+            string securityUserId = isAuthenticated
+                ? userId
+                : string.IsNullOrEmpty(userId)
+                    ? "Anonymous" : userId;
+
             User randomUser = GetUser(randomClaimsPrincipal);
             User currentUser = randomUser;
             var inputPerson = new Person { Name = GetRandomString() };
@@ -43,8 +52,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 service.GetUserAsync(inputClaimsPrincipal))
                     .ReturnsAsync(currentUser);
 
+            this.userServiceMock.Setup(service =>
+                service.IsUserAuthenticatedAsync(inputClaimsPrincipal))
+                    .ReturnsAsync(isAuthenticated);
+
             this.auditServiceMock.Setup(service =>
-                service.ApplyRemoveAuditValuesAsync(inputPerson, currentUser.UserId, securityConfigurations))
+                service.ApplyRemoveAuditValuesAsync(inputPerson, securityUserId, securityConfigurations))
                     .ReturnsAsync(updatedPerson);
 
             // When
@@ -53,6 +66,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.userServiceMock.VerifyNoOtherCalls();
+            this.auditServiceMock.VerifyNoOtherCalls();
         }
     }
 }
