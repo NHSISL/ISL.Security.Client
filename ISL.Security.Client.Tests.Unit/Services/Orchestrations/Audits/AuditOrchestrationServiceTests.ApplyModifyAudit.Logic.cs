@@ -28,7 +28,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             string securityUserId = isAuthenticated
                 ? userId
                 : string.IsNullOrEmpty(userId)
-                    ? "Anonymous" : userId;
+                    ? "anonymous" : userId;
 
             User randomUser = GetUser(randomClaimsPrincipal);
             User currentUser = randomUser;
@@ -66,6 +66,18 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.userServiceMock.Verify(service =>
+                service.GetUserAsync(inputClaimsPrincipal),
+                    Times.Once);
+
+            this.userServiceMock.Verify(service =>
+                service.IsUserAuthenticatedAsync(inputClaimsPrincipal),
+                    Times.Once);
+
+            this.auditServiceMock.Verify(service =>
+                service.ApplyModifyAuditValuesAsync(inputPerson, securityUserId, securityConfigurations),
+                    Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
             this.auditServiceMock.VerifyNoOtherCalls();
