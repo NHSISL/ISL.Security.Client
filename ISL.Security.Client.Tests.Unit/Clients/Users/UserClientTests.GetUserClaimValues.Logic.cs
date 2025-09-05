@@ -38,7 +38,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             actualResult.Should().BeEquivalentTo(expectedResult);
 
             this.userServiceMock.Verify(service =>
-                service.UserHasClaimAsync(claimsPrincipal, type),
+                service.GetUserClaimValuesAsync(claimsPrincipal, type),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
