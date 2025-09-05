@@ -24,9 +24,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             this.securityClient = new SecurityClient();
         }
 
-        private static ClaimsPrincipal CreateRandomClaimsPrincipal(bool isAuthenticated = true)
+        private static ClaimsPrincipal CreateRandomClaimsPrincipal(bool isAuthenticated = true, string userId = "")
         {
-            Guid securityOid = Guid.NewGuid();
             string givenName = GetRandomString();
             string surname = GetRandomString();
             string displayName = GetRandomString();
@@ -35,7 +34,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim("oid", securityOid.ToString()),
+                new Claim("oid", userId),
                 new Claim(ClaimTypes.GivenName, GetRandomString()),
                 new Claim(ClaimTypes.Surname, GetRandomString()),
                 new Claim("displayName", GetRandomString()),
