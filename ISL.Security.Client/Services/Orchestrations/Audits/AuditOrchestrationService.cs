@@ -81,6 +81,15 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return updatedEntity;
         });
 
+        public ValueTask<string> GetCurrentUserIdAsync(ClaimsPrincipal claimsPrincipal) =>
+        TryCatch(async () =>
+        {
+            ValidateOnGetCurrentUserId(claimsPrincipal);
+            string userId = await GetUserIdAsync(claimsPrincipal);
+
+            return userId;
+        });
+
         private async ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
         {
             User user = await this.userService.GetUserAsync(claimsPrincipal);
