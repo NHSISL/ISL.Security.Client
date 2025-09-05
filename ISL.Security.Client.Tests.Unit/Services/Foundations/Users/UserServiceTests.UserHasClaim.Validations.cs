@@ -40,7 +40,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<bool> userHasClaimTypeTask =
-                userService.UserHasClaimTypeAsync(nullClaimsPrincipal, invalidClaimType);
+                userService.UserHasClaimAsync(nullClaimsPrincipal, invalidClaimType);
 
             UserValidationException actualUserValidationException =
                 await Assert.ThrowsAsync<UserValidationException>(userHasClaimTypeTask.AsTask);
@@ -84,7 +84,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<bool> userHasClaimTypeTask =
-                userService.UserHasClaimTypeAsync(nullClaimsPrincipal, invalidClaimType, invalidClaimValue);
+                userService.UserHasClaimAsync(nullClaimsPrincipal, invalidClaimType, invalidClaimValue);
 
             UserValidationException actualUserValidationException =
                 await Assert.ThrowsAsync<UserValidationException>(userHasClaimTypeTask.AsTask);

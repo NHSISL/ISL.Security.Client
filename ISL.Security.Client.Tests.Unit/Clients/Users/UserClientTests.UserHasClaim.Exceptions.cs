@@ -30,12 +30,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: validationException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
                     .Throws(validationException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType);
 
             UserClientValidationException actualUserClientValidationException =
                 await Assert.ThrowsAsync<UserClientValidationException>(
@@ -46,7 +46,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientValidationException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -68,12 +68,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: dependencyException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
                     .Throws(dependencyException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType);
 
             UserClientDependencyException actualUserClientDependencyException =
                 await Assert.ThrowsAsync<UserClientDependencyException>(isUserAuthenticatedTask.AsTask);
@@ -83,7 +83,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientDependencyException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -104,12 +104,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: serviceException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()))
                     .Throws(serviceException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType);
 
             UserClientServiceException actualUserClientServiceException =
                 await Assert.ThrowsAsync<UserClientServiceException>(
@@ -120,7 +120,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientServiceException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -143,12 +143,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: validationException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Throws(validationException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType, someClaimValue);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType, someClaimValue);
 
             UserClientValidationException actualUserClientValidationException =
                 await Assert.ThrowsAsync<UserClientValidationException>(
@@ -159,7 +159,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientValidationException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -182,12 +182,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: dependencyException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Throws(dependencyException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType, someClaimValue);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType, someClaimValue);
 
             UserClientDependencyException actualUserClientDependencyException =
                 await Assert.ThrowsAsync<UserClientDependencyException>(isUserAuthenticatedTask.AsTask);
@@ -197,7 +197,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientDependencyException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -220,12 +220,12 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: serviceException.Data);
 
             userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
                     .Throws(serviceException);
 
             // when
             ValueTask<bool> isUserAuthenticatedTask =
-                userClient.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType, someClaimValue);
+                userClient.UserHasClaimAsync(someClaimsPrincipal, someClaimType, someClaimValue);
 
             UserClientServiceException actualUserClientServiceException =
                 await Assert.ThrowsAsync<UserClientServiceException>(
@@ -236,7 +236,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                 .BeEquivalentTo(expectedUserClientServiceException);
 
             userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
+                service.UserHasClaimAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
