@@ -22,17 +22,17 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             bool expectedResult = hasClaimType;
 
             this.userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(claimsPrincipal, claimType))
+                service.UserHasClaimAsync(claimsPrincipal, claimType))
                     .ReturnsAsync(expectedResult);
 
             // When
-            bool actualResult = await this.userClient.UserHasClaimTypeAsync(claimsPrincipal, claimType);
+            bool actualResult = await this.userClient.UserHasClaimAsync(claimsPrincipal, claimType);
 
             // Then
             actualResult.Should().Be(expectedResult);
 
             this.userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(claimsPrincipal, claimType),
+                service.UserHasClaimAsync(claimsPrincipal, claimType),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
@@ -50,17 +50,17 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             bool expectedResult = hasClaimType;
 
             this.userServiceMock.Setup(service =>
-                service.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue))
+                service.UserHasClaimAsync(claimsPrincipal, claimType, claimValue))
                     .ReturnsAsync(expectedResult);
 
             // When
-            bool actualResult = await this.userClient.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+            bool actualResult = await this.userClient.UserHasClaimAsync(claimsPrincipal, claimType, claimValue);
 
             // Then
             actualResult.Should().Be(expectedResult);
 
             this.userServiceMock.Verify(service =>
-                service.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue),
+                service.UserHasClaimAsync(claimsPrincipal, claimType, claimValue),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();

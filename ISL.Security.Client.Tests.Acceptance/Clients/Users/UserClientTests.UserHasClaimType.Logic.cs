@@ -20,7 +20,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             bool expectedResult = true;
 
             // When
-            bool actualResult = await this.securityClient.Users.UserHasClaimTypeAsync(claimsPrincipal, claimType);
+            bool actualResult = await this.securityClient.Users.UserHasClaimAsync(claimsPrincipal, claimType);
 
             // Then
             actualResult.Should().Be(expectedResult);
@@ -37,7 +37,7 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
 
             // When
             bool actualResult = await this.securityClient.Users
-                .UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+                .UserHasClaimAsync(claimsPrincipal, claimType, claimValue);
 
             // Then
             actualResult.Should().Be(expectedResult);

@@ -23,6 +23,10 @@ namespace ISL.Security.Client.Services.Foundations.Users
             {
                 throw await CreateAndLogValidationExceptionAsync(invalidArgumentUserException);
             }
+            catch (ClaimNotFoundUserException claimNotFoundUserException)
+            {
+                throw await CreateAndLogValidationExceptionAsync(claimNotFoundUserException);
+            }
             catch (Exception exception)
             {
                 var failedUserServiceException =

@@ -32,6 +32,9 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 (Rule: IsInvalid(securityConfigurations), Parameter: nameof(securityConfigurations)));
         }
 
+        private static void ValidateOnGetCurrentUserId(ClaimsPrincipal claimsPrincipal) =>
+            Validate((Rule: IsInvalid(claimsPrincipal), Parameter: nameof(claimsPrincipal)));
+
         private static dynamic IsInvalid(ClaimsPrincipal claimsPrincipal) => new
         {
             Condition = claimsPrincipal == null,
