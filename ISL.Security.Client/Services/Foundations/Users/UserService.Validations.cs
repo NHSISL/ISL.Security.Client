@@ -25,14 +25,14 @@ namespace ISL.Security.Client.Services.Foundations.Users
         virtual internal void ValidateOnUserHasClaimType(ClaimsPrincipal claimsPrincipal, string claimType)
         {
             Validate(
-                (Rule: IsInvalid(claimType), Parameter: "ClaimType"),
+                (Rule: IsInvalid(claimType), Parameter: "Type"),
                 (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
         }
 
         virtual internal void ValidateOnGetUserClaimValue(ClaimsPrincipal claimsPrincipal, string claimType)
         {
             Validate(
-                (Rule: IsInvalid(claimType), Parameter: "ClaimType"),
+                (Rule: IsInvalid(claimType), Parameter: "Type"),
                 (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
         }
 
@@ -42,8 +42,8 @@ namespace ISL.Security.Client.Services.Foundations.Users
             string claimValue)
         {
             Validate(
-                (Rule: IsInvalid(claimType), Parameter: "ClaimType"),
-                (Rule: IsInvalid(claimValue), Parameter: "ClaimValue"),
+                (Rule: IsInvalid(claimType), Parameter: "Type"),
+                (Rule: IsInvalid(claimValue), Parameter: "Value"),
                 (Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
         }
 

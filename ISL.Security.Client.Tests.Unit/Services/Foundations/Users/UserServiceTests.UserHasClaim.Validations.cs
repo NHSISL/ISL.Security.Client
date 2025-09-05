@@ -30,7 +30,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                 values: "ClaimsPrincipal is required");
 
             invalidArgumentUserException.AddData(
-                key: "ClaimType",
+                key: "Type",
                 values: "Text is required");
 
             var expectedUserValidationException =
@@ -70,11 +70,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                 values: "ClaimsPrincipal is required");
 
             invalidArgumentUserException.AddData(
-                key: "ClaimType",
+                key: "Type",
                 values: "Text is required");
 
             invalidArgumentUserException.AddData(
-                key: "ClaimValue",
+                key: "Value",
                 values: "Text is required");
 
             var expectedUserValidationException =

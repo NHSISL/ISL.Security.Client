@@ -14,13 +14,20 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 {
     public partial class AuditClientTests
     {
-        [Fact]
-        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync()
+        [Theory]
+        [InlineData("username", true)]
+        [InlineData("username", false)]
+        [InlineData("", false)]
+        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync(string userId, bool isAuthenticated)
         {
             // Given
-            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal();
+            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated, userId);
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
-            string userId = inputClaimsPrincipal.FindFirst("oid")?.Value;
+
+            string securityUserId = isAuthenticated
+                ? userId
+                : string.IsNullOrEmpty(userId)
+                    ? "anonymous" : userId;
 
             var inputPerson = new Person
             {
@@ -32,7 +39,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             };
 
             var updatedPerson = inputPerson.DeepClone();
-            updatedPerson.UpdatedBy = userId;
+            updatedPerson.UpdatedBy = securityUserId;
 
             var expectedResult = updatedPerson;
 
