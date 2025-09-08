@@ -40,7 +40,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<bool> userHasClaimTypeTask =
-                userServiceMock.Object.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType);
+                userServiceMock.Object.UserHasClaimAsync(someClaimsPrincipal, someClaimType);
 
             UserServiceException actualUserServiceException =
                 await Assert.ThrowsAsync<UserServiceException>(
@@ -84,7 +84,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<bool> userHasClaimTypeTask =
-                userServiceMock.Object.UserHasClaimTypeAsync(someClaimsPrincipal, someClaimType, someClaimValue);
+                userServiceMock.Object.UserHasClaimAsync(someClaimsPrincipal, someClaimType, someClaimValue);
 
             UserServiceException actualUserServiceException =
                 await Assert.ThrowsAsync<UserServiceException>(

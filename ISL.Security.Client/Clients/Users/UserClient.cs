@@ -3,6 +3,7 @@
 // ---------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ISL.Security.Client.Models.Clients.Users.Exceptions;
@@ -118,14 +119,14 @@ namespace ISL.Security.Client.Clients.Users
             }
         }
 
-        public async ValueTask<bool> UserHasClaimTypeAsync(
+        public async ValueTask<bool> UserHasClaimAsync(
             ClaimsPrincipal claimsPrincipal,
-            string claimType,
-            string claimValue)
+            string type,
+            string value)
         {
             try
             {
-                return await userService.UserHasClaimTypeAsync(claimsPrincipal, claimType, claimValue);
+                return await userService.UserHasClaimAsync(claimsPrincipal, type, value);
             }
             catch (UserValidationException userValidationException)
             {
@@ -153,11 +154,77 @@ namespace ISL.Security.Client.Clients.Users
             }
         }
 
-        public async ValueTask<bool> UserHasClaimTypeAsync(ClaimsPrincipal claimsPrincipal, string claimType)
+        public async ValueTask<bool> UserHasClaimAsync(ClaimsPrincipal claimsPrincipal, string type)
         {
             try
             {
-                return await userService.UserHasClaimTypeAsync(claimsPrincipal, claimType);
+                return await userService.UserHasClaimAsync(claimsPrincipal, type);
+            }
+            catch (UserValidationException userValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyValidationException userDependencyValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userDependencyValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyException userDependencyException)
+            {
+                throw CreateUserClientDependencyException(
+                    userDependencyException.InnerException as Xeption);
+            }
+            catch (UserServiceException userServiceException)
+            {
+                throw CreateUserClientDependencyException(
+                    userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
+            }
+        }
+
+        public async ValueTask<string> GetUserClaimValueAsync(ClaimsPrincipal claimsPrincipal, string type)
+        {
+            try
+            {
+                return await userService.GetUserClaimValueAsync(claimsPrincipal, type);
+            }
+            catch (UserValidationException userValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyValidationException userDependencyValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userDependencyValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyException userDependencyException)
+            {
+                throw CreateUserClientDependencyException(
+                    userDependencyException.InnerException as Xeption);
+            }
+            catch (UserServiceException userServiceException)
+            {
+                throw CreateUserClientDependencyException(
+                    userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
+            }
+        }
+
+        public async ValueTask<IReadOnlyList<string>> GetUserClaimValuesAsync(
+            ClaimsPrincipal claimsPrincipal,
+            string type)
+        {
+            try
+            {
+                return await userService.GetUserClaimValuesAsync(claimsPrincipal, type);
             }
             catch (UserValidationException userValidationException)
             {

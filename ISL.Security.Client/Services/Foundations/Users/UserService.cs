@@ -2,10 +2,13 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ISL.Security.Client.Models.Foundations.Users;
+using ISL.Security.Client.Models.Foundations.Users.Exceptions;
 
 namespace ISL.Security.Client.Services.Foundations.Users
 {
@@ -46,7 +49,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
                 claims: claimsList);
         });
 
-        public ValueTask<bool> UserHasClaimTypeAsync(
+        public ValueTask<bool> UserHasClaimAsync(
             ClaimsPrincipal claimsPrincipal,
             string claimType,
             string claimValue) =>
@@ -57,7 +60,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
             return claimsPrincipal.HasClaim(claimType, claimValue);
         });
 
-        public ValueTask<bool> UserHasClaimTypeAsync(ClaimsPrincipal claimsPrincipal, string claimType) =>
+        public ValueTask<bool> UserHasClaimAsync(ClaimsPrincipal claimsPrincipal, string claimType) =>
         TryCatch(async () =>
         {
             ValidateOnUserHasClaimType(claimsPrincipal, claimType);
@@ -80,6 +83,38 @@ namespace ISL.Security.Client.Services.Foundations.Users
             var roles = claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value);
 
             return roles.Contains(roleName);
+        });
+
+        public ValueTask<string> GetUserClaimValueAsync(ClaimsPrincipal claimsPrincipal, string type) =>
+        TryCatch(async () =>
+        {
+            ValidateOnGetUserClaimValue(claimsPrincipal, type);
+
+            var claim = claimsPrincipal.FindFirst(type);
+
+            if (claim is null)
+            {
+                throw new ClaimNotFoundUserException($"Claim with type '{type}' not found.");
+            }
+
+            return claim.Value;
+        });
+
+        public ValueTask<IReadOnlyList<string>> GetUserClaimValuesAsync(ClaimsPrincipal claimsPrincipal, string type) =>
+        TryCatch<IReadOnlyList<string>>(async () =>
+        {
+            ValidateOnGetUserClaimValue(claimsPrincipal, type);
+
+            var values = claimsPrincipal.FindAll(type)
+                .Select(c => c.Value)
+                .ToArray();
+
+            if (values.Count() == 0)
+            {
+                throw new ClaimNotFoundUserException($"Claim with type '{type}' not found.");
+            }
+
+            return values;
         });
     }
 }

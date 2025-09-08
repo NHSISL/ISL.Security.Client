@@ -166,6 +166,38 @@ namespace ISL.Security.Client.Clients.Audits
             }
         }
 
+        public async ValueTask<string> GetCurrentUserIdAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            try
+            {
+                return await this.auditOrchestrationService.GetCurrentUserIdAsync(claimsPrincipal);
+            }
+            catch (AuditOrchestrationValidationException auditOrchestrationValidationException)
+            {
+                throw CreateAuditClientValidationException(
+                    auditOrchestrationValidationException.InnerException as Xeption);
+            }
+            catch (AuditOrchestrationDependencyValidationException auditOrchestrationDependencyValidationException)
+            {
+                throw CreateAuditClientValidationException(
+                    auditOrchestrationDependencyValidationException.InnerException as Xeption);
+            }
+            catch (AuditOrchestrationDependencyException auditOrchestrationDependencyException)
+            {
+                throw CreateAuditClientDependencyException(
+                    auditOrchestrationDependencyException.InnerException as Xeption);
+            }
+            catch (AuditOrchestrationServiceException auditOrchestrationServiceException)
+            {
+                throw CreateAuditClientDependencyException(
+                    auditOrchestrationServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateAuditClientServiceException(exception);
+            }
+        }
+
         private static AuditClientValidationException CreateAuditClientValidationException(Xeption innerException)
         {
             return new AuditClientValidationException(
@@ -189,5 +221,6 @@ namespace ISL.Security.Client.Clients.Audits
                 innerException,
                 data: innerException.Data);
         }
+
     }
 }

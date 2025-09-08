@@ -29,5 +29,7 @@ namespace ISL.Security.Client.Services.Orchestrations.Audits
             T entity,
             T storageEntity,
             SecurityConfigurations securityConfigurations);
+
+        ValueTask<string> GetCurrentUserIdAsync(ClaimsPrincipal claimsPrincipal);
     }
 }
