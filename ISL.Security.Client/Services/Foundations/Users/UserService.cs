@@ -110,7 +110,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
                 .ToList()
                 .AsReadOnly();
 
-            if (values.Count() == 0)
+            if (values.Count == 0)
             {
                 throw new ClaimNotFoundUserException($"Claim with type '{type}' not found.");
             }
