@@ -253,7 +253,6 @@ namespace ISL.Security.Client.Clients.Users
             }
         }
 
-
         private static UserClientValidationException CreateUserClientValidationException(Xeption innerException)
         {
             return new UserClientValidationException(
