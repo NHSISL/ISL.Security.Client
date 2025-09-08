@@ -198,7 +198,6 @@ namespace ISL.Security.Client.Clients.Audits
             }
         }
 
-
         private static AuditClientValidationException CreateAuditClientValidationException(Xeption innerException)
         {
             return new AuditClientValidationException(
