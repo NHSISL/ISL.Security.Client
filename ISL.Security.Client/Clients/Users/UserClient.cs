@@ -186,7 +186,6 @@ namespace ISL.Security.Client.Clients.Users
             }
         }
 
-
         public async ValueTask<string> GetUserClaimValueAsync(ClaimsPrincipal claimsPrincipal, string type)
         {
             try
