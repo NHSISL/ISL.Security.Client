@@ -107,8 +107,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
 
             var values = claimsPrincipal.FindAll(type)
                 .Select(c => c.Value)
-                .ToList()
-                .AsReadOnly();
+                .ToArray();
 
             if (values.Count == 0)
             {
