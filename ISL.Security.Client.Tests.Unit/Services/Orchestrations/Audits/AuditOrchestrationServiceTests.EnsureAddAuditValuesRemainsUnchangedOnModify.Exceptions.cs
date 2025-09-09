@@ -18,7 +18,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         [Theory]
         [MemberData(nameof(DependencyValidationExceptions))]
         public async Task ShouldThrowDependencyValidationOnEnsureAddAuditIfDependencyValidationOccursAndLogItAsync(
-            Xeption dependancyValidationException)
+            Xeption dependencyValidationException)
         {
             // given
             var somePerson = new Person { Name = GetRandomString() };
@@ -28,14 +28,14 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             var expectedDependencyException =
                 new AuditOrchestrationDependencyValidationException(
                     message: "Audit orchestration dependency validation error occurred, fix the errors and try again.",
-                    innerException: dependancyValidationException.InnerException as Xeption);
+                    innerException: dependencyValidationException.InnerException as Xeption);
 
             this.auditServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
-                        .ThrowsAsync(dependancyValidationException);
+                        .ThrowsAsync(dependencyValidationException);
 
             // when
             ValueTask<Person> task = this.auditOrchestrationService.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
@@ -64,7 +64,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         [Theory]
         [MemberData(nameof(DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnEnsureAddAuditIfDependencyExceptionOccursAndLogItAsync(
-            Xeption dependancyException)
+            Xeption dependencyException)
         {
             // given
             var somePerson = new Person { Name = GetRandomString() };
@@ -74,14 +74,14 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             var expectedDependencyException =
                 new AuditOrchestrationDependencyException(
                     message: "Audit orchestration dependency error occurred, fix the errors and try again.",
-                    innerException: dependancyException.InnerException as Xeption);
+                    innerException: dependencyException.InnerException as Xeption);
 
             this.auditServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
-                        .ThrowsAsync(dependancyException);
+                        .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<Person> task = this.auditOrchestrationService
