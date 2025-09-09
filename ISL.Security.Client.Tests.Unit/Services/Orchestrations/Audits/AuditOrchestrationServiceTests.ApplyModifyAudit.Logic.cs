@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
-using ISL.Security.Client.Models.Foundations.Users;
 using ISL.Security.Client.Tests.Unit.Models;
 using Moq;
 
@@ -24,14 +23,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             // Given
             ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
-
-            string securityUserId = isAuthenticated
-                ? userId
-                : string.IsNullOrEmpty(userId)
-                    ? "anonymous" : userId;
-
-            User randomUser = GetUser(randomClaimsPrincipal);
-            User currentUser = randomUser;
+            string randomUserId = GetRandomString();
             var inputPerson = new Person { Name = GetRandomString() };
             var updatedPerson = new Person { Name = GetRandomString() };
             var expectedResult = updatedPerson;
@@ -49,15 +41,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             };
 
             this.userServiceMock.Setup(service =>
-                service.GetUserAsync(inputClaimsPrincipal))
-                    .ReturnsAsync(currentUser);
-
-            this.userServiceMock.Setup(service =>
-                service.IsUserAuthenticatedAsync(inputClaimsPrincipal))
-                    .ReturnsAsync(isAuthenticated);
+                service.GetUserIdAsync(inputClaimsPrincipal))
+                    .ReturnsAsync(randomUserId);
 
             this.auditServiceMock.Setup(service =>
-                service.ApplyModifyAuditValuesAsync(inputPerson, securityUserId, securityConfigurations))
+                service.ApplyModifyAuditValuesAsync(inputPerson, randomUserId, securityConfigurations))
                     .ReturnsAsync(updatedPerson);
 
             // When
@@ -68,15 +56,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(inputClaimsPrincipal),
-                    Times.Once);
-
-            this.userServiceMock.Verify(service =>
-                service.IsUserAuthenticatedAsync(inputClaimsPrincipal),
+                service.GetUserIdAsync(inputClaimsPrincipal),
                     Times.Once);
 
             this.auditServiceMock.Verify(service =>
-                service.ApplyModifyAuditValuesAsync(inputPerson, securityUserId, securityConfigurations),
+                service.ApplyModifyAuditValuesAsync(inputPerson, randomUserId, securityConfigurations),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
