@@ -31,7 +31,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: dependancyValidationException.InnerException as Xeption);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                    .ThrowsAsync(dependancyValidationException);
 
             // when
@@ -48,7 +48,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                 .BeEquivalentTo(expectedDependencyException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
@@ -71,7 +71,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: dependancyException.InnerException as Xeption);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                   .ThrowsAsync(dependancyException);
 
             // when
@@ -87,7 +87,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             actualException.Should().BeEquivalentTo(expectedDependencyException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
@@ -114,7 +114,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: failedAuditOrchestrationServiceException);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -130,7 +130,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             actualException.Should().BeEquivalentTo(expectedAuditOrchestrationServiceException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
