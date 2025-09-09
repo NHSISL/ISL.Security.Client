@@ -15,6 +15,11 @@ namespace ISL.Security.Client.Services.Foundations.Users
             Validate((Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
         }
 
+        virtual internal void ValidateOnGetUserId(ClaimsPrincipal claimsPrincipal)
+        {
+            Validate((Rule: IsInvalid(claimsPrincipal), Parameter: nameof(ClaimsPrincipal)));
+        }
+
         virtual internal void ValidateOnIsUserInRole(ClaimsPrincipal claimsPrincipal, string roleName)
         {
             Validate(

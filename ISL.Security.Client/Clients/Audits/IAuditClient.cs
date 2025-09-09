@@ -137,7 +137,7 @@ namespace ISL.Security.Client.Clients.Audits
         /// // e.g. "Alice" or "Anonymous"
         /// </code>
         /// </example>
-        ValueTask<string> GetCurrentUserIdAsync(ClaimsPrincipal claimsPrincipal);
+        ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal);
     }
 
 }

@@ -166,7 +166,7 @@ namespace ISL.Security.Client.Clients.Audits
             }
         }
 
-        public async ValueTask<string> GetCurrentUserIdAsync(ClaimsPrincipal claimsPrincipal)
+        public async ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
         {
             try
             {

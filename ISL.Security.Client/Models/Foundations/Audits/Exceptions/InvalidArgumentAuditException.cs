@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Foundations.Audits.Exceptions
 {
-    public class InvalidArgumentAuditException : Xeption
+    internal class InvalidArgumentAuditException : Xeption
     {
         public InvalidArgumentAuditException(string message)
             : base(message)

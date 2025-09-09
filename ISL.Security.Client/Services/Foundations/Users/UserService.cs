@@ -25,7 +25,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
         public ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal) =>
         TryCatch(async () =>
         {
-            ValidateOnGetUser(claimsPrincipal);
+            ValidateOnGetUserId(claimsPrincipal);
             var user = GetUser(claimsPrincipal);
             var isAuthenticated = claimsPrincipal.Identity?.IsAuthenticated ?? false;
 
@@ -105,7 +105,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
             return values;
         });
 
-        virtual internal User GetUser(ClaimsPrincipal claimsPrincipal)
+        private static User GetUser(ClaimsPrincipal claimsPrincipal)
         {
             var userIdString = claimsPrincipal.FindFirst("oid")?.Value
                 ?? claimsPrincipal

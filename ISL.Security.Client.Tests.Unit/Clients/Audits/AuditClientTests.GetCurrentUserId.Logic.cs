@@ -25,7 +25,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             string expectedUserId = randomUserId;
 
             // When
-            string actualUserId = await this.auditClient.GetCurrentUserIdAsync(randomClaimsPrincipal);
+            string actualUserId = await this.auditClient.GetUserIdAsync(randomClaimsPrincipal);
 
             // Then
             actualUserId.Should().BeEquivalentTo(expectedUserId);

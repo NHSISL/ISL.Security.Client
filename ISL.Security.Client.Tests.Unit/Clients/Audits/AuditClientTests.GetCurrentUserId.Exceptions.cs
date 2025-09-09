@@ -34,7 +34,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // when
             ValueTask<string> getUserIdTask =
-                auditClient.GetCurrentUserIdAsync(someClaimsPrincipal);
+                auditClient.GetUserIdAsync(someClaimsPrincipal);
 
             AuditClientValidationException actualAuditClientValidationException =
                 await Assert.ThrowsAsync<AuditClientValidationException>(
@@ -71,7 +71,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // when
             ValueTask<string> getUserIdTask =
-                auditClient.GetCurrentUserIdAsync(someClaimsPrincipal);
+                auditClient.GetUserIdAsync(someClaimsPrincipal);
 
             AuditClientDependencyException actualAuditClientDependencyException =
                 await Assert.ThrowsAsync<AuditClientDependencyException>(getUserIdTask.AsTask);
@@ -107,7 +107,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // when
             ValueTask<string> getUserIdTask =
-                auditClient.GetCurrentUserIdAsync(someClaimsPrincipal);
+                auditClient.GetUserIdAsync(someClaimsPrincipal);
 
             AuditClientServiceException actualAuditClientServiceException =
                 await Assert.ThrowsAsync<AuditClientServiceException>(

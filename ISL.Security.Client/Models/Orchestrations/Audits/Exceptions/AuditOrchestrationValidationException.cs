@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Orchestrations.Audits.Exceptions
 {
-    public class AuditOrchestrationValidationException : Xeption
+    internal class AuditOrchestrationValidationException : Xeption
     {
         public AuditOrchestrationValidationException(string message, Xeption innerException)
             : base(message, innerException)

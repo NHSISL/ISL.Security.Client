@@ -6,7 +6,6 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
-using ISL.Security.Client.Models.Foundations.Users;
 using ISL.Security.Client.Models.Foundations.Users.Exceptions;
 using ISL.Security.Client.Services.Foundations.Users;
 using Moq;
@@ -34,24 +33,24 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             var userServiceMock = new Mock<UserService> { CallBase = true };
 
-            userServiceMock.Setup(broker =>
-                broker.ValidateOnGetUser(It.IsAny<ClaimsPrincipal>()))
+            userServiceMock.Setup(service =>
+                service.ValidateOnGetUserId(It.IsAny<ClaimsPrincipal>()))
                     .Throws(serviceException);
 
             // when
-            ValueTask<User> getUserTask =
-                userServiceMock.Object.GetUserAsync(someClaimsPrincipal);
+            ValueTask<string> getUserIdTask =
+                userServiceMock.Object.GetUserIdAsync(someClaimsPrincipal);
 
             UserServiceException actualUserServiceException =
                 await Assert.ThrowsAsync<UserServiceException>(
-                    getUserTask.AsTask);
+                    getUserIdTask.AsTask);
 
             // then
             actualUserServiceException.Should()
                 .BeEquivalentTo(expectedUserServiceException);
 
-            userServiceMock.Verify(broker =>
-                broker.ValidateOnGetUser(It.IsAny<ClaimsPrincipal>()),
+            userServiceMock.Verify(service =>
+                service.ValidateOnGetUserId(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();

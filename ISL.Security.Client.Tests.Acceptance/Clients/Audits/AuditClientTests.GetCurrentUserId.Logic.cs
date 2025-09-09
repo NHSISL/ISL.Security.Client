@@ -28,7 +28,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedResult = securityUserId;
 
             // When
-            var actualResult = await this.securityClient.Audits.GetCurrentUserIdAsync(inputClaimsPrincipal);
+            var actualResult = await this.securityClient.Audits.GetUserIdAsync(inputClaimsPrincipal);
 
             // Then
             actualResult.Should().BeEquivalentTo(expectedResult);

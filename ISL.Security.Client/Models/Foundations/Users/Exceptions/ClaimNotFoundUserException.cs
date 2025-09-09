@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Foundations.Users.Exceptions
 {
-    public class ClaimNotFoundUserException : Xeption
+    internal class ClaimNotFoundUserException : Xeption
     {
         public ClaimNotFoundUserException(string message)
             : base(message)
