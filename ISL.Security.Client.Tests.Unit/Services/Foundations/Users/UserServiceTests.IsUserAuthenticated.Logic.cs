@@ -18,7 +18,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldPerformIsUserAuthenticatedAsync(bool isAuthenticated)
         {
             // Given
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated);
+            string userId = GetRandomString();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
             bool expectedResult = isAuthenticated;
 
             User expectedUser = new User(

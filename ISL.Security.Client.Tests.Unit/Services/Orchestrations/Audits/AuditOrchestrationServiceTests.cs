@@ -34,8 +34,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                 auditService: auditServiceMock.Object);
         }
 
-        private static ClaimsPrincipal CreateRandomClaimsPrincipal(string userId, bool isAuthenticated = true)
+        private static ClaimsPrincipal CreateRandomClaimsPrincipal(bool isAuthenticated = true)
         {
+            string securityOid = Guid.NewGuid().ToString();
             string givenName = GetRandomString();
             string surname = GetRandomString();
             string displayName = GetRandomString();
@@ -44,7 +45,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim("oid", userId),
+                new Claim("oid", securityOid),
                 new Claim(ClaimTypes.GivenName, GetRandomString()),
                 new Claim(ClaimTypes.Surname, GetRandomString()),
                 new Claim("displayName", GetRandomString()),

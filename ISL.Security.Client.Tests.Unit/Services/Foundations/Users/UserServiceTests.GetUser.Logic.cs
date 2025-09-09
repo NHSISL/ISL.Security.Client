@@ -16,7 +16,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldGetUserAsync()
         {
             // Given
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId);
 
             User expectedUser = new User(
                 userId: claimsPrincipal.FindFirst("oid")?.Value,

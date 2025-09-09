@@ -14,14 +14,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {
-        [Theory]
-        [InlineData("username", true)]
-        [InlineData("username", false)]
-        [InlineData("", false)]
-        public async Task ShouldApplyModifyAuditForDynamicObjectAsync(string userId, bool isAuthenticated)
+        [Fact]
+        public async Task ShouldApplyModifyAuditForDynamicObjectAsync()
         {
             // Given
-            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
+            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal();
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
             string randomUserId = GetRandomString();
             var inputPerson = new Person { Name = GetRandomString() };

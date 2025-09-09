@@ -21,7 +21,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         public async Task ShouldApplyAddAuditForDynamicObjectAsync(string userId, bool isAuthenticated)
         {
             // Given
-            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
+            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated);
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
             string randomUserId = GetRandomString();
             var inputPerson = new Person { Name = GetRandomString() };

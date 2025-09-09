@@ -18,7 +18,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldPerformIsUserInRoleAsync(string roleName, bool isInRole)
         {
             // Given
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId);
             bool expectedResult = isInRole;
 
             User expectedUser = new User(

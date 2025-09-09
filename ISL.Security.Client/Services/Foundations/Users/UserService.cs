@@ -105,7 +105,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
             return values;
         });
 
-        private static User GetUser(ClaimsPrincipal claimsPrincipal)
+        virtual internal User GetUser(ClaimsPrincipal claimsPrincipal)
         {
             var userIdString = claimsPrincipal.FindFirst("oid")?.Value
                 ?? claimsPrincipal

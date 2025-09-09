@@ -18,7 +18,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldPerformUserHasClaimTypeAsync(string claimType, bool hasClaimType)
         {
             // Given
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId);
             bool expectedResult = hasClaimType;
 
             User expectedUser = new User(
@@ -42,7 +43,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldPerformUserHasClaimTypeWithValueAsync()
         {
             // Given
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            string userId = GetRandomString();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId);
             string claimType = "displayName";
             string claimValue = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
             bool expectedResult = true;
