@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients.Users.Exceptions;
-using ISL.Security.Client.Models.Foundations.Users;
 using Moq;
 using Xeptions;
 
@@ -30,23 +29,23 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: validationException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                     .Throws(validationException);
 
             // when
-            ValueTask<User> getUserTask =
-                userClient.GetUserAsync(someClaimsPrincipal);
+            ValueTask<string> getUserIdTask =
+                userClient.GetUserIdAsync(someClaimsPrincipal);
 
             UserClientValidationException actualUserClientValidationException =
                 await Assert.ThrowsAsync<UserClientValidationException>(
-                    getUserTask.AsTask);
+                    getUserIdTask.AsTask);
 
             // then
             actualUserClientValidationException.Should()
                 .BeEquivalentTo(expectedUserClientValidationException);
 
             userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -67,22 +66,22 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: dependencyException.InnerException.Data);
 
             userServiceMock.Setup(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                     .Throws(dependencyException);
 
             // when
-            ValueTask<User> getUserTask =
-                userClient.GetUserAsync(someClaimsPrincipal);
+            ValueTask<string> getUserIdTask =
+                userClient.GetUserIdAsync(someClaimsPrincipal);
 
             UserClientDependencyException actualUserClientDependencyException =
-                await Assert.ThrowsAsync<UserClientDependencyException>(getUserTask.AsTask);
+                await Assert.ThrowsAsync<UserClientDependencyException>(getUserIdTask.AsTask);
 
             // then
             actualUserClientDependencyException.Should()
                 .BeEquivalentTo(expectedUserClientDependencyException);
 
             userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
@@ -103,23 +102,23 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
                     data: serviceException.Data);
 
             userServiceMock.Setup(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                     .Throws(serviceException);
 
             // when
-            ValueTask<User> getUserTask =
-                userClient.GetUserAsync(someClaimsPrincipal);
+            ValueTask<string> getUserIdTask =
+                userClient.GetUserIdAsync(someClaimsPrincipal);
 
             UserClientServiceException actualUserClientServiceException =
                 await Assert.ThrowsAsync<UserClientServiceException>(
-                    getUserTask.AsTask);
+                    getUserIdTask.AsTask);
 
             // then
             actualUserClientServiceException.Should()
                 .BeEquivalentTo(expectedUserClientServiceException);
 
             userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             userServiceMock.VerifyNoOtherCalls();
