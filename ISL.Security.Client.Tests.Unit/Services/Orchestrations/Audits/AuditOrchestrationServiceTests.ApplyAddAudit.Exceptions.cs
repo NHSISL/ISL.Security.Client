@@ -21,7 +21,6 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             Xeption dependencyValidationException)
         {
             // given
-            string userId = GetRandomString();
             ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
