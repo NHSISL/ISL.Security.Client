@@ -133,7 +133,7 @@ namespace ISL.Security.Client.Clients.Audits
         /// </remarks>
         /// <example>
         /// <code>
-        /// string userId = await auditClient.GetCurrentUserIdAsync(claimsPrincipal);
+        /// string userId = await auditClient.GetUserIdAsync(claimsPrincipal);
         /// // e.g. "Alice" or "Anonymous"
         /// </code>
         /// </example>
