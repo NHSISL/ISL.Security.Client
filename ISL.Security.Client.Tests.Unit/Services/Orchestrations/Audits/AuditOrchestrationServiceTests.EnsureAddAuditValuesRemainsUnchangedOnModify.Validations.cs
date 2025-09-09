@@ -8,7 +8,7 @@ using ISL.Security.Client.Models.Clients;
 using ISL.Security.Client.Models.Orchestrations.Audits.Exceptions;
 using ISL.Security.Client.Tests.Unit.Models;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {

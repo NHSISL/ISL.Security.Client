@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Foundations.Users.Exceptions
 {
-    public class UserDependencyValidationException : Xeption
+    internal class UserDependencyValidationException : Xeption
     {
         public UserDependencyValidationException(string message, Xeption innerException)
             : base(message, innerException)

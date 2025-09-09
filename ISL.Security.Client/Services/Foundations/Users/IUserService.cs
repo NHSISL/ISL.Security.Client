@@ -12,6 +12,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
     internal interface IUserService
     {
         ValueTask<User> GetUserAsync(ClaimsPrincipal claimsPrincipal);
+        ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal);
         ValueTask<bool> IsUserAuthenticatedAsync(ClaimsPrincipal claimsPrincipal);
         ValueTask<bool> IsUserInRoleAsync(ClaimsPrincipal claimsPrincipal, string roleName);
         ValueTask<bool> UserHasClaimAsync(ClaimsPrincipal claimsPrincipal, string claimType, string claimValue);

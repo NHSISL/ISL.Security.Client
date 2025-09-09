@@ -6,18 +6,18 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 
-namespace ISL.Security.Client.Tests.Clients.Audits
+namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 {
-    public partial class AuditClientTests
+    public partial class UserServiceTests
     {
         [Theory]
         [InlineData("username", true)]
         [InlineData("username", false)]
         [InlineData("", false)]
-        public async Task ShouldGetCurrentUserIdAsync(string userId, bool isAuthenticated)
+        public async Task ShouldGetUserIdAsync(string userId, bool isAuthenticated)
         {
             // Given
-            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated, userId);
+            ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(userId, isAuthenticated);
             ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
 
             string securityUserId = isAuthenticated
@@ -25,13 +25,13 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 : string.IsNullOrEmpty(userId)
                     ? "anonymous" : userId;
 
-            var expectedResult = securityUserId;
+            string expectedUserId = securityUserId;
 
             // When
-            var actualResult = await this.securityClient.Audits.GetUserIdAsync(inputClaimsPrincipal);
+            string actualUserId = await this.userService.GetUserIdAsync(randomClaimsPrincipal);
 
             // Then
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            actualUserId.Should().BeEquivalentTo(expectedUserId);
         }
     }
 }

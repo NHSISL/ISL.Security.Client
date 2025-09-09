@@ -11,29 +11,28 @@ using ISL.Security.Client.Tests.Unit.Models;
 using Moq;
 using Xeptions;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {
         [Theory]
         [MemberData(nameof(DependencyValidationExceptions))]
         public async Task ShouldThrowDependencyValidationOnGetCurrentUserIdIfDependencyValidationOccursAndLogItAsync(
-            Xeption dependancyValidationException)
+            Xeption dependencyValidationException)
         {
             // given
-            string userId = GetRandomString();
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
             var expectedDependencyException =
                 new AuditOrchestrationDependencyValidationException(
                     message: "Audit orchestration dependency validation error occurred, fix the errors and try again.",
-                    innerException: dependancyValidationException.InnerException as Xeption);
+                    innerException: dependencyValidationException.InnerException as Xeption);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
-                   .ThrowsAsync(dependancyValidationException);
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
+                   .ThrowsAsync(dependencyValidationException);
 
             // when
             ValueTask<string> task = this.auditOrchestrationService.GetCurrentUserIdAsync(someClaimsPrincipal);
@@ -46,7 +45,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 .BeEquivalentTo(expectedDependencyException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
@@ -56,22 +55,21 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         [Theory]
         [MemberData(nameof(DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnGetCurrentUserIdIfDependencyExceptionOccursAndLogItAsync(
-            Xeption dependancyException)
+            Xeption dependencyException)
         {
             // given
-            string userId = GetRandomString();
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
             var expectedDependencyException =
                 new AuditOrchestrationDependencyException(
                     message: "Audit orchestration dependency error occurred, fix the errors and try again.",
-                    innerException: dependancyException.InnerException as Xeption);
+                    innerException: dependencyException.InnerException as Xeption);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
-                  .ThrowsAsync(dependancyException);
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
+                  .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<string> task = this.auditOrchestrationService.GetCurrentUserIdAsync(someClaimsPrincipal);
@@ -83,7 +81,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             actualException.Should().BeEquivalentTo(expectedDependencyException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
@@ -94,8 +92,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         public async Task ShouldThrowServiceExceptionOnGetCurrentUserIdIfServiceErrorOccursAndLogItAsync()
         {
             //Given
-            string userId = GetRandomString();
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal(userId);
+            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
             var serviceException = new Exception();
@@ -111,7 +108,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: failedAuditOrchestrationServiceException);
 
             this.userServiceMock.Setup(service =>
-               service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+               service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -124,7 +121,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             actualException.Should().BeEquivalentTo(expectedAuditOrchestrationServiceException);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserAsync(It.IsAny<ClaimsPrincipal>()),
+                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();

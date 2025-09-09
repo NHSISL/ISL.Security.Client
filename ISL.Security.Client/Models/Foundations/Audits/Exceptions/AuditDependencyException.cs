@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Foundations.Audits.Exceptions
 {
-    public class AuditDependencyException : Xeption
+    internal class AuditDependencyException : Xeption
     {
         public AuditDependencyException(string message, Xeption innerException)
             : base(message, innerException)

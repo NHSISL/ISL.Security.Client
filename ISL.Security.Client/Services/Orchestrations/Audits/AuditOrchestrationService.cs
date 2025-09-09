@@ -5,7 +5,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ISL.Security.Client.Models.Clients;
-using ISL.Security.Client.Models.Foundations.Users;
 using ISL.Security.Client.Services.Foundations.Users;
 using ISL.Security.Client.Services.Orchestrations.Audits;
 
@@ -29,7 +28,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal, securityConfigurations);
-            string userId = await GetUserIdAsync(claimsPrincipal);
+            string userId = await this.userService.GetUserIdAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyAddAuditValuesAsync(entity, userId, securityConfigurations);
@@ -44,7 +43,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal, securityConfigurations);
-            string userId = await GetUserIdAsync(claimsPrincipal);
+            string userId = await this.userService.GetUserIdAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyModifyAuditValuesAsync(entity, userId, securityConfigurations);
@@ -59,7 +58,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch<T>(async () =>
         {
             ValidateInputs(entity, claimsPrincipal, securityConfigurations);
-            string userId = await GetUserIdAsync(claimsPrincipal);
+            string userId = await this.userService.GetUserIdAsync(claimsPrincipal);
 
             T updatedEntity = await this.auditService
                 .ApplyRemoveAuditValuesAsync(entity, userId, securityConfigurations);
@@ -85,22 +84,8 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         TryCatch(async () =>
         {
             ValidateOnGetCurrentUserId(claimsPrincipal);
-            string userId = await GetUserIdAsync(claimsPrincipal);
 
-            return userId;
+            return await this.userService.GetUserIdAsync(claimsPrincipal);
         });
-
-        private async ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
-        {
-            User user = await this.userService.GetUserAsync(claimsPrincipal);
-            bool isAuthenticated = await this.userService.IsUserAuthenticatedAsync(claimsPrincipal);
-
-            string userId = isAuthenticated
-                ? user.UserId
-                : string.IsNullOrEmpty(user.UserId)
-                    ? "anonymous" : user.UserId;
-
-            return userId;
-        }
     }
 }

@@ -7,36 +7,34 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
+namespace ISL.Security.Client.Tests.Unit.Clients.Users
 {
-    public partial class AuditOrchestrationServiceTests
+    public partial class UserClientTests
     {
         [Fact]
-        public async Task ShouldGetCurrentUserIdAsync()
+        public async Task ShouldGetUserIdAsync()
         {
             // Given
             ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal();
-            ClaimsPrincipal inputClaimsPrincipal = randomClaimsPrincipal;
             string randomUserId = GetRandomString();
-            var expectedResult = randomUserId;
 
             this.userServiceMock.Setup(service =>
-                service.GetUserIdAsync(inputClaimsPrincipal))
+                service.GetUserIdAsync(randomClaimsPrincipal))
                     .ReturnsAsync(randomUserId);
 
+            string expectedUserId = randomUserId;
+
             // When
-            var actualResult = await this.auditOrchestrationService
-                .GetCurrentUserIdAsync(inputClaimsPrincipal);
+            string actualUserId = await this.userClient.GetUserIdAsync(randomClaimsPrincipal);
 
             // Then
-            ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+            actualUserId.Should().BeEquivalentTo(expectedUserId);
 
             this.userServiceMock.Verify(service =>
-                service.GetUserIdAsync(inputClaimsPrincipal),
+                service.GetUserIdAsync(randomClaimsPrincipal),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();
-            this.auditServiceMock.VerifyNoOtherCalls();
         }
     }
 }

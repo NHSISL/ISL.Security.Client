@@ -7,7 +7,7 @@ using Xeptions;
 
 namespace ISL.Security.Client.Models.Foundations.Users.Exceptions
 {
-    public class UserServiceException : Xeption
+    internal class UserServiceException : Xeption
     {
         public UserServiceException(string message, Exception innerException)
             : base(message, innerException)

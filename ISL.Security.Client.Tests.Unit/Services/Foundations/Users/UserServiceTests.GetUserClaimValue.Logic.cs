@@ -14,8 +14,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldGetUserClaimValueAsync()
         {
             // Given
+            string userId = GetRandomString();
             string type = ClaimTypes.GivenName;
-            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal();
+            ClaimsPrincipal claimsPrincipal = CreateRandomClaimsPrincipal(userId);
             Claim givenName = claimsPrincipal.FindFirst(type);
             string expectedResult = givenName?.Value;
 
