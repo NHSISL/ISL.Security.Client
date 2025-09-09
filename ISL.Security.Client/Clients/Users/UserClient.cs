@@ -55,6 +55,38 @@ namespace ISL.Security.Client.Clients.Users
             }
         }
 
+        public async ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            try
+            {
+                return await this.userService.GetUserIdAsync(claimsPrincipal);
+            }
+            catch (UserValidationException userValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyValidationException userDependencyValidationException)
+            {
+                throw CreateUserClientValidationException(
+                    userDependencyValidationException.InnerException as Xeption);
+            }
+            catch (UserDependencyException userDependencyException)
+            {
+                throw CreateUserClientDependencyException(
+                    userDependencyException.InnerException as Xeption);
+            }
+            catch (UserServiceException userServiceException)
+            {
+                throw CreateUserClientDependencyException(
+                    userServiceException.InnerException as Xeption);
+            }
+            catch (Exception exception)
+            {
+                throw CreateUserClientServiceException(exception);
+            }
+        }
+
         public async ValueTask<bool> IsUserAuthenticatedAsync(ClaimsPrincipal claimsPrincipal)
         {
             try

@@ -19,34 +19,22 @@ namespace ISL.Security.Client.Services.Foundations.Users
         {
             ValidateOnGetUser(claimsPrincipal);
 
-            var userIdString = claimsPrincipal.FindFirst("oid")?.Value
-                ?? claimsPrincipal
-                    .FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value
+            return GetUser(claimsPrincipal);
+        });
 
-                ?? claimsPrincipal
-                    .FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value
+        public ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal) =>
+        TryCatch(async () =>
+        {
+            ValidateOnGetUser(claimsPrincipal);
+            var user = GetUser(claimsPrincipal);
+            var isAuthenticated = claimsPrincipal.Identity?.IsAuthenticated ?? false;
 
-                ?? claimsPrincipal
-                    .FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+            string userId = isAuthenticated
+                ? user.UserId
+                : string.IsNullOrEmpty(user.UserId)
+                    ? "anonymous" : user.UserId;
 
-            var userId = userIdString;
-            var givenName = claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value;
-            var surname = claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value;
-            var displayName = claimsPrincipal.FindFirst("displayName")?.Value;
-            var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
-            var jobTitle = claimsPrincipal.FindFirst("jobTitle")?.Value;
-            var roles = claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value).ToList();
-            var claimsList = claimsPrincipal.Claims;
-
-            return new User(
-                userId: userId,
-                givenName: givenName,
-                surname: surname,
-                displayName: displayName,
-                email: email,
-                jobTitle: jobTitle,
-                roles: roles,
-                claims: claimsList);
+            return userId;
         });
 
         public ValueTask<bool> UserHasClaimAsync(
@@ -116,5 +104,37 @@ namespace ISL.Security.Client.Services.Foundations.Users
 
             return values;
         });
+
+        private static User GetUser(ClaimsPrincipal claimsPrincipal)
+        {
+            var userIdString = claimsPrincipal.FindFirst("oid")?.Value
+                ?? claimsPrincipal
+                    .FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value
+
+                ?? claimsPrincipal
+                    .FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value
+
+                ?? claimsPrincipal
+                    .FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+
+            var userId = userIdString;
+            var givenName = claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value;
+            var surname = claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value;
+            var displayName = claimsPrincipal.FindFirst("displayName")?.Value;
+            var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+            var jobTitle = claimsPrincipal.FindFirst("jobTitle")?.Value;
+            var roles = claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value).ToList();
+            var claimsList = claimsPrincipal.Claims;
+
+            return new User(
+                userId: userId,
+                givenName: givenName,
+                surname: surname,
+                displayName: displayName,
+                email: email,
+                jobTitle: jobTitle,
+                roles: roles,
+                claims: claimsList);
+        }
     }
 }

@@ -34,6 +34,22 @@ namespace ISL.Security.Client.Clients.Users
         ValueTask<User> GetUserAsync(ClaimsPrincipal claimsPrincipal);
 
         /// <summary>
+        /// Retrieves the current user identifier from the given claims principal.
+        /// </summary>
+        /// <param name="claimsPrincipal">The user context containing claims.</param>
+        /// <returns>The user identifier string.</returns>
+        /// <remarks>
+        /// If no valid user identifier is found, a fallback (such as <c>"Anonymous"</c>) may be returned.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// string userId = await userClient.GetUserIdAsync(claimsPrincipal);
+        /// // e.g. "Alice" or "Anonymous"
+        /// </code>
+        /// </example>
+        ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal);
+
+        /// <summary>
         /// Determines whether the user represented by the claims principal is authenticated.
         /// </summary>
         /// <param name="claimsPrincipal">The user context.</param>
