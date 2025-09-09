@@ -64,7 +64,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
         [Theory]
         [MemberData(nameof(DependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnEnsureAddAuditIfDependencyExceptionOccursAndLogItAsync(
-            Xeption dependancyException)
+            Xeption dependencyException)
         {
             // given
             var somePerson = new Person { Name = GetRandomString() };
@@ -74,15 +74,15 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedAuditClientDependencyException =
                 new AuditClientDependencyException(
                     message: "Audit client dependency error occurred, please contact support.",
-                    innerException: dependancyException.InnerException as Xeption,
-                    data: dependancyException.InnerException.Data);
+                    innerException: dependencyException.InnerException as Xeption,
+                    data: dependencyException.InnerException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
                 service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
-                        .ThrowsAsync(dependancyException);
+                        .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<Person> task = this.auditClient
