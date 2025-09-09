@@ -8,7 +8,7 @@ using FluentAssertions;
 using ISL.Security.Client.Models.Foundations.Users;
 using Moq;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {

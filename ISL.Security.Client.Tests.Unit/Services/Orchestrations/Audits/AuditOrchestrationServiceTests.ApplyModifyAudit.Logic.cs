@@ -11,7 +11,7 @@ using ISL.Security.Client.Models.Foundations.Users;
 using ISL.Security.Client.Tests.Unit.Models;
 using Moq;
 
-namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
+namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 {
     public partial class AuditOrchestrationServiceTests
     {
