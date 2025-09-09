@@ -19,14 +19,14 @@ namespace ISL.Security.Client.Services.Foundations.Users
         {
             ValidateOnGetUser(claimsPrincipal);
 
-            return GetUser(claimsPrincipal);
+            return GetUserFromClaimsPrincipal(claimsPrincipal);
         });
 
         public ValueTask<string> GetUserIdAsync(ClaimsPrincipal claimsPrincipal) =>
         TryCatch(async () =>
         {
             ValidateOnGetUserId(claimsPrincipal);
-            var user = GetUser(claimsPrincipal);
+            var user = GetUserFromClaimsPrincipal(claimsPrincipal);
             var isAuthenticated = claimsPrincipal.Identity?.IsAuthenticated ?? false;
 
             string userId = isAuthenticated
@@ -105,7 +105,7 @@ namespace ISL.Security.Client.Services.Foundations.Users
             return values;
         });
 
-        private static User GetUser(ClaimsPrincipal claimsPrincipal)
+        private static User GetUserFromClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
         {
             var userIdString = claimsPrincipal.FindFirst("oid")?.Value
                 ?? claimsPrincipal
