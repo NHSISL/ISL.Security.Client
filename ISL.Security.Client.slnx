@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ISL.Security.Client.Infrastructure/ISL.Security.Client.Infrastructure.csproj" />
+  <Project Path="ISL.Security.Client.Tests.Acceptance/ISL.Security.Client.Tests.Acceptance.csproj" />
+  <Project Path="ISL.Security.Client.Tests.Unit/ISL.Security.Client.Tests.Unit.csproj" />
+  <Project Path="ISL.Security.Client/ISL.Security.Client.csproj" />
+</Solution>
