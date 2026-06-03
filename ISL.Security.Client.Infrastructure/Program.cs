@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -15,7 +15,7 @@ namespace ISL.Security.Client.Infrastructure
             scriptGenerationService.GenerateBuildScript(
                 branchName: "main",
                 projectName: "ISL.Security.Client",
-                dotNetVersion: "9.0.100");
+                dotNetVersion: "10.0.100");
 
             scriptGenerationService.GeneratePrLintScript("main");
         }
