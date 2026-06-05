@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
     public partial class AuditServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnEnsureAddAuditValuesIfNullsFoundAsync()
+        public async Task ShouldThrowValidationExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfNullsFoundAsync()
         {
             // given
             Person nullInputPerson = null;
@@ -41,14 +41,14 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> applyAddAuditTask =
-                auditService.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task =
+                auditService.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     nullInputPerson,
                     nullStoragePerson,
                     nullSecurityConfigurations);
 
             AuditValidationException actualAuditValidationException =
-                await Assert.ThrowsAsync<AuditValidationException>(applyAddAuditTask.AsTask);
+                await Assert.ThrowsAsync<AuditValidationException>(task.AsTask);
 
             // then
             actualAuditValidationException.Should()

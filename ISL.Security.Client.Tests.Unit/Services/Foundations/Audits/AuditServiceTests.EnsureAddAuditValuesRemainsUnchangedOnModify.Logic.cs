@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -19,8 +19,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
-            string createdUserId = "CreatedUser"; //GetRandomString();
-            string modifiedUserId = "ModifiedUser"; //GetRandomString();
+            string createdUserId = "CreatedUser";
+            string modifiedUserId = "ModifiedUser";
+            string storageDeletedByUserId = "StorageDeletedUser";
 
             dynamic inputPerson = new ExpandoObject();
             inputPerson.Name = "John Doe";
@@ -28,6 +29,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             inputPerson.CreatedDate = currentDateTime;
             inputPerson.UpdatedBy = modifiedUserId;
             inputPerson.UpdatedDate = currentDateTime;
+            inputPerson.DeletedBy = modifiedUserId;
+            inputPerson.DeletedDate = currentDateTime;
+            inputPerson.IsDeleted = false;
+            inputPerson.DeletionReason = (string)null;
 
             dynamic storagePerson = new ExpandoObject();
             storagePerson.Name = "John Doe";
@@ -35,6 +40,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             storagePerson.CreatedDate = DateTimeOffset.MinValue;
             storagePerson.UpdatedBy = createdUserId;
             storagePerson.UpdatedDate = DateTimeOffset.MinValue;
+            storagePerson.DeletedBy = storageDeletedByUserId;
+            storagePerson.DeletedDate = DateTimeOffset.MinValue;
+            storagePerson.IsDeleted = false;
+            storagePerson.DeletionReason = (string)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
@@ -42,17 +51,29 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             expectedResult.CreatedDate = DateTimeOffset.MinValue;
             expectedResult.UpdatedBy = modifiedUserId;
             expectedResult.UpdatedDate = currentDateTime;
+            expectedResult.DeletedBy = storageDeletedByUserId;
+            expectedResult.DeletedDate = DateTimeOffset.MinValue;
+            expectedResult.IsDeleted = false;     // restored from storage
+            expectedResult.DeletionReason = (string)null; // restored from storage
 
             var securityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedDate",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedDate",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedDate",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedDate",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedDate",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -61,7 +82,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             dynamic actualResult = await this.auditService
-                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
@@ -74,6 +95,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             DateTimeOffset currentDateTime = DateTime.UtcNow;
             string createdUserId = GetRandomString();
             string modifiedUserId = GetRandomString();
+            string storageDeletedByUserId = GetRandomString();
 
             var inputPerson = new Person
             {
@@ -82,6 +104,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 CreatedWhen = currentDateTime,
                 UpdatedBy = modifiedUserId,
                 UpdatedWhen = currentDateTime,
+                DeletedBy = modifiedUserId,
+                DeletedWhen = currentDateTime,
+                IsDeleted = true,
+                DeletionReason = "tampered",
             };
 
             var storagePerson = new Person
@@ -91,6 +117,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 CreatedWhen = DateTimeOffset.MinValue,
                 UpdatedBy = createdUserId,
                 UpdatedWhen = DateTimeOffset.MinValue,
+                DeletedBy = storageDeletedByUserId,
+                DeletedWhen = DateTimeOffset.MinValue,
+                IsDeleted = false,
+                DeletionReason = null,
             };
 
             var expectedResult = new Person
@@ -100,18 +130,30 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 CreatedWhen = DateTimeOffset.MinValue,
                 UpdatedBy = modifiedUserId,
                 UpdatedWhen = currentDateTime,
+                DeletedBy = storageDeletedByUserId,
+                DeletedWhen = DateTimeOffset.MinValue,
+                IsDeleted = false,      // restored from storage
+                DeletionReason = null,  // restored from storage
             };
 
             var securityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedWhen",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -120,7 +162,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

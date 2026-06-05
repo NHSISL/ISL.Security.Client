@@ -1,9 +1,8 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
@@ -18,12 +17,12 @@ namespace ISL.Security.Client.Tests.Clients.Audits
     {
         [Theory]
         [MemberData(nameof(ValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationOnApplyRemoveAuditIfDependencyValidationOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfDependencyValidationOccursAsync(
             Xeption validationException)
         {
             // given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
+            var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
             var expectedAuditClientValidationException =
@@ -33,17 +32,16 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: validationException.InnerException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.ApplyRemoveAuditValuesAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>(),
-                    It.IsAny<string>()))
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(validationException);
 
             // when
-            ValueTask<Person> task = this.auditClient.ApplyRemoveAuditValuesAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                 somePerson,
-                someClaimsPrincipal,
+                someStoragePerson,
                 someSecurityConfiguration);
 
             AuditClientValidationException actualAuditClientValidationException =
@@ -54,24 +52,23 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 .BeEquivalentTo(expectedAuditClientValidationException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.ApplyRemoveAuditValuesAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>(),
-                    It.IsAny<string>()),
-                        Times.Once);
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()),
+                    Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
 
         [Theory]
         [MemberData(nameof(DependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnApplyRemoveAuditIfDependencyExceptionOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfDependencyExceptionOccursAsync(
             Xeption dependencyException)
         {
             // given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
             var somePerson = new Person { Name = GetRandomString() };
+            var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
 
             var expectedAuditClientDependencyException =
@@ -81,18 +78,18 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: dependencyException.InnerException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.ApplyRemoveAuditValuesAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>(),
-                    It.IsAny<string>()))
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<Person> task = this.auditClient.ApplyRemoveAuditValuesAsync(
-                somePerson,
-                someClaimsPrincipal,
-                someSecurityConfiguration);
+            ValueTask<Person> task = this.auditClient
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync<Person>(
+                    somePerson,
+                    someStoragePerson,
+                    someSecurityConfiguration);
 
             AuditClientDependencyException actualAuditClientDependencyException =
                 await Assert.ThrowsAsync<AuditClientDependencyException>(task.AsTask);
@@ -101,22 +98,21 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientDependencyException.Should().BeEquivalentTo(expectedAuditClientDependencyException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.ApplyRemoveAuditValuesAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>(),
-                    It.IsAny<string>()),
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()),
                         Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnApplyRemoveAuditIfServiceErrorOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfServiceErrorOccursAsync()
         {
-            //Given
-            ClaimsPrincipal someClaimsPrincipal = CreateRandomClaimsPrincipal();
+            // Given
             var somePerson = new Person { Name = GetRandomString() };
+            var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
             var serviceException = new Exception();
 
@@ -127,17 +123,16 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: serviceException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-               service.ApplyRemoveAuditValuesAsync(
-                   It.IsAny<Person>(),
-                   It.IsAny<ClaimsPrincipal>(),
-                   It.IsAny<SecurityConfigurations>(),
-                   It.IsAny<string>()))
-                    .ThrowsAsync(serviceException);
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    It.IsAny<Person>(),
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()))
+                        .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditClient.ApplyRemoveAuditValuesAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                 somePerson,
-                someClaimsPrincipal,
+                someStoragePerson,
                 someSecurityConfiguration);
 
             AuditClientServiceException actualAuditClientServiceException =
@@ -147,11 +142,10 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientServiceException.Should().BeEquivalentTo(expectedAuditClientServiceException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.ApplyRemoveAuditValuesAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>(),
-                    It.IsAny<string>()),
+                    It.IsAny<Person>(),
+                    It.IsAny<SecurityConfigurations>()),
                         Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();

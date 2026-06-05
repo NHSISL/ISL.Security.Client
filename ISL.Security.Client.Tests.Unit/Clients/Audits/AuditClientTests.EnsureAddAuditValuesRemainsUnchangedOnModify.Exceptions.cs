@@ -32,14 +32,14 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: validationException.InnerException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(validationException);
 
             // when
-            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
@@ -52,7 +52,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 .BeEquivalentTo(expectedAuditClientValidationException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -78,7 +78,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: dependencyException.InnerException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
@@ -86,7 +86,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // when
             ValueTask<Person> task = this.auditClient
-                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<Person>(
+                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync<Person>(
                     somePerson,
                     someStoragePerson,
                     someSecurityConfiguration);
@@ -98,7 +98,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientDependencyException.Should().BeEquivalentTo(expectedAuditClientDependencyException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -123,14 +123,14 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: serviceException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
@@ -142,7 +142,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientServiceException.Should().BeEquivalentTo(expectedAuditClientServiceException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),

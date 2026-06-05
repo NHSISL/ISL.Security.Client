@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
     {
         [Theory]
         [MemberData(nameof(DependencyValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationOnEnsureAddAuditIfDependencyValidationOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfDependencyValidationOccursAsync(
             Xeption dependencyValidationException)
         {
             // given
@@ -31,17 +31,18 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: dependencyValidationException.InnerException as Xeption);
 
             this.auditServiceMock.Setup(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(dependencyValidationException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
-                somePerson,
-                someStoragePerson,
-                someSecurityConfiguration);
+            ValueTask<Person> task = this.auditOrchestrationService
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    somePerson,
+                    someStoragePerson,
+                    someSecurityConfiguration);
 
             AuditOrchestrationDependencyValidationException actualException =
                 await Assert.ThrowsAsync<AuditOrchestrationDependencyValidationException>(task.AsTask);
@@ -51,7 +52,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                 .BeEquivalentTo(expectedDependencyException);
 
             this.auditServiceMock.Verify(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -63,7 +64,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
         [Theory]
         [MemberData(nameof(DependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnEnsureAddAuditIfDependencyExceptionOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfDependencyExceptionOccursAsync(
             Xeption dependencyException)
         {
             // given
@@ -77,7 +78,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: dependencyException.InnerException as Xeption);
 
             this.auditServiceMock.Setup(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
@@ -85,7 +86,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             // when
             ValueTask<Person> task = this.auditOrchestrationService
-                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync<Person>(
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync<Person>(
                     somePerson,
                     someStoragePerson,
                     someSecurityConfiguration);
@@ -97,7 +98,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             actualException.Should().BeEquivalentTo(expectedDependencyException);
 
             this.auditServiceMock.Verify(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -108,9 +109,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnEnsureAddAuditIfServiceErrorOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfServiceErrorOccursAsync()
         {
-            //Given
+            // Given
             var somePerson = new Person { Name = GetRandomString() };
             var someStoragePerson = new Person { Name = GetRandomString() };
             var someSecurityConfiguration = GetSecurityConfigurations();
@@ -127,17 +128,18 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     innerException: failedAuditOrchestrationServiceException);
 
             this.auditServiceMock.Setup(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditOrchestrationService.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
-                somePerson,
-                someStoragePerson,
-                someSecurityConfiguration);
+            ValueTask<Person> task = this.auditOrchestrationService
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    somePerson,
+                    someStoragePerson,
+                    someSecurityConfiguration);
 
             AuditOrchestrationServiceException actualException =
                 await Assert.ThrowsAsync<AuditOrchestrationServiceException>(task.AsTask);
@@ -146,7 +148,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             actualException.Should().BeEquivalentTo(expectedAuditOrchestrationServiceException);
 
             this.auditServiceMock.Verify(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),

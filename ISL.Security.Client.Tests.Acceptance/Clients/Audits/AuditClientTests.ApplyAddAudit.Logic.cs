@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -33,18 +33,29 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var updatedPerson = inputPerson.DeepClone();
             updatedPerson.CreatedBy = securityUserId;
             updatedPerson.UpdatedBy = securityUserId;
+            updatedPerson.DeletedBy = null;
+            updatedPerson.IsDeleted = false;
+            updatedPerson.DeletionReason = null;
             var expectedResult = updatedPerson;
 
             var inputSecurityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedWhen",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             // When
@@ -54,7 +65,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             // Then
             actualResult.Should().BeEquivalentTo(expectedResult, options =>
                 options.Excluding(ctx =>
-                    ctx.Path == "CreatedWhen" || ctx.Path == "UpdatedWhen"));
+                    ctx.Path == "CreatedWhen" ||
+                    ctx.Path == "UpdatedWhen"));
 
             actualResult.CreatedWhen.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
             actualResult.UpdatedWhen.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));

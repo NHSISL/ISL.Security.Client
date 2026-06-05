@@ -71,12 +71,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             {
                 CreatedByPropertyName = invalidInput,
                 CreatedByPropertyType = typeof(DateTime),
-                CreatedDatePropertyName = invalidInput,
-                CreatedDatePropertyType = typeof(string),
+                CreatedWhenPropertyName = invalidInput,
+                CreatedWhenPropertyType = typeof(string),
                 UpdatedByPropertyName = invalidInput,
                 UpdatedByPropertyType = typeof(DateTimeOffset),
-                UpdatedDatePropertyName = invalidInput,
-                UpdatedDatePropertyType = typeof(string)
+                UpdatedWhenPropertyName = invalidInput,
+                UpdatedWhenPropertyType = typeof(string)
             };
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
@@ -91,11 +91,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "A type of String / Guid / Long is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyName),
                 values: "Text is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyType),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyType),
                 values: "A type of DateTime / DateTimeOffset is required");
 
             invalidArgumentAuditException.AddData(
@@ -107,11 +107,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "A type of String / Guid / Long is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyName),
                 values: "Text is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyType),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyType),
                 values: "A type of DateTime / DateTimeOffset is required");
 
             var expectedAuditValidationException =
@@ -141,12 +141,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             {
                 CreatedByPropertyName = "CreatedByUser",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedAt",
-                CreatedDatePropertyType = typeof(DateTime),
+                CreatedWhenPropertyName = "CreatedAt",
+                CreatedWhenPropertyType = typeof(DateTime),
                 UpdatedByPropertyName = "UpdatedByUser",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedAt",
-                UpdatedDatePropertyType = typeof(DateTime)
+                UpdatedWhenPropertyName = "UpdatedAt",
+                UpdatedWhenPropertyType = typeof(DateTime)
             };
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
@@ -161,11 +161,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyName),
                 values:
-                    $"Property '{inputSecurityConfigurations.CreatedDatePropertyName}' not found, " +
+                    $"Property '{inputSecurityConfigurations.CreatedWhenPropertyName}' not found, " +
                     $"not settable, or not assignable from " +
-                    $"'{inputSecurityConfigurations.CreatedDatePropertyType.Name}' " +
+                    $"'{inputSecurityConfigurations.CreatedWhenPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
@@ -177,11 +177,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyName),
                 values:
-                    $"Property '{inputSecurityConfigurations.UpdatedDatePropertyName}' not found, " +
+                    $"Property '{inputSecurityConfigurations.UpdatedWhenPropertyName}' not found, " +
                     $"not settable, or not assignable from " +
-                    $"'{inputSecurityConfigurations.UpdatedDatePropertyType.Name}' " +
+                    $"'{inputSecurityConfigurations.UpdatedWhenPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             var expectedAuditValidationException =

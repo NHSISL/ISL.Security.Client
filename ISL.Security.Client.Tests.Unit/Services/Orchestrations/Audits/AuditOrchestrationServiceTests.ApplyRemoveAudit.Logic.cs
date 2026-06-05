@@ -29,12 +29,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset)
             };
 
             this.userServiceMock.Setup(service =>
@@ -42,7 +42,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     .ReturnsAsync(randomUserId);
 
             this.auditServiceMock.Setup(service =>
-                service.ApplyRemoveAuditValuesAsync(inputPerson, randomUserId, securityConfigurations))
+                service.ApplyRemoveAuditValuesAsync(inputPerson, randomUserId, securityConfigurations, null))
                     .ReturnsAsync(updatedPerson);
 
             // When
@@ -57,7 +57,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                     Times.Once);
 
             this.auditServiceMock.Verify(service =>
-                service.ApplyRemoveAuditValuesAsync(inputPerson, randomUserId, securityConfigurations),
+                service.ApplyRemoveAuditValuesAsync(inputPerson, randomUserId, securityConfigurations, null),
                     Times.Once);
 
             this.userServiceMock.VerifyNoOtherCalls();

@@ -16,7 +16,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
     public partial class AuditServiceTests
     {
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnEnsureAddAuditValuesRemainsUnchangedIfServiceErrorOccursAsync()
+        public async Task ShouldThrowServiceExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfServiceErrorOccursAsync()
         {
             // given
             dynamic someObject = new ExpandoObject();
@@ -27,13 +27,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             someObject.UpdatedDate = DateTimeOffset.MinValue;
 
             dynamic someStorageObject = new ExpandoObject();
-            someObject.Name = "John Doe";
-            someObject.CreatedBy = string.Empty;
-            someObject.CreatedDate = DateTimeOffset.MinValue;
-            someObject.UpdatedBy = string.Empty;
-            someObject.UpdatedDate = DateTimeOffset.MinValue;
+            someStorageObject.Name = "John Doe";
+            someStorageObject.CreatedBy = string.Empty;
+            someStorageObject.CreatedDate = DateTimeOffset.MinValue;
+            someStorageObject.UpdatedBy = string.Empty;
+            someStorageObject.UpdatedDate = DateTimeOffset.MinValue;
 
-            string someUserId = GetRandomString();
             var serviceException = new Exception();
 
             var someSecurityConfigurations = new SecurityConfigurations
@@ -71,15 +70,14 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                         .Throws(serviceException);
 
             // when
-            ValueTask<ExpandoObject> ensureAddAuditValuesRemainsUnchangedOnModifyTask =
-                auditServiceMock.Object.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<ExpandoObject> task =
+                auditServiceMock.Object.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     someObject,
                     someStorageObject,
                     someSecurityConfigurations);
 
             AuditServiceException actualAuditServiceException =
-                await Assert.ThrowsAsync<AuditServiceException>(
-                    ensureAddAuditValuesRemainsUnchangedOnModifyTask.AsTask);
+                await Assert.ThrowsAsync<AuditServiceException>(task.AsTask);
 
             // then
             actualAuditServiceException.Should()

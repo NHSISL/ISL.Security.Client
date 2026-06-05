@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net9.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>disable</Nullable>
+		<Nullable>enable</Nullable>
 		<Title>ISL.Security.Client</Title>
 		<Authors>Christo du Toit</Authors>
 		<Description> A Standard compliant client to abstract security operations away from the security broker.</Description>

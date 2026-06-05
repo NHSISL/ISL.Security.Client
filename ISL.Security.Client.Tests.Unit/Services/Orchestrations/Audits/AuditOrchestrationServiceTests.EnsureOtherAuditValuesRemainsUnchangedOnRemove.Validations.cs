@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
     public partial class AuditOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnEnsureAddAuditValuesIfNullsFoundAsync()
+        public async Task ShouldThrowValidationExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfNullsFoundAsync()
         {
             // given
             Person nullInputPerson = null;
@@ -43,7 +43,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             // when
             ValueTask<Person> task =
-                auditOrchestrationService.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                auditOrchestrationService.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     nullInputPerson,
                     nullStoragePerson,
                     nullSecurityConfigurations);

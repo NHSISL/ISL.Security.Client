@@ -15,31 +15,42 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
     public partial class AuditServiceTests
     {
         [Fact]
-        public async Task ShouldApplyModifyAuditForDynamicObjectAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveForExpandoObjectAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
-            string createdUserId = GetRandomString();
-            string modifiedUserId = GetRandomString();
+            string createdUserId = "CreatedUser";
+            string modifiedUserId = "ModifiedUser";
 
-            dynamic person = new ExpandoObject();
-            person.Name = "John Doe";
-            person.CreatedBy = createdUserId;
-            person.CreatedDate = DateTimeOffset.MinValue;
-            person.UpdatedBy = createdUserId;
-            person.UpdatedDate = DateTimeOffset.MinValue;
-            person.DeletedBy = (string)null;
-            person.DeletedDate = DateTimeOffset.MinValue;
-            person.IsDeleted = false;
-            person.DeletionReason = (string)null;
+            dynamic inputPerson = new ExpandoObject();
+            inputPerson.Name = "John Doe";
+            inputPerson.CreatedBy = modifiedUserId;
+            inputPerson.CreatedDate = currentDateTime;
+            inputPerson.UpdatedBy = modifiedUserId;
+            inputPerson.UpdatedDate = currentDateTime;
+            inputPerson.DeletedBy = string.Empty;
+            inputPerson.DeletedDate = DateTimeOffset.MinValue;
+            inputPerson.IsDeleted = false;
+            inputPerson.DeletionReason = (string)null;
+
+            dynamic storagePerson = new ExpandoObject();
+            storagePerson.Name = "John Doe";
+            storagePerson.CreatedBy = createdUserId;
+            storagePerson.CreatedDate = DateTimeOffset.MinValue;
+            storagePerson.UpdatedBy = createdUserId;
+            storagePerson.UpdatedDate = DateTimeOffset.MinValue;
+            storagePerson.DeletedBy = (string)null;
+            storagePerson.DeletedDate = DateTimeOffset.MinValue;
+            storagePerson.IsDeleted = false;
+            storagePerson.DeletionReason = (string)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
             expectedResult.CreatedBy = createdUserId;
             expectedResult.CreatedDate = DateTimeOffset.MinValue;
-            expectedResult.UpdatedBy = modifiedUserId;
-            expectedResult.UpdatedDate = currentDateTime;
-            expectedResult.DeletedBy = (string)null;
+            expectedResult.UpdatedBy = createdUserId;
+            expectedResult.UpdatedDate = DateTimeOffset.MinValue;
+            expectedResult.DeletedBy = string.Empty;
             expectedResult.DeletedDate = DateTimeOffset.MinValue;
             expectedResult.IsDeleted = false;
             expectedResult.DeletionReason = (string)null;
@@ -69,22 +80,31 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     .ReturnsAsync(currentDateTime);
 
             // When
-            var actualResult = await this.auditService
-                .ApplyModifyAuditValuesAsync(person, modifiedUserId, securityConfigurations);
+            dynamic actualResult = await this.auditService
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
-        public async Task ShouldApplyModifyAuditForNormalObjectAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveForObjectAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
             string createdUserId = GetRandomString();
             string modifiedUserId = GetRandomString();
 
-            var person = new Person
+            var inputPerson = new Person
+            {
+                Name = "John Doe",
+                CreatedBy = modifiedUserId,
+                CreatedWhen = currentDateTime,
+                UpdatedBy = modifiedUserId,
+                UpdatedWhen = currentDateTime,
+            };
+
+            var storagePerson = new Person
             {
                 Name = "John Doe",
                 CreatedBy = createdUserId,
@@ -98,8 +118,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 Name = "John Doe",
                 CreatedBy = createdUserId,
                 CreatedWhen = DateTimeOffset.MinValue,
-                UpdatedBy = modifiedUserId,
-                UpdatedWhen = currentDateTime,
+                UpdatedBy = createdUserId,
+                UpdatedWhen = DateTimeOffset.MinValue,
             };
 
             var securityConfigurations = new SecurityConfigurations
@@ -120,7 +140,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .ApplyModifyAuditValuesAsync(person, modifiedUserId, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

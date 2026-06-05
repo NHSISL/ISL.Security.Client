@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
 using ISL.Security.Client.Models.Foundations.Audits.Exceptions;
+using ISL.Security.Client.Services.Foundations.Audits;
 using Moq;
 
 namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
@@ -31,12 +32,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedDate",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedDate",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedDate",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedDate",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset)
             };
 
             var failedAuditServiceException =
@@ -49,27 +50,38 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     message: "Audit service error occurred, please contact support.",
                     innerException: failedAuditServiceException);
 
-            dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffsetAsync())
-                    .Throws(serviceException);
+            Mock<AuditService> auditServiceMock = new Mock<AuditService>(this.dateTimeBrokerMock.Object)
+            {
+                CallBase = true
+            };
+
+            auditServiceMock.Setup(broker =>
+                broker.ValidateOnApplyRemoveAuditValues(
+                    It.IsAny<object>(),
+                    It.IsAny<string>(),
+                    It.IsAny<SecurityConfigurations>()))
+                        .Throws(serviceException);
 
             // when
-            ValueTask<ExpandoObject> applyModifyAuditTask =
-                auditService.ApplyRemoveAuditValuesAsync(someObject, someUserId, someSecurityConfigurations);
+            ValueTask<ExpandoObject> applyRemoveAuditTask =
+                auditServiceMock.Object.ApplyRemoveAuditValuesAsync(someObject, someUserId, someSecurityConfigurations, null);
 
             AuditServiceException actualAuditServiceException =
                 await Assert.ThrowsAsync<AuditServiceException>(
-                    applyModifyAuditTask.AsTask);
+                    applyRemoveAuditTask.AsTask);
 
             // then
             actualAuditServiceException.Should()
                 .BeEquivalentTo(expectedAuditServiceException);
 
-            dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffsetAsync(),
-                    Times.Once);
+            auditServiceMock.Verify(broker =>
+                broker.ValidateOnApplyRemoveAuditValues(
+                    It.IsAny<object>(),
+                    It.IsAny<string>(),
+                    It.IsAny<SecurityConfigurations>()),
+                        Times.Once);
 
-            dateTimeBrokerMock.VerifyNoOtherCalls();
+            auditServiceMock.VerifyNoOtherCalls();
         }
     }
 }
