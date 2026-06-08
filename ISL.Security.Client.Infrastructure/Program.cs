@@ -15,7 +15,7 @@ namespace ISL.Security.Client.Infrastructure
             scriptGenerationService.GenerateBuildScript(
                 branchName: "main",
                 projectName: "ISL.Security.Client",
-                dotNetVersion: "10.x");
+                dotNetVersion: "10.0.100");
 
             scriptGenerationService.GeneratePrLintScript("main");
         }
