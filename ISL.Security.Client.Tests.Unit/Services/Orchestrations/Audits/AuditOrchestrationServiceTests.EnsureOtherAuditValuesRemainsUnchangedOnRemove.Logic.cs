@@ -14,7 +14,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
     public partial class AuditOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldEnsureAddAuditValuesRemainsUnchangedOnModifyForExpandoObjectAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveForExpandoObjectAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
@@ -36,7 +36,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             };
 
             this.auditServiceMock.Setup(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     securityConfigurations))
@@ -44,13 +44,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             // When
             dynamic actualResult = await this.auditOrchestrationService
-                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
             this.auditServiceMock.Verify(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     securityConfigurations),
@@ -61,7 +61,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         }
 
         [Fact]
-        public async Task ShouldEnsureAddAuditValuesRemainsUnchangedOnModifyForObjectAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveForObjectAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
@@ -91,8 +91,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                 Name = "John Doe",
                 CreatedBy = createdUserId,
                 CreatedWhen = DateTimeOffset.MinValue,
-                UpdatedBy = modifiedUserId,
-                UpdatedWhen = currentDateTime,
+                UpdatedBy = createdUserId,
+                UpdatedWhen = DateTimeOffset.MinValue,
             };
 
             Person expectedResult = updatedPerson;
@@ -110,7 +110,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             };
 
             this.auditServiceMock.Setup(broker =>
-                broker.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                broker.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     securityConfigurations))
@@ -118,13 +118,13 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             // When
             var actualResult = await this.auditOrchestrationService
-                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
 
             this.auditServiceMock.Verify(broker =>
-                broker.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                broker.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     securityConfigurations),

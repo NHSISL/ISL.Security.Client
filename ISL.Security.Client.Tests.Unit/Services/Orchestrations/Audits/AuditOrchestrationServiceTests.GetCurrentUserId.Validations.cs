@@ -17,9 +17,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         public async Task ShouldThrowValidationExceptionOnGetCurrentUserIdAsync()
         {
             // given
-            Person nullPerson = null;
-            ClaimsPrincipal nullClaimsPrincipal = null;
-            SecurityConfigurations nullSecurityConfigurations = null;
+            ClaimsPrincipal? nullClaimsPrincipal = null;
 
             InvalidArgumentAuditOrchestrationException invalidArgumentAuditException =
                 new InvalidArgumentAuditOrchestrationException(
@@ -36,7 +34,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
 
             // when
             ValueTask<string> task =
-                auditOrchestrationService.GetCurrentUserIdAsync(nullClaimsPrincipal);
+                auditOrchestrationService.GetCurrentUserIdAsync(nullClaimsPrincipal!);
 
             AuditOrchestrationValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditOrchestrationValidationException>(task.AsTask);

@@ -24,7 +24,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId, securityConfigurations);
+            ValidateOnApplyAddAuditValues(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
 
             SetProperty(
@@ -34,7 +34,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             SetProperty(
                 entity,
-                propertyName: securityConfigurations.CreatedDatePropertyName,
+                propertyName: securityConfigurations.CreatedWhenPropertyName,
                 value: auditDateTimeOffset);
 
             SetProperty(
@@ -44,8 +44,28 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             SetProperty(
                 entity,
-                propertyName: securityConfigurations.UpdatedDatePropertyName,
+                propertyName: securityConfigurations.UpdatedWhenPropertyName,
                 value: auditDateTimeOffset);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.DeletedByPropertyName,
+                value: null);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.DeletedWhenPropertyName,
+                value: null);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.IsDeletedPropertyName,
+                value: false);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.DeletionReasonPropertyName,
+                value: null);
 
             return entity;
         });
@@ -56,10 +76,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             SecurityConfigurations securityConfigurations) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId, securityConfigurations);
+            ValidateOnApplyModifyAuditValues(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
             var updatedByName = securityConfigurations.UpdatedByPropertyName;
-            var updatedDateName = securityConfigurations.UpdatedDatePropertyName;
+            var updatedDateName = securityConfigurations.UpdatedWhenPropertyName;
 
             SetProperty(
                 entity,
@@ -77,26 +97,37 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         public ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             string userId,
-            SecurityConfigurations securityConfigurations) =>
+            SecurityConfigurations securityConfigurations,
+            string? deletionReason) =>
         TryCatch(async () =>
         {
-            ValidateInputs(entity, userId, securityConfigurations);
+            ValidateOnApplyRemoveAuditValues(entity, userId, securityConfigurations);
             var auditDateTimeOffset = await this.dateTimeBroker.GetCurrentDateTimeOffsetAsync();
 
             SetProperty(
                 entity,
-                propertyName: securityConfigurations.UpdatedByPropertyName,
+                propertyName: securityConfigurations.DeletedByPropertyName,
                 value: userId);
 
             SetProperty(
                 entity,
-                propertyName: securityConfigurations.UpdatedDatePropertyName,
+                propertyName: securityConfigurations.DeletedWhenPropertyName,
                 value: auditDateTimeOffset);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.IsDeletedPropertyName,
+                value: true);
+
+            SetProperty(
+                entity,
+                propertyName: securityConfigurations.DeletionReasonPropertyName,
+                value: deletionReason);
 
             return entity;
         });
 
-        public ValueTask<T> EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<T>(
+        public ValueTask<T> EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync<T>(
             T entity,
             T storageEntity,
             SecurityConfigurations securityConfigurations) =>
@@ -104,16 +135,51 @@ namespace ISL.Security.Client.Services.Foundations.Audits
         {
             ValidateInputs(entity, storageEntity, securityConfigurations);
             var createdByName = securityConfigurations.CreatedByPropertyName;
-            var createdDateName = securityConfigurations.CreatedDatePropertyName;
-            object createdByValue = GetProperty(storageEntity, createdByName);
-            object createdDateValue = GetProperty(storageEntity, createdDateName);
+            var createdWhenName = securityConfigurations.CreatedWhenPropertyName;
+            var deletedByName = securityConfigurations.DeletedByPropertyName;
+            var deletedWhenName = securityConfigurations.DeletedWhenPropertyName;
+            var isDeletedName = securityConfigurations.IsDeletedPropertyName;
+            var deletionReasonName = securityConfigurations.DeletionReasonPropertyName;
+            object? createdByValue = GetProperty(storageEntity, createdByName);
+            object? createdWhenValue = GetProperty(storageEntity, createdWhenName);
+            object? deletedByValue = GetProperty(storageEntity, deletedByName);
+            object? deletedWhenValue = GetProperty(storageEntity, deletedWhenName);
+            object? isDeletedValue = GetProperty(storageEntity, isDeletedName);
+            object? deletionReasonValue = GetProperty(storageEntity, deletionReasonName);
             SetProperty(entity, createdByName, createdByValue);
-            SetProperty(entity, createdDateName, createdDateValue);
+            SetProperty(entity, createdWhenName, createdWhenValue);
+            SetProperty(entity, deletedByName, deletedByValue);
+            SetProperty(entity, deletedWhenName, deletedWhenValue);
+            SetProperty(entity, isDeletedName, isDeletedValue);
+            SetProperty(entity, deletionReasonName, deletionReasonValue);
 
             return entity;
         });
 
-        private object GetProperty<T>(T obj, string propertyName)
+        public ValueTask<T> EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync<T>(
+            T entity,
+            T storageEntity,
+            SecurityConfigurations securityConfigurations) =>
+        TryCatch<T>(async () =>
+        {
+            ValidateInputs(entity, storageEntity, securityConfigurations);
+            var createdByName = securityConfigurations.CreatedByPropertyName;
+            var createdWhenName = securityConfigurations.CreatedWhenPropertyName;
+            var updatedByName = securityConfigurations.UpdatedByPropertyName;
+            var updatedWhenName = securityConfigurations.UpdatedWhenPropertyName;
+            object? createdByValue = GetProperty(storageEntity, createdByName);
+            object? createdWhenValue = GetProperty(storageEntity, createdWhenName);
+            object? updatedByValue = GetProperty(storageEntity, updatedByName);
+            object? updatedWhenValue = GetProperty(storageEntity, updatedWhenName);
+            SetProperty(entity, createdByName, createdByValue);
+            SetProperty(entity, createdWhenName, createdWhenValue);
+            SetProperty(entity, updatedByName, updatedByValue);
+            SetProperty(entity, updatedWhenName, updatedWhenValue);
+
+            return entity;
+        });
+
+        private object? GetProperty<T>(T obj, string propertyName)
         {
             if (obj is IDictionary<string, object> expando)
             {
@@ -137,7 +203,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return prop.GetValue(obj);
         }
 
-        private static void SetProperty<T>(T entity, string propertyName, object value)
+        private static void SetProperty<T>(T entity, string propertyName, object? value)
         {
             if (entity == null || string.IsNullOrWhiteSpace(propertyName))
             {
@@ -146,7 +212,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             if (entity is IDictionary<string, object> expando)
             {
-                expando[propertyName] = value;
+                expando[propertyName] = value!;
             }
             else
             {

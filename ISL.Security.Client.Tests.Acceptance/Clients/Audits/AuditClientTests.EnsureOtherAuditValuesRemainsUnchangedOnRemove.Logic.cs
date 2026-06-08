@@ -1,4 +1,4 @@
-// ---------------------------------------------------------
+﻿// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -14,7 +14,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
     public partial class AuditClientTests
     {
         [Fact]
-        public async Task ShouldEnsureAddAuditValuesRemainsUnchangedOnModifyAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
@@ -25,11 +25,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 CreatedBy = GetRandomString(),
                 CreatedWhen = currentDateTime,
                 UpdatedBy = GetRandomString(),
-                UpdatedWhen = currentDateTime,
-                DeletedBy = GetRandomString(),
-                DeletedWhen = currentDateTime,
-                IsDeleted = true,
-                DeletionReason = GetRandomString()
+                UpdatedWhen = currentDateTime
             };
 
             Person storagePerson = new Person
@@ -38,11 +34,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 CreatedBy = GetRandomString(),
                 CreatedWhen = currentDateTime.AddDays(-1),
                 UpdatedBy = GetRandomString(),
-                UpdatedWhen = currentDateTime.AddDays(-1),
-                DeletedBy = null,
-                DeletedWhen = DateTimeOffset.MinValue,
-                IsDeleted = false,
-                DeletionReason = null
+                UpdatedWhen = currentDateTime.AddDays(-1)
             };
 
             Person updatedPerson = new Person
@@ -50,12 +42,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 Name = inputPerson.Name,
                 CreatedBy = storagePerson.CreatedBy,
                 CreatedWhen = storagePerson.CreatedWhen,
-                UpdatedBy = inputPerson.UpdatedBy,
-                UpdatedWhen = inputPerson.UpdatedWhen,
-                DeletedBy = storagePerson.DeletedBy,
-                DeletedWhen = storagePerson.DeletedWhen,
-                IsDeleted = storagePerson.IsDeleted,
-                DeletionReason = storagePerson.DeletionReason
+                UpdatedBy = storagePerson.UpdatedBy,
+                UpdatedWhen = storagePerson.UpdatedWhen
             };
 
             Person expectedResult = updatedPerson.DeepClone();
@@ -69,20 +57,12 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
                 UpdatedWhenPropertyName = "UpdatedWhen",
-                UpdatedWhenPropertyType = typeof(DateTimeOffset),
-                DeletedByPropertyName = "DeletedBy",
-                DeletedByPropertyType = typeof(string),
-                DeletedWhenPropertyName = "DeletedWhen",
-                DeletedWhenPropertyType = typeof(DateTimeOffset),
-                IsDeletedPropertyName = "IsDeleted",
-                IsDeletedPropertyType = typeof(bool),
-                DeletionReasonPropertyName = "DeletionReason",
-                DeletionReasonPropertyType = typeof(string)
+                UpdatedWhenPropertyType = typeof(DateTimeOffset)
             };
 
             // When
             Person actualResult = await this.securityClient.Audits
-                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     inputSecurityConfigurations);

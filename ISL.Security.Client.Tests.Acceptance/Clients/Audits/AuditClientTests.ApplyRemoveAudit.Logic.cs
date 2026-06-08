@@ -15,10 +15,12 @@ namespace ISL.Security.Client.Tests.Clients.Audits
     public partial class AuditClientTests
     {
         [Theory]
-        [InlineData("username", true)]
-        [InlineData("username", false)]
-        [InlineData("", false)]
-        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync(string userId, bool isAuthenticated)
+        [InlineData("username", true, null)]
+        [InlineData("username", false, null)]
+        [InlineData("", false, null)]
+        [InlineData("username", true, "User requested deletion")]
+        public async Task ShouldApplyRemoveAuditForDynamicObjectAsync(
+            string userId, bool isAuthenticated, string? deletionReason)
         {
             // Given
             ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated, userId);
@@ -36,10 +38,16 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 CreatedWhen = DateTimeOffset.UtcNow.AddMinutes(-1),
                 UpdatedBy = GetRandomString(),
                 UpdatedWhen = DateTimeOffset.UtcNow.AddMinutes(-1),
+                DeletedBy = string.Empty,
+                DeletedWhen = DateTimeOffset.MinValue,
+                IsDeleted = false,
+                DeletionReason = null,
             };
 
             var updatedPerson = inputPerson.DeepClone();
-            updatedPerson.UpdatedBy = securityUserId;
+            updatedPerson.DeletedBy = securityUserId;
+            updatedPerson.IsDeleted = true;
+            updatedPerson.DeletionReason = deletionReason;
 
             var expectedResult = updatedPerson;
 
@@ -47,23 +55,35 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedWhen",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             // When
             var actualResult = await this.securityClient.Audits
-                .ApplyRemoveAuditValuesAsync(inputPerson, inputClaimsPrincipal, inputSecurityConfigurations);
+                .ApplyRemoveAuditValuesAsync(
+                    inputPerson,
+                    inputClaimsPrincipal,
+                    inputSecurityConfigurations,
+                    deletionReason);
 
             // Then
             actualResult.Should().BeEquivalentTo(expectedResult, options =>
-                options.Excluding(ctx => ctx.Path == "UpdatedWhen"));
+                options.Excluding(ctx => ctx.Path == "DeletedWhen"));
 
-            actualResult.UpdatedWhen.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+            actualResult.DeletedWhen.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
         }
     }
 }

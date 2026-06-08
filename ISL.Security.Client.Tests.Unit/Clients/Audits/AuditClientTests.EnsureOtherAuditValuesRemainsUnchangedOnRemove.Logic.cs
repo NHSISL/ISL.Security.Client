@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------
+// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -14,7 +14,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
     public partial class AuditClientTests
     {
         [Fact]
-        public async Task ShouldEnsureAddAuditValuesRemainsUnchangedOnModifyAsync()
+        public async Task ShouldEnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync()
         {
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
@@ -25,7 +25,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var securityConfigurations = new SecurityConfigurations();
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     inputPerson,
                     storagePerson,
                     securityConfigurations))
@@ -33,10 +33,20 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // When
             dynamic actualResult = await this.auditClient
-                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(inputPerson, storagePerson, securityConfigurations);
+                .EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    inputPerson, storagePerson, securityConfigurations);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+
+            this.auditOrchestrationServiceMock.Verify(service =>
+                service.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    inputPerson,
+                    storagePerson,
+                    securityConfigurations),
+                        Times.Once);
+
+            this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
         }
     }
 }

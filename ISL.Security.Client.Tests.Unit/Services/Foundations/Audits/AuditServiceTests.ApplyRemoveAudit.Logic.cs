@@ -20,7 +20,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
             string createdUserId = GetRandomString();
-            string modifiedUserId = GetRandomString();
+            string deletedUserId = GetRandomString();
 
             dynamic person = new ExpandoObject();
             person.Name = "John Doe";
@@ -28,24 +28,40 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             person.CreatedDate = DateTimeOffset.MinValue;
             person.UpdatedBy = createdUserId;
             person.UpdatedDate = DateTimeOffset.MinValue;
+            person.DeletedBy = string.Empty;
+            person.DeletedDate = DateTimeOffset.MinValue;
+            person.IsDeleted = false;
+            person.DeletionReason = (string?)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
             expectedResult.CreatedBy = createdUserId;
             expectedResult.CreatedDate = DateTimeOffset.MinValue;
-            expectedResult.UpdatedBy = modifiedUserId;
-            expectedResult.UpdatedDate = currentDateTime;
+            expectedResult.UpdatedBy = createdUserId;
+            expectedResult.UpdatedDate = DateTimeOffset.MinValue;
+            expectedResult.DeletedBy = deletedUserId;
+            expectedResult.DeletedDate = currentDateTime;
+            expectedResult.IsDeleted = true;
+            expectedResult.DeletionReason = (string?)null;
 
             var securityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedDate",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedDate",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedDate",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedDate",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedDate",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -54,7 +70,70 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .ApplyRemoveAuditValuesAsync(person, modifiedUserId, securityConfigurations);
+                .ApplyRemoveAuditValuesAsync(person, deletedUserId, securityConfigurations);
+
+            // Then
+            ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task ShouldApplyRemoveAuditWithDeletionReasonForDynamicObjectAsync()
+        {
+            // Given
+            DateTimeOffset currentDateTime = DateTime.UtcNow;
+            string createdUserId = GetRandomString();
+            string deletedUserId = GetRandomString();
+            string inputDeletionReason = GetRandomString();
+
+            dynamic person = new ExpandoObject();
+            person.Name = "John Doe";
+            person.CreatedBy = createdUserId;
+            person.CreatedDate = DateTimeOffset.MinValue;
+            person.UpdatedBy = createdUserId;
+            person.UpdatedDate = DateTimeOffset.MinValue;
+            person.DeletedBy = string.Empty;
+            person.DeletedDate = DateTimeOffset.MinValue;
+            person.IsDeleted = false;
+            person.DeletionReason = (string?)null;
+
+            dynamic expectedResult = new ExpandoObject();
+            expectedResult.Name = "John Doe";
+            expectedResult.CreatedBy = createdUserId;
+            expectedResult.CreatedDate = DateTimeOffset.MinValue;
+            expectedResult.UpdatedBy = createdUserId;
+            expectedResult.UpdatedDate = DateTimeOffset.MinValue;
+            expectedResult.DeletedBy = deletedUserId;
+            expectedResult.DeletedDate = currentDateTime;
+            expectedResult.IsDeleted = true;
+            expectedResult.DeletionReason = inputDeletionReason;
+
+            var securityConfigurations = new SecurityConfigurations
+            {
+                CreatedByPropertyName = "CreatedBy",
+                CreatedByPropertyType = typeof(string),
+                CreatedWhenPropertyName = "CreatedDate",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
+                UpdatedByPropertyName = "UpdatedBy",
+                UpdatedByPropertyType = typeof(string),
+                UpdatedWhenPropertyName = "UpdatedDate",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedDate",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
+            };
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffsetAsync())
+                    .ReturnsAsync(currentDateTime);
+
+            // When
+            var actualResult = await this.auditService
+                .ApplyRemoveAuditValuesAsync(person, deletedUserId, securityConfigurations, inputDeletionReason);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);
@@ -66,7 +145,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             // Given
             DateTimeOffset currentDateTime = DateTime.UtcNow;
             string createdUserId = GetRandomString();
-            string modifiedUserId = GetRandomString();
+            string deletedUserId = GetRandomString();
 
             var person = new Person
             {
@@ -75,6 +154,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 CreatedWhen = DateTimeOffset.MinValue,
                 UpdatedBy = createdUserId,
                 UpdatedWhen = DateTimeOffset.MinValue,
+                DeletedBy = string.Empty,
+                DeletedWhen = DateTimeOffset.MinValue,
+                IsDeleted = false,
+                DeletionReason = null,
             };
 
             var expectedResult = new Person
@@ -82,20 +165,32 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 Name = "John Doe",
                 CreatedBy = createdUserId,
                 CreatedWhen = DateTimeOffset.MinValue,
-                UpdatedBy = modifiedUserId,
-                UpdatedWhen = currentDateTime,
+                UpdatedBy = createdUserId,
+                UpdatedWhen = DateTimeOffset.MinValue,
+                DeletedBy = deletedUserId,
+                DeletedWhen = currentDateTime,
+                IsDeleted = true,
+                DeletionReason = null,
             };
 
             var securityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedWhen",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -104,7 +199,74 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
 
             // When
             var actualResult = await this.auditService
-                .ApplyRemoveAuditValuesAsync(person, modifiedUserId, securityConfigurations);
+                .ApplyRemoveAuditValuesAsync(person, deletedUserId, securityConfigurations);
+
+            // Then
+            ((object)actualResult).Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task ShouldApplyRemoveAuditWithDeletionReasonForNormalObjectAsync()
+        {
+            // Given
+            DateTimeOffset currentDateTime = DateTime.UtcNow;
+            string createdUserId = GetRandomString();
+            string deletedUserId = GetRandomString();
+            string inputDeletionReason = GetRandomString();
+
+            var person = new Person
+            {
+                Name = "John Doe",
+                CreatedBy = createdUserId,
+                CreatedWhen = DateTimeOffset.MinValue,
+                UpdatedBy = createdUserId,
+                UpdatedWhen = DateTimeOffset.MinValue,
+                DeletedBy = string.Empty,
+                DeletedWhen = DateTimeOffset.MinValue,
+                IsDeleted = false,
+                DeletionReason = null,
+            };
+
+            var expectedResult = new Person
+            {
+                Name = "John Doe",
+                CreatedBy = createdUserId,
+                CreatedWhen = DateTimeOffset.MinValue,
+                UpdatedBy = createdUserId,
+                UpdatedWhen = DateTimeOffset.MinValue,
+                DeletedBy = deletedUserId,
+                DeletedWhen = currentDateTime,
+                IsDeleted = true,
+                DeletionReason = inputDeletionReason,
+            };
+
+            var securityConfigurations = new SecurityConfigurations
+            {
+                CreatedByPropertyName = "CreatedBy",
+                CreatedByPropertyType = typeof(string),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
+                UpdatedByPropertyName = "UpdatedBy",
+                UpdatedByPropertyType = typeof(string),
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedWhen",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
+            };
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffsetAsync())
+                    .ReturnsAsync(currentDateTime);
+
+            // When
+            var actualResult = await this.auditService
+                .ApplyRemoveAuditValuesAsync(person, deletedUserId, securityConfigurations, inputDeletionReason);
 
             // Then
             ((object)actualResult).Should().BeEquivalentTo(expectedResult);

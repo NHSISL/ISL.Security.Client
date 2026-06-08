@@ -29,14 +29,15 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedAuditClientValidationException =
                 new AuditClientValidationException(
                     message: "Audit client validation error occurred, fix the error and try again.",
-                    innerException: validationException.InnerException as Xeption,
-                    data: validationException.InnerException.Data);
+                    innerException: (validationException.InnerException as Xeption)!,
+                    data: validationException.InnerException?.Data!);
 
             this.auditOrchestrationServiceMock.Setup(service =>
                 service.ApplyRemoveAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>()))
+                    It.IsAny<SecurityConfigurations>(),
+                    It.IsAny<string>()))
                         .ThrowsAsync(validationException);
 
             // when
@@ -56,7 +57,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 service.ApplyRemoveAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>()),
+                    It.IsAny<SecurityConfigurations>(),
+                    It.IsAny<string>()),
                         Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
@@ -75,14 +77,15 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedAuditClientDependencyException =
                 new AuditClientDependencyException(
                     message: "Audit client dependency error occurred, please contact support.",
-                    innerException: dependencyException.InnerException as Xeption,
-                    data: dependencyException.InnerException.Data);
+                    innerException: (dependencyException.InnerException as Xeption)!,
+                    data: dependencyException.InnerException?.Data!);
 
             this.auditOrchestrationServiceMock.Setup(service =>
                 service.ApplyRemoveAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>()))
+                    It.IsAny<SecurityConfigurations>(),
+                    It.IsAny<string>()))
                         .ThrowsAsync(dependencyException);
 
             // when
@@ -101,7 +104,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 service.ApplyRemoveAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>()),
+                    It.IsAny<SecurityConfigurations>(),
+                    It.IsAny<string>()),
                         Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();
@@ -126,7 +130,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                service.ApplyRemoveAuditValuesAsync(
                    It.IsAny<Person>(),
                    It.IsAny<ClaimsPrincipal>(),
-                   It.IsAny<SecurityConfigurations>()))
+                   It.IsAny<SecurityConfigurations>(),
+                   It.IsAny<string>()))
                     .ThrowsAsync(serviceException);
 
             // when
@@ -145,7 +150,8 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 service.ApplyRemoveAuditValuesAsync(
                     It.IsAny<Person>(),
                     It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<SecurityConfigurations>()),
+                    It.IsAny<SecurityConfigurations>(),
+                    It.IsAny<string>()),
                         Times.Once);
 
             this.auditOrchestrationServiceMock.VerifyNoOtherCalls();

@@ -28,6 +28,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             person.CreatedDate = DateTimeOffset.MinValue;
             person.UpdatedBy = createdUserId;
             person.UpdatedDate = DateTimeOffset.MinValue;
+            person.DeletedBy = (string?)null;
+            person.DeletedDate = DateTimeOffset.MinValue;
+            person.IsDeleted = false;
+            person.DeletionReason = (string?)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
@@ -35,17 +39,29 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             expectedResult.CreatedDate = DateTimeOffset.MinValue;
             expectedResult.UpdatedBy = modifiedUserId;
             expectedResult.UpdatedDate = currentDateTime;
+            expectedResult.DeletedBy = (string?)null;
+            expectedResult.DeletedDate = DateTimeOffset.MinValue;
+            expectedResult.IsDeleted = false;
+            expectedResult.DeletionReason = (string?)null;
 
             var securityConfigurations = new SecurityConfigurations
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedDate",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedDate",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedDate",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedDate",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset),
+                DeletedByPropertyName = "DeletedBy",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedDate",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeleted",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeletionReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>
@@ -90,12 +106,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             {
                 CreatedByPropertyName = "CreatedBy",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedWhen",
-                CreatedDatePropertyType = typeof(DateTimeOffset),
+                CreatedWhenPropertyName = "CreatedWhen",
+                CreatedWhenPropertyType = typeof(DateTimeOffset),
                 UpdatedByPropertyName = "UpdatedBy",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedWhen",
-                UpdatedDatePropertyType = typeof(DateTimeOffset)
+                UpdatedWhenPropertyName = "UpdatedWhen",
+                UpdatedWhenPropertyType = typeof(DateTimeOffset)
             };
 
             this.dateTimeBrokerMock.Setup(broker =>

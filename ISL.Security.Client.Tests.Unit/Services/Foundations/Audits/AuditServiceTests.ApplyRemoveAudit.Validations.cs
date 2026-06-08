@@ -18,12 +18,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         [InlineData("")]
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnApplyRemoveAuditIfNullObjectsFoundAsync(
-            string invalidInput)
+            string? invalidInput)
         {
             // given
-            Person nullPerson = null;
-            string invalidUserId = invalidInput;
-            SecurityConfigurations nullSecurityConfigurations = null;
+            Person? nullPerson = null;
+            string? invalidUserId = invalidInput;
+            SecurityConfigurations? nullSecurityConfigurations = null;
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
                 message: "Invalid audit argument(s), correct the errors and try again.");
@@ -46,8 +46,8 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> applyRemoveAuditTask =
-                auditService.ApplyRemoveAuditValuesAsync(nullPerson, invalidUserId, nullSecurityConfigurations);
+            ValueTask<Person?> applyRemoveAuditTask =
+                auditService.ApplyRemoveAuditValuesAsync(nullPerson, invalidUserId!, nullSecurityConfigurations!);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(applyRemoveAuditTask.AsTask);
@@ -62,21 +62,29 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         [InlineData("")]
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnApplyRemoveAuditIfConfigurationNotPopulatedFoundAsync(
-            string invalidInput)
+            string? invalidInput)
         {
             // given
             Person inputPerson = new Person();
             string inputUserId = GetRandomString();
             SecurityConfigurations invalidSecurityConfigurations = new SecurityConfigurations
             {
-                CreatedByPropertyName = invalidInput,
+                CreatedByPropertyName = invalidInput!,
                 CreatedByPropertyType = typeof(DateTime),
-                CreatedDatePropertyName = invalidInput,
-                CreatedDatePropertyType = typeof(string),
-                UpdatedByPropertyName = invalidInput,
+                CreatedWhenPropertyName = invalidInput!,
+                CreatedWhenPropertyType = typeof(string),
+                UpdatedByPropertyName = invalidInput!,
                 UpdatedByPropertyType = typeof(DateTimeOffset),
-                UpdatedDatePropertyName = invalidInput,
-                UpdatedDatePropertyType = typeof(string)
+                UpdatedWhenPropertyName = invalidInput!,
+                UpdatedWhenPropertyType = typeof(string),
+                DeletedByPropertyName = invalidInput!,
+                DeletedByPropertyType = typeof(DateTime),
+                DeletedWhenPropertyName = invalidInput!,
+                DeletedWhenPropertyType = typeof(string),
+                IsDeletedPropertyName = invalidInput!,
+                IsDeletedPropertyType = typeof(string),
+                DeletionReasonPropertyName = invalidInput!,
+                DeletionReasonPropertyType = typeof(DateTimeOffset)
             };
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
@@ -91,11 +99,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "A type of String / Guid / Long is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyName),
                 values: "Text is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyType),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyType),
                 values: "A type of DateTime / DateTimeOffset is required");
 
             invalidArgumentAuditException.AddData(
@@ -107,12 +115,44 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                 values: "A type of String / Guid / Long is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyName),
                 values: "Text is required");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyType),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyType),
                 values: "A type of DateTime / DateTimeOffset is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedByPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedByPropertyType),
+                values: "A type of String / Guid / Long is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedWhenPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedWhenPropertyType),
+                values: "A type of DateTime / DateTimeOffset is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.IsDeletedPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.IsDeletedPropertyType),
+                values: "A type of Boolean is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletionReasonPropertyName),
+                values: "Text is required");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletionReasonPropertyType),
+                values: "A type of String / Guid / Long is required");
 
             var expectedAuditValidationException =
                 new AuditValidationException(
@@ -141,12 +181,20 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             {
                 CreatedByPropertyName = "CreatedByUser",
                 CreatedByPropertyType = typeof(string),
-                CreatedDatePropertyName = "CreatedAt",
-                CreatedDatePropertyType = typeof(DateTime),
+                CreatedWhenPropertyName = "CreatedAt",
+                CreatedWhenPropertyType = typeof(DateTime),
                 UpdatedByPropertyName = "UpdatedByUser",
                 UpdatedByPropertyType = typeof(string),
-                UpdatedDatePropertyName = "UpdatedAt",
-                UpdatedDatePropertyType = typeof(DateTime)
+                UpdatedWhenPropertyName = "UpdatedAt",
+                UpdatedWhenPropertyType = typeof(DateTime),
+                DeletedByPropertyName = "DeletedByUser",
+                DeletedByPropertyType = typeof(string),
+                DeletedWhenPropertyName = "DeletedAt",
+                DeletedWhenPropertyType = typeof(DateTimeOffset),
+                IsDeletedPropertyName = "IsDeletedFlag",
+                IsDeletedPropertyType = typeof(bool),
+                DeletionReasonPropertyName = "DeleteReason",
+                DeletionReasonPropertyType = typeof(string)
             };
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
@@ -161,11 +209,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.CreatedDatePropertyName),
+                key: nameof(SecurityConfigurations.CreatedWhenPropertyName),
                 values:
-                    $"Property '{inputSecurityConfigurations.CreatedDatePropertyName}' not found, " +
+                    $"Property '{inputSecurityConfigurations.CreatedWhenPropertyName}' not found, " +
                     $"not settable, or not assignable from " +
-                    $"'{inputSecurityConfigurations.CreatedDatePropertyType.Name}' " +
+                    $"'{inputSecurityConfigurations.CreatedWhenPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
@@ -177,11 +225,43 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     $"on entity '{typeof(Person).Name}'.");
 
             invalidArgumentAuditException.AddData(
-                key: nameof(SecurityConfigurations.UpdatedDatePropertyName),
+                key: nameof(SecurityConfigurations.UpdatedWhenPropertyName),
                 values:
-                    $"Property '{inputSecurityConfigurations.UpdatedDatePropertyName}' not found, " +
+                    $"Property '{inputSecurityConfigurations.UpdatedWhenPropertyName}' not found, " +
                     $"not settable, or not assignable from " +
-                    $"'{inputSecurityConfigurations.UpdatedDatePropertyType.Name}' " +
+                    $"'{inputSecurityConfigurations.UpdatedWhenPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedByPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.DeletedByPropertyName}' not found, " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.DeletedByPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletedWhenPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.DeletedWhenPropertyName}' not found, " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.DeletedWhenPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.IsDeletedPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.IsDeletedPropertyName}' not found, " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.IsDeletedPropertyType.Name}' " +
+                    $"on entity '{typeof(Person).Name}'.");
+
+            invalidArgumentAuditException.AddData(
+                key: nameof(SecurityConfigurations.DeletionReasonPropertyName),
+                values:
+                    $"Property '{inputSecurityConfigurations.DeletionReasonPropertyName}' not found, " +
+                    $"not settable, or not assignable from " +
+                    $"'{inputSecurityConfigurations.DeletionReasonPropertyType.Name}' " +
                     $"on entity '{typeof(Person).Name}'.");
 
             var expectedAuditValidationException =

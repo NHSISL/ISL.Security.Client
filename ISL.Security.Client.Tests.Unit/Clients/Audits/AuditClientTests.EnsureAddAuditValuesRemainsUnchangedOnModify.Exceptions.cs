@@ -28,18 +28,18 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedAuditClientValidationException =
                 new AuditClientValidationException(
                     message: "Audit client validation error occurred, fix the error and try again.",
-                    innerException: validationException.InnerException as Xeption,
-                    data: validationException.InnerException.Data);
+                    innerException: (validationException.InnerException as Xeption)!,
+                    data: validationException.InnerException?.Data!);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(validationException);
 
             // when
-            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
@@ -52,7 +52,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                 .BeEquivalentTo(expectedAuditClientValidationException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -74,11 +74,11 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             var expectedAuditClientDependencyException =
                 new AuditClientDependencyException(
                     message: "Audit client dependency error occurred, please contact support.",
-                    innerException: dependencyException.InnerException as Xeption,
-                    data: dependencyException.InnerException.Data);
+                    innerException: (dependencyException.InnerException as Xeption)!,
+                    data: dependencyException.InnerException?.Data!);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
@@ -86,7 +86,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
 
             // when
             ValueTask<Person> task = this.auditClient
-                .EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<Person>(
+                .EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync<Person>(
                     somePerson,
                     someStoragePerson,
                     someSecurityConfiguration);
@@ -98,7 +98,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientDependencyException.Should().BeEquivalentTo(expectedAuditClientDependencyException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),
@@ -123,14 +123,14 @@ namespace ISL.Security.Client.Tests.Clients.Audits
                     data: serviceException.Data);
 
             this.auditOrchestrationServiceMock.Setup(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()))
                         .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Person> task = this.auditClient.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+            ValueTask<Person> task = this.auditClient.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                 somePerson,
                 someStoragePerson,
                 someSecurityConfiguration);
@@ -142,7 +142,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
             actualAuditClientServiceException.Should().BeEquivalentTo(expectedAuditClientServiceException);
 
             this.auditOrchestrationServiceMock.Verify(service =>
-                service.EnsureAddAuditValuesRemainsUnchangedOnModifyAsync(
+                service.EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync(
                     It.IsAny<Person>(),
                     It.IsAny<Person>(),
                     It.IsAny<SecurityConfigurations>()),

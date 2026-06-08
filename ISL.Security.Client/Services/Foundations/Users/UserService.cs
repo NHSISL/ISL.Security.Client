@@ -127,12 +127,12 @@ namespace ISL.Security.Client.Services.Foundations.Users
             var claimsList = claimsPrincipal.Claims;
 
             return new User(
-                userId: userId,
-                givenName: givenName,
-                surname: surname,
-                displayName: displayName,
-                email: email,
-                jobTitle: jobTitle,
+                userId: userId!,
+                givenName: givenName!,
+                surname: surname!,
+                displayName: displayName!,
+                email: email!,
+                jobTitle: jobTitle!,
                 roles: roles,
                 claims: claimsList);
         }

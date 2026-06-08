@@ -2,7 +2,6 @@
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
-using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ISL.Security.Client.Models.Clients;
@@ -14,48 +13,47 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
     public partial class AuditOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnApplyAddAuditIfNullObjectsFoundAsync()
+        public async Task ShouldThrowValidationExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfNullsFoundAsync()
         {
             // given
-            Person? nullPerson = null;
-            ClaimsPrincipal? nullClaimsPrincipal = null;
+            Person? nullInputPerson = null;
+            Person? nullStoragePerson = null;
             SecurityConfigurations? nullSecurityConfigurations = null;
 
             InvalidArgumentAuditOrchestrationException invalidArgumentAuditException =
                 new InvalidArgumentAuditOrchestrationException(
-                    message: "Invalid audit orchestration argument(s), correct the errors and try again.");
+                message: "Invalid audit orchestration argument(s), correct the errors and try again.");
 
             invalidArgumentAuditException.AddData(
                 key: "entity",
                 values: "Entity is required");
 
             invalidArgumentAuditException.AddData(
-                key: "claimsPrincipal",
-                values: "Claims principal is required");
+                key: "storageEntity",
+                values: "Entity is required");
 
             invalidArgumentAuditException.AddData(
                 key: "securityConfigurations",
                 values: "Entity is required");
 
-            var expectedAuditValidationException =
+            var expectedAuditOrchestrationValidationException =
                 new AuditOrchestrationValidationException(
                     message: "Audit orchestration validation error occurred, please try again.",
                     innerException: invalidArgumentAuditException);
 
             // when
             ValueTask<Person?> task =
-                auditOrchestrationService.ApplyAddAuditValuesAsync(
-                    nullPerson,
-                    nullClaimsPrincipal!,
+                auditOrchestrationService.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
+                    nullInputPerson,
+                    nullStoragePerson,
                     nullSecurityConfigurations!);
 
-            AuditOrchestrationValidationException actualAuditValidationException =
+            AuditOrchestrationValidationException actualAuditOrchestrationValidationException =
                 await Assert.ThrowsAsync<AuditOrchestrationValidationException>(task.AsTask);
 
             // then
-            actualAuditValidationException.Should()
-                .BeEquivalentTo(expectedAuditValidationException);
-
+            actualAuditOrchestrationValidationException.Should()
+                .BeEquivalentTo(expectedAuditOrchestrationValidationException);
 
             this.userServiceMock.VerifyNoOtherCalls();
             this.auditServiceMock.VerifyNoOtherCalls();

@@ -16,7 +16,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         public async Task ShouldThrowValidationExceptionOnGetUserIfClaimsPrincipalIsNullAndLogItAsync()
         {
             // given
-            ClaimsPrincipal nullClaimsPrincipal = null;
+            ClaimsPrincipal? nullClaimsPrincipal = null;
 
             InvalidArgumentUserException invalidArgumentUserException = new InvalidArgumentUserException(
                 message: "Invalid user argument(s), correct the errors and try again.");
@@ -32,7 +32,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<User> getUserTask =
-                userService.GetUserAsync(nullClaimsPrincipal);
+                userService.GetUserAsync(nullClaimsPrincipal!);
 
             UserValidationException actualUserValidationException =
                 await Assert.ThrowsAsync<UserValidationException>(getUserTask.AsTask);

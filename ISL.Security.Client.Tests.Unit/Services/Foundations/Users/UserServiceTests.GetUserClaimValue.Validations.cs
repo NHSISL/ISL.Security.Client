@@ -16,11 +16,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
         [InlineData("")]
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnGetUserClaimValueIfClaimsPrincipalAndTypeIsInvalidAsync(
-            string claimType)
+            string? claimType)
         {
             // given
-            ClaimsPrincipal nullClaimsPrincipal = null;
-            string invalidClaimType = claimType;
+            ClaimsPrincipal? nullClaimsPrincipal = null;
+            string? invalidClaimType = claimType;
 
             InvalidArgumentUserException invalidArgumentUserException = new InvalidArgumentUserException(
                 message: "Invalid user argument(s), correct the errors and try again.");
@@ -40,7 +40,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
 
             // when
             ValueTask<string> getUserClaimValueAsyncTask =
-                userService.GetUserClaimValueAsync(nullClaimsPrincipal, invalidClaimType);
+                userService.GetUserClaimValueAsync(nullClaimsPrincipal!, invalidClaimType!);
 
             UserValidationException actualUserValidationException =
                 await Assert.ThrowsAsync<UserValidationException>(getUserClaimValueAsyncTask.AsTask);

@@ -23,9 +23,15 @@ namespace ISL.Security.Client.Services.Orchestrations.Audits
         ValueTask<T> ApplyRemoveAuditValuesAsync<T>(
             T entity,
             ClaimsPrincipal claimsPrincipal,
+            SecurityConfigurations securityConfigurations,
+            string? deletionReason = null);
+
+        ValueTask<T> EnsureOtherAuditValuesRemainsUnchangedOnModifyAsync<T>(
+            T entity,
+            T storageEntity,
             SecurityConfigurations securityConfigurations);
 
-        ValueTask<T> EnsureAddAuditValuesRemainsUnchangedOnModifyAsync<T>(
+        ValueTask<T> EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync<T>(
             T entity,
             T storageEntity,
             SecurityConfigurations securityConfigurations);
