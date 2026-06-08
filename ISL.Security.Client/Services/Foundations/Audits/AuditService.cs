@@ -140,12 +140,12 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             var deletedWhenName = securityConfigurations.DeletedWhenPropertyName;
             var isDeletedName = securityConfigurations.IsDeletedPropertyName;
             var deletionReasonName = securityConfigurations.DeletionReasonPropertyName;
-            object createdByValue = GetProperty(storageEntity, createdByName);
-            object createdWhenValue = GetProperty(storageEntity, createdWhenName);
-            object deletedByValue = GetProperty(storageEntity, deletedByName);
-            object deletedWhenValue = GetProperty(storageEntity, deletedWhenName);
-            object isDeletedValue = GetProperty(storageEntity, isDeletedName);
-            object deletionReasonValue = GetProperty(storageEntity, deletionReasonName);
+            object? createdByValue = GetProperty(storageEntity, createdByName);
+            object? createdWhenValue = GetProperty(storageEntity, createdWhenName);
+            object? deletedByValue = GetProperty(storageEntity, deletedByName);
+            object? deletedWhenValue = GetProperty(storageEntity, deletedWhenName);
+            object? isDeletedValue = GetProperty(storageEntity, isDeletedName);
+            object? deletionReasonValue = GetProperty(storageEntity, deletionReasonName);
             SetProperty(entity, createdByName, createdByValue);
             SetProperty(entity, createdWhenName, createdWhenValue);
             SetProperty(entity, deletedByName, deletedByValue);
@@ -167,10 +167,10 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             var createdWhenName = securityConfigurations.CreatedWhenPropertyName;
             var updatedByName = securityConfigurations.UpdatedByPropertyName;
             var updatedWhenName = securityConfigurations.UpdatedWhenPropertyName;
-            object createdByValue = GetProperty(storageEntity, createdByName);
-            object createdWhenValue = GetProperty(storageEntity, createdWhenName);
-            object updatedByValue = GetProperty(storageEntity, updatedByName);
-            object updatedWhenValue = GetProperty(storageEntity, updatedWhenName);
+            object? createdByValue = GetProperty(storageEntity, createdByName);
+            object? createdWhenValue = GetProperty(storageEntity, createdWhenName);
+            object? updatedByValue = GetProperty(storageEntity, updatedByName);
+            object? updatedWhenValue = GetProperty(storageEntity, updatedWhenName);
             SetProperty(entity, createdByName, createdByValue);
             SetProperty(entity, createdWhenName, createdWhenValue);
             SetProperty(entity, updatedByName, updatedByValue);
@@ -179,7 +179,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return entity;
         });
 
-        private object GetProperty<T>(T obj, string propertyName)
+        private object? GetProperty<T>(T obj, string propertyName)
         {
             if (obj is IDictionary<string, object> expando)
             {
@@ -203,7 +203,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             return prop.GetValue(obj);
         }
 
-        private static void SetProperty<T>(T entity, string propertyName, object value)
+        private static void SetProperty<T>(T entity, string propertyName, object? value)
         {
             if (entity == null || string.IsNullOrWhiteSpace(propertyName))
             {
@@ -212,7 +212,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
 
             if (entity is IDictionary<string, object> expando)
             {
-                expando[propertyName] = value;
+                expando[propertyName] = value!;
             }
             else
             {

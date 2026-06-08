@@ -86,7 +86,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 new AuditOrchestrationDependencyValidationException(
                     message: "Audit orchestration dependency validation error occurred, " +
                     "fix the errors and try again.",
-                    innerException: exception.InnerException as Xeption);
+                    innerException: (exception.InnerException as Xeption)!);
 
             return addressOrchestrationDependencyValidationException;
         }
@@ -98,7 +98,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 new AuditOrchestrationDependencyException(
                     message: "Audit orchestration dependency error occurred, " +
                     "fix the errors and try again.",
-                    innerException: exception.InnerException as Xeption);
+                    innerException: (exception.InnerException as Xeption)!);
 
             return addressOrchestrationDependencyException;
         }

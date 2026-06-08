@@ -28,10 +28,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             person.CreatedDate = DateTimeOffset.MinValue;
             person.UpdatedBy = createdUserId;
             person.UpdatedDate = DateTimeOffset.MinValue;
-            person.DeletedBy = (string)null;
+            person.DeletedBy = (string?)null;
             person.DeletedDate = DateTimeOffset.MinValue;
             person.IsDeleted = false;
-            person.DeletionReason = (string)null;
+            person.DeletionReason = (string?)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
@@ -39,10 +39,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             expectedResult.CreatedDate = DateTimeOffset.MinValue;
             expectedResult.UpdatedBy = modifiedUserId;
             expectedResult.UpdatedDate = currentDateTime;
-            expectedResult.DeletedBy = (string)null;
+            expectedResult.DeletedBy = (string?)null;
             expectedResult.DeletedDate = DateTimeOffset.MinValue;
             expectedResult.IsDeleted = false;
-            expectedResult.DeletionReason = (string)null;
+            expectedResult.DeletionReason = (string?)null;
 
             var securityConfigurations = new SecurityConfigurations
             {

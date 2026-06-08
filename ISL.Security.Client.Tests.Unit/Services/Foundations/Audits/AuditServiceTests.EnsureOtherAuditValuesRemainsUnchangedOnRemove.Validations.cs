@@ -1,4 +1,4 @@
-// ---------------------------------------------------------
+﻿// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -16,9 +16,9 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
         public async Task ShouldThrowValidationExceptionOnEnsureOtherAuditValuesRemainsUnchangedOnRemoveIfNullsFoundAsync()
         {
             // given
-            Person nullInputPerson = null;
-            Person nullStoragePerson = null;
-            SecurityConfigurations nullSecurityConfigurations = null;
+            Person? nullInputPerson = null;
+            Person? nullStoragePerson = null;
+            SecurityConfigurations? nullSecurityConfigurations = null;
 
             InvalidArgumentAuditException invalidArgumentAuditException = new InvalidArgumentAuditException(
                 message: "Invalid audit argument(s), correct the errors and try again.");
@@ -41,11 +41,11 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
                     innerException: invalidArgumentAuditException);
 
             // when
-            ValueTask<Person> task =
+            ValueTask<Person?> task =
                 auditService.EnsureOtherAuditValuesRemainsUnchangedOnRemoveAsync(
                     nullInputPerson,
                     nullStoragePerson,
-                    nullSecurityConfigurations);
+                    nullSecurityConfigurations!);
 
             AuditValidationException actualAuditValidationException =
                 await Assert.ThrowsAsync<AuditValidationException>(task.AsTask);

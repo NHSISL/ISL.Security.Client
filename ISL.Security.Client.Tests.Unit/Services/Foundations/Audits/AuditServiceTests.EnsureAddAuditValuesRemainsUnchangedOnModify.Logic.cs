@@ -1,4 +1,4 @@
-// ---------------------------------------------------------
+﻿// ---------------------------------------------------------
 // Copyright (c) North East London ICB. All rights reserved.
 // ---------------------------------------------------------
 
@@ -32,7 +32,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             inputPerson.DeletedBy = modifiedUserId;
             inputPerson.DeletedDate = currentDateTime;
             inputPerson.IsDeleted = false;
-            inputPerson.DeletionReason = (string)null;
+            inputPerson.DeletionReason = (string?)null;
 
             dynamic storagePerson = new ExpandoObject();
             storagePerson.Name = "John Doe";
@@ -43,7 +43,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             storagePerson.DeletedBy = storageDeletedByUserId;
             storagePerson.DeletedDate = DateTimeOffset.MinValue;
             storagePerson.IsDeleted = false;
-            storagePerson.DeletionReason = (string)null;
+            storagePerson.DeletionReason = (string?)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
@@ -54,7 +54,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             expectedResult.DeletedBy = storageDeletedByUserId;
             expectedResult.DeletedDate = DateTimeOffset.MinValue;
             expectedResult.IsDeleted = false;     // restored from storage
-            expectedResult.DeletionReason = (string)null; // restored from storage
+            expectedResult.DeletionReason = (string?)null; // restored from storage
 
             var securityConfigurations = new SecurityConfigurations
             {

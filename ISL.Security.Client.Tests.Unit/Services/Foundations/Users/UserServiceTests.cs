@@ -40,7 +40,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Users
                 new Claim(ClaimTypes.Role, "Users")
             };
 
-            string authenticationType = isAuthenticated ? "TestScheme" : null;
+            string? authenticationType = isAuthenticated ? "TestScheme" : null;
             var identity = new ClaimsIdentity(claims, authenticationType);
             var principal = new ClaimsPrincipal(identity);
 

@@ -20,7 +20,7 @@ namespace ISL.Security.Client.Tests.Clients.Audits
         [InlineData("", false, null)]
         [InlineData("username", true, "User requested deletion")]
         public async Task ShouldApplyRemoveAuditForDynamicObjectAsync(
-            string userId, bool isAuthenticated, string deletionReason)
+            string userId, bool isAuthenticated, string? deletionReason)
         {
             // Given
             ClaimsPrincipal randomClaimsPrincipal = CreateRandomClaimsPrincipal(isAuthenticated, userId);

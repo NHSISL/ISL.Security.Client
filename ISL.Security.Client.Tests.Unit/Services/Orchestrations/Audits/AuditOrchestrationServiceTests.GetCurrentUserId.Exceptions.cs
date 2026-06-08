@@ -28,7 +28,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             var expectedDependencyException =
                 new AuditOrchestrationDependencyValidationException(
                     message: "Audit orchestration dependency validation error occurred, fix the errors and try again.",
-                    innerException: dependencyValidationException.InnerException as Xeption);
+                    innerException: (dependencyValidationException.InnerException as Xeption)!);
 
             this.userServiceMock.Setup(service =>
                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))
@@ -65,7 +65,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
             var expectedDependencyException =
                 new AuditOrchestrationDependencyException(
                     message: "Audit orchestration dependency error occurred, fix the errors and try again.",
-                    innerException: dependencyException.InnerException as Xeption);
+                    innerException: (dependencyException.InnerException as Xeption)!);
 
             this.userServiceMock.Setup(service =>
                service.GetUserIdAsync(It.IsAny<ClaimsPrincipal>()))

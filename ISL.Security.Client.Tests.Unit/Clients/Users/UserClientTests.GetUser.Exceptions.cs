@@ -26,8 +26,8 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             var expectedUserClientValidationException =
                 new UserClientValidationException(
                     message: "User client validation error occurred, fix errors and try again.",
-                    innerException: validationException.InnerException as Xeption,
-                    data: validationException.InnerException.Data);
+                    innerException: (validationException.InnerException as Xeption)!,
+                    data: validationException.InnerException?.Data!);
 
             userServiceMock.Setup(service =>
                 service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
@@ -63,8 +63,8 @@ namespace ISL.Security.Client.Tests.Unit.Clients.Users
             var expectedUserClientDependencyException =
                 new UserClientDependencyException(
                     message: "User client dependency error occurred, please contact support.",
-                    innerException: dependencyException.InnerException as Xeption,
-                    data: dependencyException.InnerException.Data);
+                    innerException: (dependencyException.InnerException as Xeption)!,
+                    data: dependencyException.InnerException?.Data!);
 
             userServiceMock.Setup(service =>
                 service.GetUserAsync(It.IsAny<ClaimsPrincipal>()))

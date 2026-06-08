@@ -31,7 +31,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             inputPerson.DeletedBy = string.Empty;
             inputPerson.DeletedDate = DateTimeOffset.MinValue;
             inputPerson.IsDeleted = false;
-            inputPerson.DeletionReason = (string)null;
+            inputPerson.DeletionReason = (string?)null;
 
             dynamic storagePerson = new ExpandoObject();
             storagePerson.Name = "John Doe";
@@ -39,10 +39,10 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             storagePerson.CreatedDate = DateTimeOffset.MinValue;
             storagePerson.UpdatedBy = createdUserId;
             storagePerson.UpdatedDate = DateTimeOffset.MinValue;
-            storagePerson.DeletedBy = (string)null;
+            storagePerson.DeletedBy = (string?)null;
             storagePerson.DeletedDate = DateTimeOffset.MinValue;
             storagePerson.IsDeleted = false;
-            storagePerson.DeletionReason = (string)null;
+            storagePerson.DeletionReason = (string?)null;
 
             dynamic expectedResult = new ExpandoObject();
             expectedResult.Name = "John Doe";
@@ -53,7 +53,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Foundations.Audits
             expectedResult.DeletedBy = string.Empty;
             expectedResult.DeletedDate = DateTimeOffset.MinValue;
             expectedResult.IsDeleted = false;
-            expectedResult.DeletionReason = (string)null;
+            expectedResult.DeletionReason = (string?)null;
 
             var securityConfigurations = new SecurityConfigurations
             {

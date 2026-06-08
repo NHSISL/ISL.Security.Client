@@ -55,7 +55,7 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
                 new Claim(ClaimTypes.Role, "Users")
             };
 
-            string authenticationType = isAuthenticated ? "TestScheme" : null;
+            string? authenticationType = isAuthenticated ? "TestScheme" : null;
             var identity = new ClaimsIdentity(claims, authenticationType);
             var principal = new ClaimsPrincipal(identity);
 
@@ -65,12 +65,12 @@ namespace ISL.Security.Client.Tests.Unit.Services.Orchestrations.Audits
         private User GetUser(ClaimsPrincipal claimsPrincipal)
         {
             return new User(
-                userId: claimsPrincipal.FindFirst("oid")?.Value,
-                givenName: claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value,
-                surname: claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value,
-                displayName: claimsPrincipal.FindFirst("displayName")?.Value,
-                email: claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value,
-                jobTitle: claimsPrincipal.FindFirst("jobTitle")?.Value,
+                userId: claimsPrincipal.FindFirst("oid")?.Value!,
+                givenName: claimsPrincipal.FindFirst(ClaimTypes.GivenName)?.Value!,
+                surname: claimsPrincipal.FindFirst(ClaimTypes.Surname)?.Value!,
+                displayName: claimsPrincipal.FindFirst("displayName")?.Value!,
+                email: claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value!,
+                jobTitle: claimsPrincipal.FindFirst("jobTitle")?.Value!,
                 roles: claimsPrincipal.FindAll(ClaimTypes.Role).Select(role => role.Value).ToList(),
                 claims: claimsPrincipal.Claims.ToList());
         }
