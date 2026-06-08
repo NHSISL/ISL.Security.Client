@@ -19,11 +19,11 @@ jobs:
     - name: Enable long paths for Git
       run: git config --system core.longpaths true
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup .Net
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.100
+        dotnet-version: 10.x
     - name: Restore
       run: dotnet restore
     - name: Build
@@ -124,7 +124,7 @@ jobs:
     - name: Setup .Net
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 10.0.100
+        dotnet-version: 10.x
     - name: Restore
       run: dotnet restore
     - name: Build
