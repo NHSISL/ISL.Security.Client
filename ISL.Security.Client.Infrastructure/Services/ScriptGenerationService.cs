@@ -49,7 +49,7 @@ namespace ISL.Security.Client.Infrastructure.Services
                                 new GithubTask
                                 {
                                     Name = "Enable long paths for Git",
-                                    Run = "git config --system core.longpaths true"
+                                    Run = "git config --global core.longpaths true"
                                 },
 
                                 new CheckoutTaskV4
@@ -98,7 +98,7 @@ namespace ISL.Security.Client.Infrastructure.Services
                     },
                     {
                         "publish",
-                        new PublishJobV2(
+                        new PublishJobV3(
                             runsOn: BuildMachines.UbuntuLatest,
                             dependsOn: "add_tag",
                             dotNetVersion: dotNetVersion,
