@@ -44,31 +44,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
 
                 (Rule: IsInvalidDateType(securityConfigurations.UpdatedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedByPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletedByPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedWhenPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidDateType(securityConfigurations.DeletedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.IsDeletedPropertyName),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidBoolType(securityConfigurations.IsDeletedPropertyType),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletionReasonPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletionReasonPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyType)));
+                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)));
 
             Validate(
                 (Rule: IsInvalidProperty(
@@ -93,31 +69,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     securityConfigurations.UpdatedWhenPropertyName,
                     entity,
                     securityConfigurations.UpdatedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedByPropertyName,
-                    entity,
-                    securityConfigurations.DeletedByPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedWhenPropertyName,
-                    entity,
-                    securityConfigurations.DeletedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.IsDeletedPropertyName,
-                    entity,
-                    securityConfigurations.IsDeletedPropertyType),
-                Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletionReasonPropertyName,
-                    entity,
-                    securityConfigurations.DeletionReasonPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)));
+                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)));
         }
 
         virtual internal void ValidateOnApplyModifyAuditValues<T>(
@@ -153,31 +105,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
 
                 (Rule: IsInvalidDateType(securityConfigurations.UpdatedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedByPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletedByPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedWhenPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidDateType(securityConfigurations.DeletedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.IsDeletedPropertyName),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidBoolType(securityConfigurations.IsDeletedPropertyType),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletionReasonPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletionReasonPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyType)));
+                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)));
 
             Validate(
                 (Rule: IsInvalidProperty(
@@ -202,31 +130,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     securityConfigurations.UpdatedWhenPropertyName,
                     entity,
                     securityConfigurations.UpdatedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedByPropertyName,
-                    entity,
-                    securityConfigurations.DeletedByPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedWhenPropertyName,
-                    entity,
-                    securityConfigurations.DeletedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.IsDeletedPropertyName,
-                    entity,
-                    securityConfigurations.IsDeletedPropertyType),
-                Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletionReasonPropertyName,
-                    entity,
-                    securityConfigurations.DeletionReasonPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)));
+                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)));
         }
 
         virtual internal void ValidateOnApplyRemoveAuditValues<T>(
@@ -371,31 +275,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
 
                 (Rule: IsInvalidDateType(securityConfigurations.UpdatedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedByPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletedByPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedByPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletedWhenPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidDateType(securityConfigurations.DeletedWhenPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.IsDeletedPropertyName),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidBoolType(securityConfigurations.IsDeletedPropertyType),
-                    Parameter: nameof(SecurityConfigurations.IsDeletedPropertyType)),
-
-                (Rule: IsInvalid(securityConfigurations.DeletionReasonPropertyName),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)),
-
-                (Rule: IsInvalidDataType(securityConfigurations.DeletionReasonPropertyType),
-                    Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyType)));
+                    Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyType)));
 
             Validate(
                 (Rule: IsInvalidProperty(
@@ -444,55 +324,7 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                     securityConfigurations.UpdatedWhenPropertyName,
                     storageEntity,
                     securityConfigurations.UpdatedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedByPropertyName,
-                    entity,
-                    securityConfigurations.DeletedByPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedWhenPropertyName,
-                    entity,
-                    securityConfigurations.DeletedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.IsDeletedPropertyName,
-                    entity,
-                    securityConfigurations.IsDeletedPropertyType),
-                Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletionReasonPropertyName,
-                    entity,
-                    securityConfigurations.DeletionReasonPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedByPropertyName,
-                    storageEntity,
-                    securityConfigurations.DeletedByPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedByPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletedWhenPropertyName,
-                    storageEntity,
-                    securityConfigurations.DeletedWhenPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletedWhenPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.IsDeletedPropertyName,
-                    storageEntity,
-                    securityConfigurations.IsDeletedPropertyType),
-                Parameter: nameof(SecurityConfigurations.IsDeletedPropertyName)),
-
-                (Rule: IsInvalidProperty(
-                    securityConfigurations.DeletionReasonPropertyName,
-                    storageEntity,
-                    securityConfigurations.DeletionReasonPropertyType),
-                Parameter: nameof(SecurityConfigurations.DeletionReasonPropertyName)));
+                Parameter: nameof(SecurityConfigurations.UpdatedWhenPropertyName)));
         }
 
         private static dynamic IsInvalidProperty<T>(string propertyName, T entity, Type expectedType) => new

@@ -47,25 +47,17 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 propertyName: securityConfigurations.UpdatedWhenPropertyName,
                 value: auditDateTimeOffset);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletedByPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletedByPropertyName, securityConfigurations.DeletedByPropertyType))
+                SetProperty(entity, securityConfigurations.DeletedByPropertyName, null);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletedWhenPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletedWhenPropertyName, securityConfigurations.DeletedWhenPropertyType))
+                SetProperty(entity, securityConfigurations.DeletedWhenPropertyName, null);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.IsDeletedPropertyName,
-                value: false);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.IsDeletedPropertyName, securityConfigurations.IsDeletedPropertyType))
+                SetProperty(entity, securityConfigurations.IsDeletedPropertyName, false);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletionReasonPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletionReasonPropertyName, securityConfigurations.DeletionReasonPropertyType))
+                SetProperty(entity, securityConfigurations.DeletionReasonPropertyName, null);
 
             return entity;
         });
@@ -142,16 +134,20 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             var deletionReasonName = securityConfigurations.DeletionReasonPropertyName;
             object? createdByValue = GetProperty(storageEntity, createdByName);
             object? createdWhenValue = GetProperty(storageEntity, createdWhenName);
-            object? deletedByValue = GetProperty(storageEntity, deletedByName);
-            object? deletedWhenValue = GetProperty(storageEntity, deletedWhenName);
-            object? isDeletedValue = GetProperty(storageEntity, isDeletedName);
-            object? deletionReasonValue = GetProperty(storageEntity, deletionReasonName);
             SetProperty(entity, createdByName, createdByValue);
             SetProperty(entity, createdWhenName, createdWhenValue);
-            SetProperty(entity, deletedByName, deletedByValue);
-            SetProperty(entity, deletedWhenName, deletedWhenValue);
-            SetProperty(entity, isDeletedName, isDeletedValue);
-            SetProperty(entity, deletionReasonName, deletionReasonValue);
+
+            if (HasWritablePropertyOfType(entity, deletedByName, securityConfigurations.DeletedByPropertyType))
+                SetProperty(entity, deletedByName, GetProperty(storageEntity, deletedByName));
+
+            if (HasWritablePropertyOfType(entity, deletedWhenName, securityConfigurations.DeletedWhenPropertyType))
+                SetProperty(entity, deletedWhenName, GetProperty(storageEntity, deletedWhenName));
+
+            if (HasWritablePropertyOfType(entity, isDeletedName, securityConfigurations.IsDeletedPropertyType))
+                SetProperty(entity, isDeletedName, GetProperty(storageEntity, isDeletedName));
+
+            if (HasWritablePropertyOfType(entity, deletionReasonName, securityConfigurations.DeletionReasonPropertyType))
+                SetProperty(entity, deletionReasonName, GetProperty(storageEntity, deletionReasonName));
 
             return entity;
         });
@@ -201,6 +197,24 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             }
 
             return prop.GetValue(obj);
+        }
+
+        private static bool HasWritablePropertyOfType<T>(T entity, string propertyName, Type expectedType)
+        {
+            if (entity == null || string.IsNullOrWhiteSpace(propertyName) || expectedType == null)
+                return false;
+
+            if (entity is IDictionary<string, object> expandoCheck)
+                return expandoCheck.ContainsKey(propertyName);
+
+            var property = entity.GetType().GetProperty(propertyName);
+
+            if (property == null || !property.CanWrite)
+                return false;
+
+            var underlyingType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+
+            return underlyingType.IsAssignableFrom(expectedType);
         }
 
         private static void SetProperty<T>(T entity, string propertyName, object? value)
