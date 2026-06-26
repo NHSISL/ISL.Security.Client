@@ -204,8 +204,8 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             if (entity == null || string.IsNullOrWhiteSpace(propertyName) || expectedType == null)
                 return false;
 
-            if (entity is IDictionary<string, object>)
-                return true;
+            if (entity is IDictionary<string, object> expandoCheck)
+                return expandoCheck.ContainsKey(propertyName);
 
             var property = entity.GetType().GetProperty(propertyName);
 
