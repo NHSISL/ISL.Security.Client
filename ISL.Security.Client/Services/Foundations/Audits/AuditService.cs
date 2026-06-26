@@ -47,25 +47,17 @@ namespace ISL.Security.Client.Services.Foundations.Audits
                 propertyName: securityConfigurations.UpdatedWhenPropertyName,
                 value: auditDateTimeOffset);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletedByPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletedByPropertyName, securityConfigurations.DeletedByPropertyType))
+                SetProperty(entity, securityConfigurations.DeletedByPropertyName, null);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletedWhenPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletedWhenPropertyName, securityConfigurations.DeletedWhenPropertyType))
+                SetProperty(entity, securityConfigurations.DeletedWhenPropertyName, null);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.IsDeletedPropertyName,
-                value: false);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.IsDeletedPropertyName, securityConfigurations.IsDeletedPropertyType))
+                SetProperty(entity, securityConfigurations.IsDeletedPropertyName, false);
 
-            SetProperty(
-                entity,
-                propertyName: securityConfigurations.DeletionReasonPropertyName,
-                value: null);
+            if (HasWritablePropertyOfType(entity, securityConfigurations.DeletionReasonPropertyName, securityConfigurations.DeletionReasonPropertyType))
+                SetProperty(entity, securityConfigurations.DeletionReasonPropertyName, null);
 
             return entity;
         });
@@ -201,6 +193,24 @@ namespace ISL.Security.Client.Services.Foundations.Audits
             }
 
             return prop.GetValue(obj);
+        }
+
+        private static bool HasWritablePropertyOfType<T>(T entity, string propertyName, Type expectedType)
+        {
+            if (entity == null || string.IsNullOrWhiteSpace(propertyName) || expectedType == null)
+                return false;
+
+            if (entity is IDictionary<string, object>)
+                return true;
+
+            var property = entity.GetType().GetProperty(propertyName);
+
+            if (property == null || !property.CanWrite)
+                return false;
+
+            var underlyingType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+
+            return underlyingType.IsAssignableFrom(expectedType);
         }
 
         private static void SetProperty<T>(T entity, string propertyName, object? value)
