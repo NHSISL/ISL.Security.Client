@@ -7,7 +7,7 @@ using System.IO;
 using ADotNet.Clients;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
-using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV4s;
+using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV5s;
 
 namespace ISL.Security.Client.Infrastructure.Services
 {
@@ -30,8 +30,7 @@ namespace ISL.Security.Client.Infrastructure.Services
 
                     PullRequest = new PullRequestEvent
                     {
-                        Types = ["opened", "synchronize", "reopened", "closed"],
-                        Branches = [branchName]
+                        Types = ["opened", "synchronize", "reopened", "closed"]
                     }
                 },
 
@@ -52,16 +51,16 @@ namespace ISL.Security.Client.Infrastructure.Services
                                     Run = "git config --global core.longpaths true"
                                 },
 
-                                new CheckoutTaskV4
+                                new CheckoutTaskV5
                                 {
                                     Name = "Check out"
                                 },
 
-                                new SetupDotNetTaskV4
+                                new SetupDotNetTaskV5
                                 {
                                     Name = "Setup .Net",
 
-                                    With = new TargetDotNetVersionV4
+                                    With = new TargetDotNetVersionV5
                                     {
                                         DotNetVersion = dotNetVersion
                                     }
@@ -86,7 +85,7 @@ namespace ISL.Security.Client.Infrastructure.Services
                     },
                     {
                         "add_tag",
-                        new TagJob(
+                        new TagJobV2(
                             runsOn: BuildMachines.UbuntuLatest,
                             dependsOn: "build",
                             projectRelativePath: $"{projectName}/{projectName}.csproj",
@@ -98,7 +97,7 @@ namespace ISL.Security.Client.Infrastructure.Services
                     },
                     {
                         "publish",
-                        new PublishJobV3(
+                        new PublishJobV4(
                             runsOn: BuildMachines.UbuntuLatest,
                             dependsOn: "add_tag",
                             dotNetVersion: dotNetVersion,
@@ -142,16 +141,23 @@ namespace ISL.Security.Client.Infrastructure.Services
                 {
                     {
                         "label",
-                        new LabelJobV2(runsOn: BuildMachines.UbuntuLatest)
+                        new LabelJobV3(runsOn: BuildMachines.UbuntuLatest)
                         {
-                            Name = "Add Label(s)",
+                            Name = "Label"
                         }
                     },
                     {
                         "requireIssueOrTask",
-                        new RequireIssueOrTaskJob()
+                        new RequireIssueOrTaskJobV2(excludedAuthors: "dependabot[bot]")
                         {
                             Name = "Require Issue Or Task Association",
+                        }
+                    },
+                    {
+                        "setAuthorAsPrAssignee",
+                        new SetAuthorAsPrAssigneeJobV2(runsOn: BuildMachines.UbuntuLatest)
+                        {
+                            Name = "Set Author As PR Assignee",
                         }
                     },
                 }
